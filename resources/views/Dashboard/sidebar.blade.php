@@ -126,14 +126,12 @@
                                     fas fa-sign-out-alt">
                             <span></span>
                         </i>
-                        <span class="menu-text"> <form id="logout" action="#" method="Post">
+                        <span class="menu-text"> <form id="logout" action="{{route('logout')}}" method="Post">
                                 @csrf
                                 Sign Out
                             </form></span>
                     </a>
                 </li>
-
-
             </ul>
             <!--end::Menu Nav-->
         </div>
