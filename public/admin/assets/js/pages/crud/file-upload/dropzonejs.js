@@ -6,16 +6,36 @@ var KTDropzoneDemo = function () {
     var demo1 = function () {
         // single file upload
         $('#kt_dropzone_1').dropzone({
-            url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
+            url: "/trainees", // Set the url for your upload script location
             paramName: "file", // The name that will be used to transfer the file
             maxFiles: 1,
             maxFilesize: 5, // MB
             addRemoveLinks: true,
             accept: function(file, done) {
-                if (file.name == "justinbieber.jpg") {
-                    done("Naha, you don't.");
+                if (file.type != "application/pdf" && file.type != "application/msword" && file.type != "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                    done("Only pdf and docx files are allowed for upload");
                 } else {
-                    done();
+                    // Create a new FormData object and append the file to it
+                    var formData = new FormData();
+                    formData.append("cv", file);
+
+                    // Send an AJAX request to upload the file to the server
+                    $.ajax({
+                        url: "/upload",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            // If the upload was successful, set the value of the hidden input field to the path of the uploaded file
+                            $("input[name=cv]").val(response.path);
+                            done();
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(xhr.responseText);
+                            done("Error uploading file");
+                        }
+                    });
                 }
             }
         });

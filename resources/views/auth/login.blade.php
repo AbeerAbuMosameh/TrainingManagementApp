@@ -3,13 +3,12 @@
 <!--begin::Head-->
 <head>
     @include('Dashboard.css')
-    <link href="{{asset('admin/assets/css/pages/login/login-3.css')}}" rel="stylesheet" type="text/css"/>
+    <title>Login</title>
 
 </head>
 <!--end::Head-->
 <!--begin::Body-->
-<body id="kt_body"
-      class="header-mobile-fixed subheader-enabled aside-enabled aside-fixed aside-secondary-enabled page-loading">
+<body id="kt_body" class="header-mobile-fixed subheader-enabled aside-enabled aside-fixed aside-secondary-enabled page-loading">
 <!--begin::Main-->
 <div class="d-flex flex-column flex-root">
     <!--begin::Login-->
@@ -47,7 +46,8 @@
                 <!--begin::Signin-->
                 <div class="login-form">
                     <!--begin::Form-->
-                    <form class="form" id="kt_login_singin_form" method="POST" action="{{ route('login') }}">
+                    <form class="form fv-plugins-bootstrap fv-plugins-framework" id="kt_login_singin_form" method="POST"
+                          action="{{ route('login') }}">
                         @csrf
                         <!--begin::Title-->
                         <div class="pb-5 pb-lg-15">
@@ -55,16 +55,16 @@
     margin-top: -200px;
 ">Sign In</h3>
                             <div class="text-muted font-weight-bold font-size-h4">New Here?
-                                <a href="{{route('register')}}" class="text-primary font-weight-bolder">Create Account</a>
+                                <a href="{{route('trainees.create')}}" class="text-primary font-weight-bolder">Create
+                                    Account</a>
                             </div>
                         </div>
                         <!--begin::Title-->
-                        <!--begin::Form group-->
-                        <div class="form-group">
+                        <div class="form-group fv-plugins-icon-container">
                             <label class="font-size-h6 font-weight-bolder text-dark">Your Email</label>
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                   name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
+                            <input id="email" type="email" class="form-control font-size-h6 h-auto py-7 px-6 rounded-lg border-0 @error('email') is-invalid @enderror"
+                                   name="email" value="{{ old('email') }}" required  autofocus>
+                            <div class="fv-plugins-message-container"></div>
                             @error('email')
                             <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -73,18 +73,19 @@
                         </div>
                         <!--end::Form group-->
                         <!--begin::Form group-->
-                        <div class="form-group">
+                        <div class="form-group fv-plugins-icon-container">
                             <div class="d-flex justify-content-between mt-n5">
                                 <label class="font-size-h6 font-weight-bolder text-dark pt-5">Password</label>
                                 @if (Route::has('password.request'))
-                                    <a class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5" href="{{ route('password.request') }}">
+                                    <a class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5"
+                                       href="{{ route('password.request') }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif
 
                             </div>
                             <input id="password" type="password"
-                                   class="form-control @error('password') is-invalid @enderror" name="password" required
+                                   class="form-control h-auto py-7 px-6 font-size-h6 rounded-lg border-0 @error('password') is-invalid @enderror" name="password" required
                                    autocomplete="current-password">
 
                             @error('password')
@@ -98,7 +99,7 @@
                             <button type="submit" id="kt_login_singin_form_submit_button"
                                     class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3">  {{ __('Login') }}</button>
                             <a type="button" href="{{route('google.login')}}"
-                                    class="btn btn-light-primary font-weight-bolder px-8 py-4 my-3 font-size-lg">
+                               class="btn btn-light-primary font-weight-bolder px-8 py-4 my-3 font-size-lg">
 									<span class="svg-icon svg-icon-md">
 										<!--begin::Svg Icon | path:assets/media/svg/social-icons/google.svg-->
 										<svg xmlns="http://www.w3.org/2000/svg" width="23" height="20"
@@ -123,13 +124,13 @@
                     </form>
                     <!--end::Form-->
                 </div>
+
                 <!--end::Signin-->
             </div>
             <!--end::Wrapper-->
         </div>
         <!--end::Content-->
     </div>
-    <!--end::Login-->
 </div>
 <!--end::Main-->
 @include('Dashboard.js')

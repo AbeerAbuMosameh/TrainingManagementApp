@@ -21,14 +21,14 @@
         <!--end::Aside-->
         <!--begin::Wrapper-->
         <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
-            @yield('content')
             @include('Dashboard.header')
-            <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-                <div class="d-flex flex-column-fluid">
+
+            <div class="d-flex flex-column-fluid" id="kt_content">
+                <div class="container">
                     @yield('content')
                 </div>
-
             </div>
+
             @include('Dashboard.footer')
 
         </div>

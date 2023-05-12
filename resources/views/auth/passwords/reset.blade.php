@@ -3,8 +3,7 @@
 <!--begin::Head-->
 <head>
     @include('Dashboard.css')
-    <link href="{{asset('admin/assets/css/pages/login/login-3.css')}}" rel="stylesheet" type="text/css"/>
-
+    <title>Reset Password</title>
 </head>
 <!--end::Head-->
 <!--begin::Body-->
