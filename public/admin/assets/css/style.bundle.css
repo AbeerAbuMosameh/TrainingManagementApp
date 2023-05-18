@@ -56499,7 +56499,7 @@ button {
 }
 .btn.btn-default {
   color: #B5B5C3;
-  background-color: #F3F6F9;
+  background-color: #0BB7AF;
   border-color: #F3F6F9;
 }
 .btn.btn-default i {
@@ -56508,7 +56508,7 @@ button {
 .btn.btn-default .svg-icon svg g [fill] {
   -webkit-transition: fill 0.3s ease;
   transition: fill 0.3s ease;
-  fill: #B5B5C3;
+  fill: #fffs;
 }
 .btn.btn-default .svg-icon svg:hover g [fill] {
   -webkit-transition: fill 0.3s ease;
@@ -74992,7 +74992,7 @@ code {
 .svg-icon svg g [fill] {
   -webkit-transition: fill 0.3s ease;
   transition: fill 0.3s ease;
-  fill: #B5B5C3;
+  fill: #fff;
 }
 .svg-icon svg:hover g [fill] {
   -webkit-transition: fill 0.3s ease;
@@ -75013,14 +75013,14 @@ code {
 .svg-icon.svg-icon-primary svg g [fill] {
   -webkit-transition: fill 0.3s ease;
   transition: fill 0.3s ease;
-  fill: #1BC5BD !important;
+  fill: #fff ;
 }
 .svg-icon.svg-icon-primary svg:hover g [fill] {
   -webkit-transition: fill 0.3s ease;
   transition: fill 0.3s ease;
 }
 .svg-icon.svg-logo-primary svg path {
-  fill: #1BC5BD !important;
+  fill: #fff !important;
 }
 .svg-icon.svg-icon-secondary svg g [fill] {
   -webkit-transition: fill 0.3s ease;
@@ -83225,7 +83225,7 @@ body {
 .container-lg,
 .container-xl,
 .container-xxl {
-    padding: 0 25px;
+    padding: 0 5px;
   }
 }
 @media (max-width: 991.98px) {

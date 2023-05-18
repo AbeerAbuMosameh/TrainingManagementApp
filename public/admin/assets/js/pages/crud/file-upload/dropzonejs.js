@@ -16,9 +16,6 @@ var KTDropzoneDemo = function () {
                     done("Only pdf and docx files are allowed for upload");
                 } else {
                     // Create a new FormData object and append the file to it
-                    var formData = new FormData();
-                    formData.append("cv", file);
-
                     // Send an AJAX request to upload the file to the server
                     $.ajax({
                         url: "/upload",
@@ -28,7 +25,6 @@ var KTDropzoneDemo = function () {
                         processData: false,
                         success: function(response) {
                             // If the upload was successful, set the value of the hidden input field to the path of the uploaded file
-                            $("input[name=cv]").val(response.path);
                             done();
                         },
                         error: function(xhr, status, error) {

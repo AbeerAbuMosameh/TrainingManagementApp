@@ -416,8 +416,9 @@ var KTLogin = function () {
                     $.ajax({
                         type: "POST",
                         url: "/trainees",
-                        data: $("#kt_login_signup_form").serialize(), // Serialize the form data
-
+                        data: new FormData($("#kt_login_signup_form")[0]),
+                        processData: false,
+                        contentType: false,
                         success: function (response) {
 
                             console.log($("#kt_login_signup_form").serialize());

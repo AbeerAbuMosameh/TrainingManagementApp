@@ -22,13 +22,14 @@ return new class extends Migration
             $table->string('gpa')->nullable(); // New column
             $table->string('address');
             $table->string('city')->nullable();
-            $table->enum('payment', ['card', 'paypal','bank'])->nullable()->default('card');
-            $table->enum('language', ['english', 'arabic','french'])->nullable()->default('english');
+            $table->enum('payment', ['Card', 'PayPal','Bank'])->nullable()->default('card');
+            $table->enum('language', ['English', 'Arabic','French'])->nullable()->default('english');
             $table->string('cv')->nullable();
             $table->string('certification')->nullable();
             $table->string('otherFile')->nullable();
             $table->boolean('is_approved')->default(false);
             $table->string('trainee_id')->unique()->nullable();
+            $table->string('password');
             $table->softDeletes();
             $table->timestamps();
         });

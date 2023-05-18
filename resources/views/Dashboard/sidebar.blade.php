@@ -20,6 +20,7 @@
              data-menu-dropdown-timeout="500">
             <!--begin::Menu Nav-->
             <ul class="menu-nav">
+                @if(auth()->user()->level == 1)
                     <li class="menu-item" aria-haspopup="true">
                         <a href="#" class="menu-link">
 										<span class="svg-icon menu-icon">
@@ -54,7 +55,7 @@
                             <i class="menu-arrow"></i>
                         </a>
                         <i class="menu-arrow"></i>
-                        </a>
+
                         <div class="menu-submenu">
                             <i class="menu-arrow"></i>
                             <ul class="menu-subnav">
@@ -79,40 +80,32 @@
                     </li>
 
                     <li class="menu-section">
-                        <h4 class="menu-text">Company Management</h4>
+                        <h4 class="menu-text">Trainee Management</h4>
                         <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                     </li>
                     <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                         <a href="javascript:;" class="menu-link menu-toggle">
-                            <i class="menu-icon fas fa-building"></i> <span class="menu-text">Companies</span>
+                            <i class="menu-icon fas fa-users"></i> <span class="menu-text">Trainees</span>
 
                             <i class="menu-arrow"></i>
                         </a>
                         <i class="menu-arrow"></i>
-                        </a>
+
                         <div class="menu-submenu">
                             <i class="menu-arrow"></i>
                             <ul class="menu-subnav">
                                 <li class="menu-item" aria-haspopup="true">
-                                    <a href="#companies.index')}}" class="menu-link">
+                                    <a href="{{route('trainees.index')}}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
-                                        <span class="menu-text">Show Companies</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item" aria-haspopup="true">
-                                    <a href="#companies.create')}}" class="menu-link">
-                                        <i class="menu-bullet menu-bullet-dot">
-                                            <span></span>
-                                        </i>
-                                        <span class="menu-text">Add Company</span>
+                                        <span class="menu-text">Show Trainee</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
-
+                @endif
 
 
 

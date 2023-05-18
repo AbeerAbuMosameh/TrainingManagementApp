@@ -23,16 +23,17 @@ class AdminPermissionsSeeder extends Seeder
             ['name' => 'role-edit'],
             ['name' => 'role-delete'],
             //Users
-            ['name' => 'user-list'],
-            ['name' => 'user-create'],
-            ['name' => 'user-edit'],
-            ['name' => 'user-delete'],
+            ['name' => 'trainee-list'],
+            ['name' => 'trainee-create'],
+            ['name' => 'trainee-accept'],
+            ['name' => 'trainee-edit'],
+            ['name' => 'trainee-delete'],
 
             //Companies
-            ['name' => 'company-list'],
-            ['name' => 'company-create'],
-            ['name' => 'company-edit'],
-            ['name' => 'company-delete'],
+            ['name' => 'advisor-list'],
+            ['name' => 'advisor-create'],
+            ['name' => 'advisor-edit'],
+            ['name' => 'advisor-delete'],
         ];
 
         foreach ($permissions as $permission) {

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdvisorController;
 use App\Http\Controllers\Admin\TraineeController;
 use App\Http\Controllers\API\SocialAuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\WebSiteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -17,22 +18,27 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/' , [WebSiteController::class , 'index'])->name('home_page');
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+
+Route::post('/traineess', [TraineeController::class, 'store'])->name('traineessss');
+
 
 Route::get('login/google' , [SocialAuthController::class , 'redirectToProvider'])->name('google.login');
 Route::get('auth/google/callback' , [SocialAuthController::class , 'handleCallback'])->name('google.login.callback');
 
-Auth::routes();
-Route::resource('advisors' , AdvisorController::class );
-Route::post('/trainees', [TraineeController::class, 'store']);
-Route::post('/trainees/upload-cv', 'TraineeController@uploadCv')->name('trainees.upload-cv');
 
+
+Route::resource('advisors' , AdvisorController::class );
 Route::resource('trainees' , TraineeController::class );
 
+
+
+Auth::routes();
+
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/sendmail/{id}', [TraineeController::class, 'accept'])->name('sendmail');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 });
+

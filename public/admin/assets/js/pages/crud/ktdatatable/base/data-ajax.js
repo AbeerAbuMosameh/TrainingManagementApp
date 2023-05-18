@@ -13,16 +13,19 @@ var KTDatatableRemoteAjaxDemo = function() {
                 type: 'remote',
                 source: {
                     read: {
-                        url: HOST_URL + '/api/datatables/demos/default.php',
-                        // sample custom headers
-                        // headers: {'x-my-custom-header': 'some value', 'x-test-header': 'the value'},
+                        url:'/trainees', // Point to your API endpoint that returns trainee data
+                        method: 'GET', // Use the GET HTTP method to retrieve data
                         map: function(raw) {
-                            // sample data mapping
-                            var dataSet = raw;
-                            if (typeof raw.data !== 'undefined') {
-                                dataSet = raw.data;
-                            }
-                            return dataSet;
+                            // Map the raw data to the format expected by datatables.net
+                            return raw.data.map(function(trainee) {
+                                return {
+                                    'id': trainee.id,
+                                    'name': trainee.name,
+                                    'email': trainee.email,
+                                    'created_at': trainee.created_at,
+                                    // Add more properties here as needed
+                                };
+                            });
                         },
                     },
                 },
@@ -34,7 +37,7 @@ var KTDatatableRemoteAjaxDemo = function() {
 
             // layout definition
             layout: {
-                scroll: false,
+                scroll: true,
                 footer: false,
             },
 
@@ -53,7 +56,7 @@ var KTDatatableRemoteAjaxDemo = function() {
                 field: 'RecordID',
                 title: '#',
                 sortable: 'asc',
-                width: 30,
+                width: 15,
                 type: 'number',
                 selector: false,
                 textAlign: 'center',

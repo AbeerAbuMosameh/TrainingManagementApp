@@ -113,7 +113,7 @@
                 <!--begin::Signin-->
                 <div class="login-form login-form-signup">
                     <!--begin::Form-->
-                    <form class="form" action="{{route('trainees.store')}}"
+                    <form class="form" action="{{route('traineessss')}}" method="POST"
                           id="kt_login_signup_form" enctype="multipart/form-data">
                         @csrf
                         <!--begin: Wizard Step 1-->
@@ -176,11 +176,11 @@
                                         <select name="education" id="education"
                                                 class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
                                             <option value="" selected="selected">Select Option</option>
-                                            <option value="high_school">High School</option>
-                                            <option value="diploma_degree">Diploma degree</option>
-                                            <option value="bachelor_degree">Bachelor's Degree</option>
-                                            <option value="master_degree">Master's Degree</option>
-                                            <option value="doctoral_degree">Doctoral Degree</option>
+                                            <option value="High School">High School</option>
+                                            <option value="Diploma Degree">Diploma degree</option>
+                                            <option value="Bachelor Degree">Bachelor's Degree</option>
+                                            <option value="Master Degree">Master's Degree</option>
+                                            <option value="Doctoral Degree">Doctoral Degree</option>
                                         </select>
                                     </div>
                                     <!--end::Input-->
@@ -236,11 +236,11 @@
                                 <label class="font-size-h6 font-weight-bolder text-dark">Preferred Payment Type:</label>
                                 <select name="payment" id="payment"
                                         class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
-                                    <option value="card" selected="selected">Select a payment Option</option>
-                                    <option value="card">Credit/debit cards
+                                    <option value="Card" selected="selected">Select a payment Option</option>
+                                    <option value="Card">Credit/debit cards
                                     </option>
-                                    <option value="paypal">PayPal</option>
-                                    <option value="bank">Bank transfers</option>
+                                    <option value="PayPal">PayPal</option>
+                                    <option value="Bank">Bank transfers</option>
                                 </select>
                             </div>
                             <!--end::Form Group-->
@@ -249,10 +249,10 @@
                                 <label class="font-size-h6 font-weight-bolder text-dark">Preferred Language: </label>
                                 <select name="language" id="language"
                                         class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
-                                    <option value="english" selected="selected">Select a language Type Option</option>
-                                    <option value="english">English</option>
-                                    <option value="arabic">Arabic</option>
-                                    <option value="french">French</option>
+                                    <option value="English" selected="selected">Select a language Type Option</option>
+                                    <option value="English">English</option>
+                                    <option value="Arabic">Arabic</option>
+                                    <option value="French">French</option>
                                 </select>
                             </div>
                             <!--end::Row-->
@@ -269,26 +269,32 @@
                                 <div class="text-muted font-weight-bold font-size-h4">Information
                                 </div>
                             </div>
+                                <div class="form-group">
+                                    <label class="font-size-h6 font-weight-bolder text-dark">CV Or Resume<span
+                                            class="text-danger">*</span></label>
+                                    <input type="file"
+                                           class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"
+                                           name="cv" id="cv" placeholder="cv" value="{{old('cv', '')}}"/>
+                                </div>
 
-                            <div class="form-group">
-                                <label class="font-size-h6 font-weight-bolder text-dark">CV Or Resume<span class="text-danger">*</span></label>
-                                <input type="file" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"
-                                       name="cv" id="cv" placeholder="cv" value="{{old('cv', '')}}"/>
-                            </div>
 
+                                <div class="form-group">
+                                    <label class="font-size-h6 font-weight-bolder text-dark">Certification<span
+                                            class="text-danger">*</span></label>
+                                    <input type="file"
+                                           class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"
+                                           name="certification" id="certification" placeholder="certification"
+                                           value="{{old('certification', '')}}"/>
+                                </div>
 
-                            <div class="form-group">
-                                <label class="font-size-h6 font-weight-bolder text-dark">Certification<span class="text-danger">*</span></label>
-                                <input type="file" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"
-                                       name="certification" id="certification" placeholder="certification" value="{{old('certification', '')}}"/>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="font-size-h6 font-weight-bolder text-dark">Other Files<span class="text-danger">*</span></label>
-                                <input type="file" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"
-                                       name="otherFile" id="otherFile" placeholder="Other File" value="{{old('otherFile', '')}}"/>
-                            </div>
-
+                                <div class="form-group">
+                                    <label class="font-size-h6 font-weight-bolder text-dark">Other Files<span
+                                            class="text-danger">*</span></label>
+                                    <input type="file"
+                                           class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"
+                                           name="otherFile" id="otherFile" placeholder="Other File"
+                                           value="{{old('otherFile', '')}}"/>
+                                </div>
                         </div>
 
                         <!--end: Wizard Step 3-->
@@ -536,55 +542,6 @@
     });
     languageSelect.addEventListener('change', () => {
         languageDiv.textContent = 'Preferred Language : ' + languageSelect.value;
-    });
-    // Get the dropzone elements
-    const dropzones = document.querySelectorAll('.dropzone');
-
-    // Loop through each dropzone element and add a change event listener
-    dropzones.forEach(dropzone => {
-        const input = dropzone.querySelector('input[type=file]');
-
-        input.addEventListener('change', () => {
-            // Get the uploaded file(s)
-            const files = input.files;
-
-            // Do something with the file(s), like create a FormData object and send it to the server
-            const formData = new FormData();
-            formData.append('file', files[0]);
-
-            // You can also display the file name or other information on the page
-            const fileName = files[0].name;
-            const fileContainer = dropzone.querySelector('.dropzone-msg-desc');
-            fileContainer.textContent = fileName;
-        });
-    });
-
-    const form = document.querySelector('.form');
-
-    // Add a submit event listener to the form
-    form.addEventListener('submit', event => {
-        event.preventDefault();
-
-        // Get the uploaded files
-        const cvFile = document.querySelector('#kt_dropzone_1 input[type=file]').files[0];
-        const certificationFile = document.querySelector('#kt_dropzone_2 input[type=file]').files[0];
-        const otherFiles = document.querySelector('#kt_dropzone_3 input[type=file]').files;
-
-        // Create a FormData object and append the files
-        const formData = new FormData();
-        formData.append('cv', cvFile);
-        formData.append('certification', certificationFile);
-
-        // Append the other files (multiple files are allowed)
-        for (let i = 0; i < otherFiles.length; i++) {
-            formData.append('other_files[]', otherFiles[i]);
-        }
-
-        // Send the form data to the server using an AJAX request
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', form.action);
-        xhr.setRequestHeader('X-CSRF-TOKEN', form.querySelector('input[name="_token"]').value);
-        xhr.send(formData);
     });
 
 </script>

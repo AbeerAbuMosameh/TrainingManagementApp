@@ -76,7 +76,8 @@
                         <!--begin::Form group-->
                         <div class="form-group d-flex flex-wrap">
                             <button type="submit" id="kt_login_forgot_form_submit_button" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-4">  {{ __('Send Password Reset Link') }}</button>
-                            <a href="{{route('login')}}" id="kt_login_forgot_cancel" class="btn btn-light-primary font-weight-bolder font-size-h6 px-8 py-4 my-3">Cancel</a>
+                            <a href="{{route('login')}}" id="kt_login_forgot_cancel" class="btn btn-light-primary font-weight-bolder font-size-h6 px-8 py-4 my-3">Back</a>
+
                         </div>
                         <!--end::Form group-->
                     </form>
