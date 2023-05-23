@@ -26,12 +26,15 @@ return new class extends Migration
             $table->enum('language', ['English', 'Arabic','French'])->nullable()->default('english');
             $table->string('cv')->nullable();
             $table->string('certification')->nullable();
-            $table->string('otherFile')->nullable();
+            $table->json('otherFile')->nullable();
             $table->boolean('is_approved')->default(false);
-            $table->string('trainee_id')->unique()->nullable();
             $table->string('password');
+            $table->unsignedBigInteger('notification_id')->nullable(); // New column
+            $table->foreign('notification_id')->references('id')->on('notifications')->onDelete('cascade')->onDelete('set null');
             $table->softDeletes();
             $table->timestamps();
+
+
         });
     }
 

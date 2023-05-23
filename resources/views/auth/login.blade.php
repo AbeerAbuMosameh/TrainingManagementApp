@@ -62,8 +62,8 @@
                         </div>
                         <!--begin::Title-->
                         <div class="form-group fv-plugins-icon-container">
-                            <label class="font-size-h6 font-weight-bolder text-dark">Your Email</label>
-                            <input id="email" type="email"
+                            <label class="font-size-h6 font-weight-bolder text-dark">Your Email OR ID</label>
+                            <input id="email" type="text"
                                    class="form-control font-size-h6 h-auto py-7 px-6 rounded-lg border-0 @error('email') is-invalid @enderror"
                                    name="email" value="{{ old('email') }}" required autofocus>
                             <div class="fv-plugins-message-container"></div>

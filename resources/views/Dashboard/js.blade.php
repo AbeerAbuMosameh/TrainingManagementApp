@@ -64,3 +64,4 @@
 <!--end::Page Vendors-->
 <!--begin::Page Scripts(used by this page)-->
 <script src="{{asset('admin/assets/js/pages/widgets.js')}}"></script>
+

@@ -223,6 +223,13 @@ var KTLogin = function () {
                                 message: 'The value is not a valid email address'
                             }
                         }
+                    },
+                    field: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Specialization is required'
+                            },
+                        }
                     }
                 },
                 plugins: {
@@ -274,17 +281,17 @@ var KTLogin = function () {
             form,
             {
                 fields: {
-                    delivery: {
+                    cv: {
                         validators: {
                             notEmpty: {
-                                message: 'Delivery type is required'
+                                message: 'cv is required'
                             }
                         }
                     },
-                    packaging: {
+                    certification: {
                         validators: {
                             notEmpty: {
-                                message: 'Packaging type is required'
+                                message: 'certification is required'
                             }
                         }
                     },

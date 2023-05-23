@@ -32,12 +32,10 @@ return new class extends Migration {
     {
         Schema::table('roles', function (Blueprint $table) {
             $table->dropColumn('level');
-            $table->dropColumn('company_id');
         });
 
         Schema::table('permissions', function (Blueprint $table) {
             $table->dropColumn('level');
-            $table->dropColumn('company_id');
         });
     }
 };

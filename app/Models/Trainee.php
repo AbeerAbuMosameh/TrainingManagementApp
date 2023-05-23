@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trainee extends Model
 {
-    use HasFactory , SoftDeletes;
-     protected $guarded =[];
+    use HasFactory, SoftDeletes;
+
+    protected $guarded = [];
+
+    public function notification()
+    {
+        return $this->belongsTo(Notification::class);
+    }
 }

@@ -113,7 +113,7 @@
                 <!--begin::Signin-->
                 <div class="login-form login-form-signup">
                     <!--begin::Form-->
-                    <form class="form" action="{{route('traineessss')}}" method="POST"
+                    <form class="form" action="{{route('trainees.store')}}" method="POST"
                           id="kt_login_signup_form" enctype="multipart/form-data">
                         @csrf
                         <!--begin: Wizard Step 1-->
@@ -272,7 +272,7 @@
                                 <div class="form-group">
                                     <label class="font-size-h6 font-weight-bolder text-dark">CV Or Resume<span
                                             class="text-danger">*</span></label>
-                                    <input type="file"
+                                    <input type="file"  accept=".pdf,.docx"
                                            class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"
                                            name="cv" id="cv" placeholder="cv" value="{{old('cv', '')}}"/>
                                 </div>
@@ -280,19 +280,18 @@
 
                                 <div class="form-group">
                                     <label class="font-size-h6 font-weight-bolder text-dark">Certification<span
-                                            class="text-danger">*</span></label>
-                                    <input type="file"
+                                            class="text-danger">* The last Related Certification</span></label>
+                                    <input type="file"  accept=".pdf,.docx,.jpeg,.jpg,.png,.doc"
                                            class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"
                                            name="certification" id="certification" placeholder="certification"
                                            value="{{old('certification', '')}}"/>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="font-size-h6 font-weight-bolder text-dark">Other Files<span
-                                            class="text-danger">*</span></label>
+                                    <label class="font-size-h6 font-weight-bolder text-dark">Other Files</label>
                                     <input type="file"
                                            class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"
-                                           name="otherFile" id="otherFile" placeholder="Other File"
+                                           name="otherFile[]" multiple id="otherFile" placeholder="Other File"
                                            value="{{old('otherFile', '')}}"/>
                                 </div>
                         </div>

@@ -37,4 +37,9 @@ return [
         'client_secret' => env('GOOGLE_ClIENT_SECRET'),
         'redirect' => 'http://127.0.0.1:8000/auth/google/callback',
     ],
+    'firebase' => [
+        'credential' => storage_path('app/Http/Controllers/Admin/it-training-app-386209-firebase-adminsdk-20xbx-c933a61e7b.json'),
+        'database_url' => 'https://it-training-app-386209-default-rtdb.firebaseio.com/',
+        'storage_bucket' => 'gs://it-training-app-386209.appspot.com/',
+    ],
 ];

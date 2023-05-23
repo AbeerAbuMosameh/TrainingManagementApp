@@ -20,7 +20,8 @@
         </div>
         <div class="card-body">
             <!--begin: Datatable-->
-            <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+            <table class="table table-bordered table-hover table-checkable" id="kt_datatable"
+                   style="margin-top: 13px !important">
                 <thead>
                 <tr>
 
@@ -66,37 +67,38 @@
                         <td>{{$trainee->payment}}</td>
                         <td>{{$trainee->language}}</td>
                         <td>
-                            @can('trainee-edit')
-                                <a href="{{ route('trainees.edit', $trainee->id) }}"
-                                   class="btn btn-sm btn-clean btn-icon"
-                                   title="Edit details">
-                                    <i class="la la-edit"></i>
-                                </a>
-                            @endcan
-                            @can('trainee-delete')
-                                <a onclick="sweet('{{$trainee->id}}',this)"
-                                   class="btn btn-sm btn-clean btn-icon btn-delete " title="Delete">
-                                    <i class="nav-icon la la-trash"></i>
-                                </a>
-                            @endcan
-                            <a href="{{ route('sendmail', $trainee->id) }}" class="btn btn-sm btn-clean btn-icon" title="Approve">
+                            <a href="{{ route('trainees.edit', $trainee->id) }}"
+                               class="btn btn-sm btn-clean btn-icon"
+                               title="Edit details">
+                                <i class="la la-edit"></i>
+                            </a>
+                            <a onclick="sweetees('{{$trainee->id}}', this)"
+                               class="btn btn-sm btn-clean btn-icon btn-delete " title="Delete">
+                                <i class="nav-icon la la-trash"></i>
+                            </a>
+                            <a href="{{ route('sendemail', $trainee->id) }}" class="btn btn-sm btn-clean btn-icon"
+                               title="Approve">
                                 <i class="la la-check-circle"></i>
                             </a>
 
                         </td>
                         <td>
-                            <a href="{{ asset('uploads/Trainee_files/cvs/' .$trainee->cv) }}" class="btn btn-primary" download>Download File</a>
+                            @if($trainee->cv)
+                                <a href="{{ $trainee->cv}}" class="btn btn-primary" target="_blank"
+                                   rel="noopener noreferrer">Download CV</a>
+                            @endif
 
-                        @can('trainee-delete')
-                                <a onclick="sweet('{{$trainee->id}}',this)"
-                                   class="btn btn-sm btn-clean btn-icon btn-delete " title="Delete">
-                                    <i class="nav-icon la la-trash"></i>
-                                </a>
-                            @endcan
-                            <a href="{{ route('sendmail', $trainee->id) }}" class="btn btn-sm btn-clean btn-icon" title="Approve">
-                                <i class="la la-check-circle"></i>
-                            </a>
+                            @if($trainee->certification)
+                                <a href="{{ $trainee->certification }}" class="btn btn-primary" target="_blank"
+                                   rel="noopener noreferrer">Download Certification</a>
+                            @endif
 
+                            @if(count($trainee->otherFile ?? []) > 0)
+                                @foreach($trainee->otherFile as $otherFileUrl)
+                                    <a href="{{ $otherFileUrl }}" class="btn btn-primary" target="_blank"
+                                       rel="noopener noreferrer">Related File</a>
+                                @endforeach
+                            @endif
                         </td>
                     </tr>
                 @endforeach
@@ -108,9 +110,55 @@
     </div>
 @endsection
 
-
 @section('js')
     <script src="{{asset('admin/assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
     <script src="{{asset('admin/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+
+    <script>
+        function sweetees(id, reference) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/trainees/' + id,
+                        method: 'DELETE',
+                        data: {_token: '{{ csrf_token() }}'},
+                        success: function (response) {
+                            reference.closest('tr').remove();
+                            // Show the success message
+                            Swal.fire(
+                                'Deleted!',
+                                'Trainee has been deleted.',
+                                'success'
+                            ).then(() => {
+                                // Reload the page
+                                location.reload();
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            console(error);
+                            // Show the error message
+                            Swal.fire(
+                                'Error!',
+                                'There was an error deleting Training.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+
+        }
+
+
+    </script>
+
 
 @endsection

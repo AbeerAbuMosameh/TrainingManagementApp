@@ -4,7 +4,7 @@
     <!--begin::Brand-->
     <div class="brand flex-column-auto" id="kt_brand">
         <!--begin::Logo-->
-        <a href="#" class="brand-logo">
+        <a href="{{route('home')}}" class="brand-logo">
             <img alt="Logo" src="{{asset('admin/assets/media/logos/logoo.png')}}" width="200px" height="50px" style="margin-left: 30px;"/>
 
         </a>
@@ -20,9 +20,8 @@
              data-menu-dropdown-timeout="500">
             <!--begin::Menu Nav-->
             <ul class="menu-nav">
-                @if(auth()->user()->level == 1)
-                    <li class="menu-item" aria-haspopup="true">
-                        <a href="#" class="menu-link">
+                <li class="menu-item" aria-haspopup="true">
+                    <a href="{{route('home')}}" class="menu-link">
 										<span class="svg-icon menu-icon">
 											<!--begin::Svg Icon | path:assets/media/svg/icons/Design/Layers.svg-->
 											<svg xmlns="http://www.w3.org/2000/svg"
@@ -40,17 +39,28 @@
 											</svg>
                                             <!--end::Svg Icon-->
 										</span>
-                            <span class="menu-text">Dashboard</span>
+                        <span class="menu-text">Dashboard</span>
+                    </a>
+                </li>
+                @if(auth()->user()->level == 1)
+
+                    <li class="menu-item" aria-haspopup="true">
+                        <a class="menu-link" href="{{route('password')}}">
+                            <i class="menu-icon
+                                    fas fa-chevron-circle-down"></i>
+
+                            <span class="menu-text">Update Password</span>
+
+
                         </a>
                     </li>
-
                     <li class="menu-section">
-                        <h4 class="menu-text">User Management</h4>
+                        <h4 class="menu-text">Advisores Management</h4>
                         <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                     </li>
                     <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                         <a href="javascript:;" class="menu-link menu-toggle">
-                            <i class="menu-icon fas fa-users"></i> <span class="menu-text">Users</span>
+                            <i class="menu-icon fas fa-users"></i> <span class="menu-text">Advisors</span>
 
                             <i class="menu-arrow"></i>
                         </a>
@@ -60,21 +70,14 @@
                             <i class="menu-arrow"></i>
                             <ul class="menu-subnav">
                                 <li class="menu-item" aria-haspopup="true">
-                                    <a href="#" class="menu-link">
+                                    <a href="{{route('advisors.index')}}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
-                                        <span class="menu-text">Show Users</span>
+                                        <span class="menu-text">Show Advisors</span>
                                     </a>
                                 </li>
-                                <li class="menu-item" aria-haspopup="true">
-                                    <a href="#" class="menu-link">
-                                        <i class="menu-bullet menu-bullet-dot">
-                                            <span></span>
-                                        </i>
-                                        <span class="menu-text">Add User</span>
-                                    </a>
-                                </li>
+
                             </ul>
                         </div>
                     </li>
@@ -105,6 +108,35 @@
                             </ul>
                         </div>
                     </li>
+
+
+                    <li class="menu-section">
+                        <h4 class="menu-text">Programmes Management</h4>
+                        <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
+                    </li>
+                    <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                        <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-icon fas fa-book"></i> <span class="menu-text">Programmes</span>
+
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <i class="menu-arrow"></i>
+
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                <li class="menu-item" aria-haspopup="true">
+                                    <a href="{{route('trainees.index')}}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text">Show Programmes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
                 @endif
 
 
@@ -113,6 +145,16 @@
                     <h4 class="menu-text">SETTINGS</h4>
                     <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                 </li>
+                    <li class="menu-item" aria-haspopup="true">
+                        <a class="menu-link" href="{{route('password')}}">
+                            <i class="menu-icon
+                                    fas fa-chevron-circle-down"></i>
+
+                                    <span class="menu-text">Update Password</span>
+
+
+                        </a>
+                    </li>
                 <li class="menu-item" aria-haspopup="true">
                     <a class="menu-link" onclick="document.getElementById('logout').submit()">
                         <i class="menu-icon

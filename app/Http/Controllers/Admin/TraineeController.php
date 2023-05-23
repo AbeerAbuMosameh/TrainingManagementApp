@@ -4,47 +4,100 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\TraineeCredentialsMail;
+use App\Models\Notification;
 use App\Models\Trainee;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Traits\imageTrait;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
+use Google\Cloud\Storage\StorageClient;
 
 class TraineeController extends Controller
 {
-    use imageTrait;
 
-//    function __construct()
-//    {
+    function __construct()
+    {
 //        $this->middleware('permission:trainee-list', ['only' => ['index', 'show']]);
-//     //   $this->middleware('permission:trainee-create', ['only' => ['create', 'store','accept']]);
-//    //    $this->middleware('permission:trainee-accept', ['only' => ['accept']]);
+//        $this->middleware('permission:trainee-accept', ['only' => ['accept']]);
 //        $this->middleware('permission:trainee-edit', ['only' => ['edit', 'update']]);
 //        $this->middleware('permission:trainee-delete', ['only' => ['destroy']]);
-//    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $trainees = Trainee::all();
-        return view('Admin.TraineesManagement.index', ['trainees' => $trainees]);
+//        $this->middleware('permission:trainee-create')->only(['create', 'store']);
 
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function index(){
+        $trainees = Trainee::all();
+
+        foreach ($trainees as $trainee) {
+            // Get the file paths for CV, certification, and other files
+            $cvPath = $trainee->cv;
+            $certificationPath = $trainee->certification;
+            $otherFiles = json_decode($trainee->otherFile);
+
+
+            // Generate download links or display the files
+            $cvDownloadUrl = $this->generateDownloadUrl($cvPath);
+            $certificationDownloadUrl = $this->generateDownloadUrl($certificationPath);
+            $otherFileDownloadUrls = [];
+
+
+            // Handle the case when $otherFiles is empty or null
+            if (!empty($otherFiles)) {
+                foreach ($otherFiles as $otherFile) {
+                    $otherFileDownloadUrls[] = $this->generateDownloadUrl($otherFile);
+                }
+            }
+
+
+            // Assign the download URLs to the trainee object
+            $trainee->cv = $cvDownloadUrl;
+            $trainee->certification = $certificationDownloadUrl;
+            $trainee->otherFile = $otherFileDownloadUrls;
+
+        }
+
+
+        return view('Admin.TraineesManagement.index', ['trainees' => $trainees]);
+    }
+
+    /**
+     * Generate a signed URL for the given file path
+     *
+     * @param string $filePath
+     * @return string|null
+     */
+    function generateDownloadUrl($filePath){
+        if (!empty($filePath)) {
+            // Initialize Firebase Storage
+            $storage = new StorageClient([
+                'projectId' => 'it-training-app-386209',
+                'keyFilePath' => 'C:\xampp\htdocs\TrainingManagementApp\app\Http\Controllers\it-training-app-386209-firebase-adminsdk-20xbx-c933a61e7b.json',
+            ]);
+
+            // Get the bucket name from the Firebase configuration or replace it with your bucket name
+            $bucket = $storage->bucket('it-training-app-386209.appspot.com');
+
+            // Generate the signed URL for the file
+            $object = $bucket->object($filePath);
+            $downloadUrl = $object->signedUrl(now()->addHour());
+
+            return $downloadUrl;
+        }
+
+        return null;
+    }
+
+
+    /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
+    public function create(){
         return view('Admin.TraineesManagement.create');
-
     }
 
 
@@ -62,9 +115,10 @@ class TraineeController extends Controller
             'city' => 'required|string|max:255',
             'payment' => 'nullable|string|in:Card,PayPal,Bank',
             'language' => 'nullable|string|in:French,Arabic,English',
-            'cv' => 'nullable|mimes:pdf,docx|max:10240', //validate the file types and size
-            'certification' => 'nullable|mimes:pdf,docx,jpeg,png|max:10240',
-            'otherFile' => 'nullable|mimes:pdf,docx,jpeg,png|max:10240',
+            'cv' => 'required|mimes:pdf,docx,jpeg,png|max:10240', //validate the file types and size
+            'certification' => 'required|mimes:pdf,docx,jpeg,png|max:10240',
+            'otherFile.*' => 'nullable|file|max:10240', // Adjust the maximum file size as needed
+
         ]);
 
         if ($validator->fails()) {
@@ -73,93 +127,152 @@ class TraineeController extends Controller
         }
 
         // Generate a unique ID
+        try {
+            DB::beginTransaction();
+            $trainee = new Trainee();
+            $trainee->first_name = $request->input('first_name');
+            $trainee->last_name = $request->input('last_name');
+            $trainee->email = $request->input('email');
+            $trainee->phone = $request->input('phone');
+            $trainee->education = $request->input('education');
+            $trainee->gpa = $request->input('gpa');
+            $trainee->address = $request->input('address');
+            $trainee->city = $request->input('city');
+            $trainee->payment = $request->input('payment');
+            $trainee->language = $request->input('language');
+            $trainee->password = Hash::make('123456');
+
+            // Initialize Google Cloud Storage
+            $storage = new StorageClient([
+                'projectId' => 'it-training-app-386209',
+                'keyFilePath' => 'C:\xampp\htdocs\TrainingManagementApp\app\Http\Controllers\it-training-app-386209-firebase-adminsdk-20xbx-c933a61e7b.json',
+            ]);
+
+            $bucket = $storage->bucket('it-training-app-386209.appspot.com');
+
+            // Store CV Files
+            if ($request->hasFile('cv')) {
+                $cvFile = $request->file('cv');
+                $cvPath = 'CVs/' . time() + rand(1, 10000000) . '.' . $cvFile->getClientOriginalName();
+                $test = $bucket->upload(
+                    file_get_contents($cvFile),
+                    [
+                        'name' => $cvPath,
+                    ]
+                );
+                $trainee->cv = $cvPath;
+
+            }
+
+            // Store Certification Files
+            if ($request->hasFile('certification')) {
+                $certificationFile = $request->file('certification');
+
+                $certificationPath = 'Certifications/' . time() + rand(1, 10000000) . '.' . $certificationFile->getClientOriginalName();
+                $bucket->upload(
+                    file_get_contents($certificationFile),
+                    [
+                        'name' => $certificationPath,
+                    ]
+                );
+                $trainee->certification = $certificationPath;
+
+            }
+
+            // Store Other Files
+            if ($request->hasFile('otherFile')) {
+                $otherFiles = $request->file('otherFile');
+
+                foreach ($otherFiles as $otherFile) {
+                    $otherPath = 'otherFiles/' . time() + rand(1, 10000000) . '.' . $otherFile->getClientOriginalName();
+                    $bucket->upload(
+                        file_get_contents($otherFile),
+                        [
+                            'name' => $otherPath,
+                        ]
+                    );
+                    $otherFilePaths[] = $otherPath;
+                }
+
+                // Convert file paths to JSON array and save them in the trainee model
+                $trainee->otherFile = json_encode($otherFilePaths);
+            }
+
+            $trainee->save();
 
 
-        $trainee = new Trainee();
-        $trainee->first_name = $request->input('first_name');
-        $trainee->last_name = $request->input('last_name');
-        $trainee->email = $request->input('email');
-        $trainee->phone = $request->input('phone');
-        $trainee->education = $request->input('education');
-        $trainee->gpa = $request->input('gpa');
-        $trainee->address = $request->input('address');
-        $trainee->city = $request->input('city');
-        $trainee->payment = $request->input('payment');
-        $trainee->language = $request->input('language');
-        $trainee->password = Hash::make('123456');
+            $user = User::create([
+                'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make('123456'),
+                'level' => 3,
+            ]);
 
-        // checking if cv file is uploaded and valid.
-        if ($request->hasFile('cv')) {
-            $file = $request->file('cv');
-            $path = "uploads/Trainee_files/cvs/";
-            $filename = time() + rand(1, 10000000) . '.' . $file->getClientOriginalName();
-            $file->move($path, $filename);
-            $trainee->cv = $path . $filename;
+            // Create a new notification for the manager
+            $notification = new Notification();
+            $notification->message = $trainee->first_name. 'is a New trainee registration';
+            $notification->status = 'unread';
+            $notification->save();
+
+            // Assign the notification to the trainee
+            $trainee->notification()->associate($notification);
+            $trainee->save();
+
+            DB::commit();
+
+            // Save the trainee instance and other data to the database
+
+
+            // save the trainee instance to the database
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            toastr()->error($e);
+
         }
-
-        // checking if certification file is uploaded and valid.
-        if ($request->hasFile('certification')) {
-            $file = $request->file('certification');
-            $path = "uploads/Trainee_files/certifications/";
-            $filename = time() + rand(1, 10000000) . '.' . $file->getClientOriginalName();
-            $file->move($path, $filename);
-            $trainee->certification = $path . $filename;
-        }
-
-        // checking if otherFile file is uploaded and valid.
-        if ($request->hasFile('otherFile')) {
-            $file = $request->file('otherFile');
-            $path = "uploads/Trainee_files/otherFiles/";
-            $filename = time() + rand(1, 10000000) . '.' . $file->getClientOriginalName();
-            $file->move($path, $filename);
-            $trainee->otherFile = $path . $filename;
-        }
-
-        // save the trainee instance to the database
-        $trainee->save();
-
-
-        $user = User::create([
-            'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make('123456'),
-            'level' => 3,
-        ]);
 
     }
-
-
 
 
     /**
      * Display the specified resource.
      */
-    public function accept($id)
+    public
+    function accept($id)
     {
         $trainee = Trainee::find($id); // Find the user by ID
         $user = User::where('email', $trainee->email)->first(); // Find the trainee by email
-        $trainee_id = uniqid();
-       if($trainee->is_approved == 0) {
-           $trainee->is_approved = true;
-           $trainee->save();
+        $unique_id = uniqid();
+        if ($user->unique_id == null) {
+            $trainee->is_approved = true;
+            $trainee->save();
 
-           $user->trainee_id = $trainee_id;
-           $pass = Str::random(10);
-           $user->password = Hash::make($pass);
+            $user->unique_id = $unique_id;
+            $pass = Str::random(10);
+            $user->password = Hash::make($pass);
 
-           $user->save();
+            $user->save();
+            toastr()->success('Trainee Is Active  & Mail Send Successfully with login data!');
 
-           toastr()->success('Approved Trainee & Mail Send Successfully!');
+            Mail::to($user->email)->send(new TraineeCredentialsMail($user->unique_id, $pass));
 
-           Mail::to($user->email)->send(new TraineeCredentialsMail($user->trainee_id, $pass));
+        } else {
+            if ($trainee->is_approved) {
+                $trainee->is_approved = false;
+                toastr()->warning('Trainee now not active!');
 
-       }else{
-           toastr()->error('You Approved this Trainee & send Email Before!');
-       }
+            } else {
+                $trainee->is_approved = true;
+                toastr()->Info('Trainee now active');
+
+            }
+            $trainee->save();
+        }
         return redirect()->route('trainees.index');
     }
 
-    public function show(Trainee $trainee)
+    public
+    function show(Trainee $trainee)
     {
 
     }
@@ -167,7 +280,8 @@ class TraineeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Trainee $trainee)
+    public
+    function edit(Trainee $trainee)
     {
         //
     }
@@ -175,7 +289,8 @@ class TraineeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public
+    function update(Request $request, $id)
     {
         //
     }
@@ -183,8 +298,43 @@ class TraineeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Trainee $trainee)
+    public
+    function destroy($id)
     {
-        //
+        Trainee::findOrFail($id)->delete();
+        return response()->json(['message' => 'Trainee deleted.']);
+    }
+
+
+    public function password()
+    {
+        return view('Admin.updatePassword');
+    }
+
+
+    public function updatePassword(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $validator = Validator($request->all(), [
+            'oldPassword' => 'required',
+            'password' => 'required|string|confirmed',
+        ]);
+        if ($validator->fails() && !$validator->errors()->has('password_confirmation')) {
+            toastr()->warning('All fields should be entered');
+        } elseif ($validator->errors()->has('password_confirmation')) {
+            toastr()->warning('Password confirmation does not match');
+        } else {
+            // Check if the previous password matches the one stored in the database
+            if (!Hash::check($request->input('oldPassword'), $user->password)) {
+                toastr()->warning('Previous password is incorrect');
+            } else {
+                // Update the password
+                $user->password = Hash::make($request->input('password'));
+                $user->save();
+                toastr()->success('Password updated successfully');
+            }
+        }
+        return redirect()->route('password');
+
     }
 }

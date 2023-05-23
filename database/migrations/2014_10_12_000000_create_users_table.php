@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('google_id')->unique()->nullable();
-            $table->string('trainee_id')->unique()->nullable();
+            $table->string('unique_id')->unique()->nullable();
             $table->enum('level', [1, 2,3])->default(3);
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();

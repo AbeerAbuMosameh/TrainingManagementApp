@@ -5,12 +5,9 @@
 @endsection
 
 
-@section('js')
-
-@endsection
-
 @section('content')
     <!--Begin::Row-->
+
     <div class="row">
         <div class="col-xl-3">
             <!--begin::Stats Widget 25-->

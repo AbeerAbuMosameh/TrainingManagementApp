@@ -16,5 +16,7 @@
 <!--end::Global Theme Styles-->
 <!--begin::Layout Themes(used by all pages)-->
 <!--end::Layout Themes-->
-<link rel="shortcut icon" href="{{asset('admin/assets/media/logos/favicon2.png')}}" />
+<link rel="shortcut icon" href="{{asset('admin/assets/media/logos/favicon2.png')}}" style="border-radius: 50% !important"/>
 <link href="{{asset('admin/assets/css/pages/login/login-3.css')}}" rel="stylesheet" type="text/css"/>
+<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+

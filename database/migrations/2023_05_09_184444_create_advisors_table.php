@@ -13,6 +13,24 @@ return new class extends Migration
     {
         Schema::create('advisors', function (Blueprint $table) {
             $table->id();
+            $table->string('image')->nullable();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('email')->unique();
+            $table->string('phone');
+            $table->string('education');
+            $table->string('field');
+            $table->string('address');
+            $table->string('city')->nullable();
+            $table->enum('language', ['English', 'Arabic','French'])->nullable()->default('english');
+            $table->string('cv')->nullable();
+            $table->string('certification')->nullable();
+            $table->json('otherFile')->nullable();
+            $table->boolean('is_approved')->default(false);
+            $table->string('password');
+            $table->unsignedBigInteger('notification_id')->nullable();
+            $table->foreign('notification_id')->references('id')->on('notifications')->onDelete('cascade')->onDelete('set null');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

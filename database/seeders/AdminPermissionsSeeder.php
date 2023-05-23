@@ -16,24 +16,39 @@ class AdminPermissionsSeeder extends Seeder
         $permissions = [
             //Home
             ['name' => 'home'],
-            //UserManagement
+
             //Roles
             ['name' => 'role-list'],
             ['name' => 'role-create'],
             ['name' => 'role-edit'],
             ['name' => 'role-delete'],
-            //Users
+
+            //Trainees
             ['name' => 'trainee-list'],
             ['name' => 'trainee-create'],
             ['name' => 'trainee-accept'],
             ['name' => 'trainee-edit'],
             ['name' => 'trainee-delete'],
 
-            //Companies
+            //Advisor
             ['name' => 'advisor-list'],
             ['name' => 'advisor-create'],
             ['name' => 'advisor-edit'],
             ['name' => 'advisor-delete'],
+            ['name' => 'advisor-accept'],
+
+            //Field
+            ['name' => 'field-list'],
+            ['name' => 'field-create'],
+            ['name' => 'field-edit'],
+            ['name' => 'field-delete'],
+
+            //Programmes
+            ['name' => 'Programme-list'],
+            ['name' => 'Programme-create'],
+            ['name' => 'Programme-edit'],
+            ['name' => 'Programme-delete'],
+            ['name' => 'Programme-accept'],
         ];
 
         foreach ($permissions as $permission) {
