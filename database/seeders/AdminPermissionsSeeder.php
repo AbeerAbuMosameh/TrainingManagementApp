@@ -49,6 +49,12 @@ class AdminPermissionsSeeder extends Seeder
             ['name' => 'program-edit'],
             ['name' => 'program-delete'],
             ['name' => 'program-accept'],
+
+            //payment
+            ['name' => 'payment-list'],
+            ['name' => 'payment-create'],
+            ['name' => 'payment-edit'],
+            ['name' => 'payment-delete'],
         ];
 
         foreach ($permissions as $permission) {

@@ -19,11 +19,10 @@ class TraineeController extends Controller
 {
 
     function __construct(){
-//        $this->middleware('permission:trainee-list', ['only' => ['index', 'show']]);
-//        $this->middleware('permission:trainee-accept', ['only' => ['accept']]);
-//        $this->middleware('permission:trainee-edit', ['only' => ['edit', 'update']]);
-//        $this->middleware('permission:trainee-delete', ['only' => ['destroy']]);
-//        $this->middleware('permission:trainee-create')->only(['create', 'store']);
+        $this->middleware('permission:trainee-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:trainee-accept', ['only' => ['accept']]);
+        $this->middleware('permission:trainee-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:trainee-delete', ['only' => ['destroy']]);
     }
 
     /**

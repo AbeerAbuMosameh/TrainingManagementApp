@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 class ProgramController extends Controller
 {
 
+    function __construct(){
+        $this->middleware('permission:program-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:program-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:program-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:program-create')->only(['create', 'store']);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -35,7 +41,7 @@ class ProgramController extends Controller
             'image' => 'nullable',
             'name' => 'required|string',
             'hours' => 'required|string',
-            'start_date' => 'required|date|equal:today',
+            'start_date' => 'required|date|date_equals:today',
             'end_date' => 'required|date|after_or_equal:start_date',
             'type' => 'required|in:free,paid',
             'price' => 'nullable|integer',
@@ -73,14 +79,13 @@ class ProgramController extends Controller
         return view('Admin.ProgramsManagement.edit', compact('program','fields','advisor'));
     }
 
-
     //Program Management - Validate & Update Program
     public function update(Request $request, $id){
         $validator = Validator($request->all(), [
             'image' => 'nullable',
             'name' => 'required|string',
             'hours' => 'required|string',
-            'start_date' => 'required|date|after:today',
+            'start_date' => 'required|date|date_equals:today',
             'end_date' => 'required|date|after_or_equal:start_date',
             'type' => 'required|in:free,paid',
             'price' => 'nullable|integer',

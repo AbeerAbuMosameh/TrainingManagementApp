@@ -19,6 +19,13 @@ use Illuminate\Support\Str;
 
 class AdvisorController extends Controller
 {
+
+    function __construct(){
+        $this->middleware('permission:advisor-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:advisor-accept', ['only' => ['accept']]);
+        $this->middleware('permission:advisor-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:advisor-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */

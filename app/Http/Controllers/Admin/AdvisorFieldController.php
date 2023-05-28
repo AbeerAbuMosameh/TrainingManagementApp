@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class AdvisorFieldController extends Controller
 {
+
+    function __construct(){
+        $this->middleware('permission:program-accept', ['only' => ['accept']]);
+    }
     /**
      * Display a listing of the resource.
      */
