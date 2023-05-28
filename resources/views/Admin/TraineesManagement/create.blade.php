@@ -237,10 +237,9 @@
                                 <select name="payment" id="payment"
                                         class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
                                     <option value="Card" selected="selected">Select a payment Option</option>
-                                    <option value="Card">Credit/debit cards
-                                    </option>
-                                    <option value="PayPal">PayPal</option>
-                                    <option value="Bank">Bank transfers</option>
+                                    @foreach($payments as $payment)
+                                        <option value="{{ $payment->id }}">{{ $payment->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <!--end::Form Group-->
@@ -280,7 +279,7 @@
 
                                 <div class="form-group">
                                     <label class="font-size-h6 font-weight-bolder text-dark">Certification<span
-                                            class="text-danger">* The last Related Certification</span></label>
+                                            class=" font-size-h12 text-danger">*</span></label>
                                     <input type="file"  accept=".pdf,.docx,.jpeg,.jpg,.png,.doc"
                                            class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"
                                            name="certification" id="certification" placeholder="certification"

@@ -224,11 +224,12 @@ var KTLogin = function () {
                             }
                         }
                     },
-                    field: {
+                    'field[]': {
                         validators: {
-                            notEmpty: {
-                                message: 'Specialization is required'
-                            },
+                            choice: {
+                                min: 1,
+                                message: 'At least one specialization is required'
+                            }
                         }
                     }
                 },

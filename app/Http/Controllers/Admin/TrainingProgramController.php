@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Programme;
+use App\Models\TrainingProgram;
 use Illuminate\Http\Request;
 
-class ProgrameController extends Controller
+class TrainingProgramController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +35,7 @@ class ProgrameController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Programme $programme)
+    public function show(TrainingProgram $trainingProgram)
     {
         //
     }
@@ -43,7 +43,7 @@ class ProgrameController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Programme $programme)
+    public function edit(TrainingProgram $trainingProgram)
     {
         //
     }
@@ -51,7 +51,7 @@ class ProgrameController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Programme $programme)
+    public function update(Request $request, TrainingProgram $trainingProgram)
     {
         //
     }
@@ -59,7 +59,7 @@ class ProgrameController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Programme $programme)
+    public function destroy(TrainingProgram $trainingProgram)
     {
         //
     }

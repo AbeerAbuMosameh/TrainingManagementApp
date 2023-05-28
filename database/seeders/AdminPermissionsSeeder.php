@@ -43,12 +43,12 @@ class AdminPermissionsSeeder extends Seeder
             ['name' => 'field-edit'],
             ['name' => 'field-delete'],
 
-            //Programmes
-            ['name' => 'Programme-list'],
-            ['name' => 'Programme-create'],
-            ['name' => 'Programme-edit'],
-            ['name' => 'Programme-delete'],
-            ['name' => 'Programme-accept'],
+            //Programs
+            ['name' => 'program-list'],
+            ['name' => 'program-create'],
+            ['name' => 'program-edit'],
+            ['name' => 'program-delete'],
+            ['name' => 'program-accept'],
         ];
 
         foreach ($permissions as $permission) {

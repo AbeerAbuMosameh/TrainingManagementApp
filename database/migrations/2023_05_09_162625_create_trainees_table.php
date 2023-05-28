@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('gpa')->nullable(); // New column
             $table->string('address');
             $table->string('city')->nullable();
-            $table->enum('payment', ['Card', 'PayPal','Bank'])->nullable()->default('card');
+            $table->string('payment');
             $table->enum('language', ['English', 'Arabic','French'])->nullable()->default('english');
             $table->string('cv')->nullable();
             $table->string('certification')->nullable();

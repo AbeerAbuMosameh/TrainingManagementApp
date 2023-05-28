@@ -1,7 +1,7 @@
 @extends('Dashboard.master')
 
 @section('title')
-    dashboard
+    Advisors
 @endsection
 
 @section('css')
@@ -30,7 +30,6 @@
                     <th>email</th>
                     <th>phone</th>
                     <th>education</th>
-                    <th>field</th>
                     <th>Address</th>
                     <th>City</th>
                     <th>Status</th>
@@ -47,11 +46,8 @@
                         <td>{{$advisor->email}}</td>
                         <td>{{$advisor->phone}}</td>
                         <td>{{$advisor->education}}</td>
-                        <td>{{$advisor->field}}</td>
                         <td>{{$advisor->address}}</td>
                         <td>{{$advisor->city}}</td>
-
-
                         @if($advisor->is_approved == 1 )
                             <td data-field="Status" data-autohide-disabled="false" aria-label="3"
                                 class="datatable-cell"><span style="width: 108px;"><span
@@ -65,21 +61,19 @@
                         @endif
                         <td>{{$advisor->language}}</td>
                         <td>
-                            <a href="{{ route('advisors.edit', $advisor->id) }}"
+                            <a href="{{ route('advisors.show', $advisor->id) }}"
                                class="btn btn-sm btn-clean btn-icon"
-                               title="Edit details">
-                                <i class="la la-edit"></i>
+                               title="Show details">
+                                <i class="la la-eye"></i>
                             </a>
                             <a onclick="deleteRows('{{$advisor->id}}', this)"
                                class="btn btn-sm btn-clean btn-icon btn-delete" title="Delete">
                                 <i class="nav-icon la la-trash"></i>
                             </a>
-
-                            <a href="{{ route('sendmailtoavisor', $advisor->id) }}"
-                               class="btn btn-sm btn-clean btn-icon" title="Approve">
+                            <a  class="btn btn-sm btn-clean btn-icon" title="Approve"
+                               onclick="sendEmail({{ $advisor->id }})">
                                 <i class="la la-check-circle"></i>
                             </a>
-
                         </td>
                         <td>
                             @if($advisor->cv)
@@ -107,14 +101,92 @@
             <!--end: Datatable-->
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="advisorModal" tabindex="-1" role="dialog" aria-labelledby="advisorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="advisorModalLabel">Advisor Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Advisor fields and checkbox here -->
+                    <div class="form-group">
+                        <label for="acceptCheckbox">Accept Program</label>
+                        <input type="checkbox" id="acceptCheckbox" name="acceptCheckbox">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveAdvisorBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 
 @section('js')
-
-
     <script>
-         function deleteRows(id, reference) {
+        $(document).ready(function () {
+            $('.edit-btn').click(function () {
+                var advisorId = $(this).data('advisor-id');
+                $('#advisorModal').modal('show');
+
+                // Perform additional logic if needed based on the advisor ID
+                // and populate the modal fields accordingly
+            });
+
+            // Handle the save button click event
+            $('#saveAdvisorBtn').click(function () {
+                var acceptCheckbox = $('#acceptCheckbox').prop('checked');
+
+                // Perform further processing based on the checkbox value (accept/reject program)
+                // You can make an AJAX request here to update the advisor's program status accordingly
+
+                // Close the modal
+                $('#advisorModal').modal('hide');
+            });
+        });
+    </script>
+    <script src="{{asset('admin/assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
+    <script src="{{asset('admin/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+    <script>
+        function sendEmail(advisorId) {
+            // AJAX call to send email
+            $.ajax({
+                url: '/sendmail/' + advisorId,
+                type: 'GET',
+                success: function (response) {
+                    var message = response.message;
+
+                    if (message === 'Advisor Not Active Now') {
+                        toastr.error(message); // Display success message
+                        updateStatus('Not Approved'); // Update status display
+                    } else {
+                        toastr.success(message); // Display error message
+                        updateStatus('Approved'); // Update status display
+
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response
+                    toastr.error('Error occurred. Please try again.');
+                }
+            });
+        }
+        function updateStatus(status) {
+            var statusCell = $('.datatable-cell[data-field="Status"]');
+            var labelClass = (status === 'Approved') ? 'label-light-primary' : 'label-light-danger';
+            var labelContent = (status === 'Approved') ? 'Approved' : 'Not Approved';
+
+            statusCell.html('<span style="width: 108px;"><span class="label font-weight-bold label-lg ' + labelClass + ' label-inline">' + labelContent + '</span></span>');
+        }
+    </script>
+    <script>
+        function deleteRows(id, reference) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -134,12 +206,9 @@
                             // Show the success message
                             Swal.fire(
                                 'Deleted!',
-                                'Your role has been deleted.',
+                                'Advisor has been deleted.',
                                 'success'
-                            ).then(() => {
-                                // Reload the page
-                                location.reload();
-                            });
+                            )
                         },
                         error: function (xhr, status, error) {
                             console(error);
@@ -156,6 +225,5 @@
 
         }
     </script>
-
 
 @endsection

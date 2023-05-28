@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone');
             $table->string('education');
-            $table->string('field');
             $table->string('address');
             $table->string('city')->nullable();
             $table->enum('language', ['English', 'Arabic','French'])->nullable()->default('english');

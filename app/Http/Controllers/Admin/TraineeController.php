@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Mail\TraineeCredentialsMail;
 use App\Models\Notification;
+use App\Models\Payment;
 use App\Models\Trainee;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,24 +18,32 @@ use Google\Cloud\Storage\StorageClient;
 class TraineeController extends Controller
 {
 
-    function __construct()
-    {
+    function __construct(){
 //        $this->middleware('permission:trainee-list', ['only' => ['index', 'show']]);
 //        $this->middleware('permission:trainee-accept', ['only' => ['accept']]);
 //        $this->middleware('permission:trainee-edit', ['only' => ['edit', 'update']]);
 //        $this->middleware('permission:trainee-delete', ['only' => ['destroy']]);
 //        $this->middleware('permission:trainee-create')->only(['create', 'store']);
-
     }
 
     /**
      * Display a listing of the resource.
      */
+
+    //Trainee Management - display View contain all Trainees & his documents and files stored in firebase
     public function index(){
         $trainees = Trainee::all();
-
         foreach ($trainees as $trainee) {
-            // Get the file paths for CV, certification, and other files
+            $payment = Payment::where('id', $trainee->payment)->first();
+            if ($payment == null) {
+                $trainee->payment = 'not Selected';
+            } else {
+                $trainee->payment = $payment->name;
+            }
+
+
+
+        // Get the file paths for CV, certification, and other files
             $cvPath = $trainee->cv;
             $certificationPath = $trainee->certification;
             $otherFiles = json_decode($trainee->otherFile);
@@ -65,12 +74,7 @@ class TraineeController extends Controller
         return view('Admin.TraineesManagement.index', ['trainees' => $trainees]);
     }
 
-    /**
-     * Generate a signed URL for the given file path
-     *
-     * @param string $filePath
-     * @return string|null
-     */
+    //generate URL for each file or document stored in firebase
     function generateDownloadUrl($filePath){
         if (!empty($filePath)) {
             // Initialize Firebase Storage
@@ -93,16 +97,14 @@ class TraineeController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    //Trainee Management - display View contain all payment way to register new trainee
     public function create(){
-        return view('Admin.TraineesManagement.create');
+        $payments =Payment::all();
+        return view('Admin.TraineesManagement.create',compact('payments'));
     }
 
-
-    public function store(Request $request)
-    {
+    //Trainee Management - Validate & Store trainee Information in database (Sql-NoSQL)
+    public function store(Request $request){
         $validator = Validator($request->all(), [
             'image' => 'nullable|mimes:jpeg,png|max:10240', //validate the file types and size
             'first_name' => 'required|string|max:255',
@@ -113,7 +115,7 @@ class TraineeController extends Controller
             'gpa' => 'nullable|numeric|min:0|max:4',
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
-            'payment' => 'nullable|string|in:Card,PayPal,Bank',
+            'payment' => 'nullable|string',
             'language' => 'nullable|string|in:French,Arabic,English',
             'cv' => 'required|mimes:pdf,docx,jpeg,png|max:10240', //validate the file types and size
             'certification' => 'required|mimes:pdf,docx,jpeg,png|max:10240',
@@ -198,25 +200,25 @@ class TraineeController extends Controller
                 $trainee->otherFile = json_encode($otherFilePaths);
             }
 
+
+
+            $notification = Notification::create([
+                'message' => $trainee->first_name . ' is a new trainee registration',
+                'status' => 'unread'
+            ]);
+
+            $trainee->notification_id = $notification->id;
             $trainee->save();
 
 
-            $user = User::create([
+            User::create([
                 'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make('123456'),
                 'level' => 3,
             ]);
 
-            // Create a new notification for the manager
-            $notification = new Notification();
-            $notification->message = $trainee->first_name. 'is a New trainee registration';
-            $notification->status = 'unread';
-            $notification->save();
 
-            // Assign the notification to the trainee
-            $trainee->notification()->associate($notification);
-            $trainee->save();
 
             DB::commit();
 
@@ -233,13 +235,8 @@ class TraineeController extends Controller
 
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public
-    function accept($id)
-    {
+    //send email contain unique ID and password and change status if first time or change activation of this advisor
+    public function accept($id){
         $trainee = Trainee::find($id); // Find the user by ID
         $user = User::where('email', $trainee->email)->first(); // Find the trainee by email
         $unique_id = uniqid();
@@ -252,89 +249,97 @@ class TraineeController extends Controller
             $user->password = Hash::make($pass);
 
             $user->save();
-            toastr()->success('Trainee Is Active  & Mail Send Successfully with login data!');
-
             Mail::to($user->email)->send(new TraineeCredentialsMail($user->unique_id, $pass));
+
+            return response()->json(['message' =>'Trainee Is Active  & Mail Send Successfully with login data!']);
+
 
         } else {
             if ($trainee->is_approved) {
                 $trainee->is_approved = false;
-                toastr()->warning('Trainee now not active!');
+                $trainee->save();
+
+                return response()->json(['message' => "Trainee Not Active Now"]);
 
             } else {
                 $trainee->is_approved = true;
-                toastr()->Info('Trainee now active');
+                $trainee->save();
+
+                return response()->json(['message' => "Trainee Active Now"]);
 
             }
-            $trainee->save();
         }
-        return redirect()->route('trainees.index');
     }
 
-    public
-    function show(Trainee $trainee)
-    {
+    //Trainee Management - Show specific trainee Information and their Documents & files
+    public function show($id){
+        $trainee = Trainee::findOrFail($id);
+        // Get the file paths for CV, certification, and other files
+        $cvPath = $trainee->cv;
+        $certificationPath = $trainee->certification;
+        $otherFiles = json_decode($trainee->otherFile);
 
+
+        // Generate download links or display the files
+        $cvDownloadUrl = $this->generateDownloadUrl($cvPath);
+        $certificationDownloadUrl = $this->generateDownloadUrl($certificationPath);
+        $otherFileDownloadUrls = [];
+
+
+        // Handle the case when $otherFiles is empty or null
+        if (!empty($otherFiles)) {
+            foreach ($otherFiles as $otherFile) {
+                $otherFileDownloadUrls[] = $this->generateDownloadUrl($otherFile);
+            }
+        }
+
+
+        // Assign the download URLs to the trainee object
+        $trainee->cv = $cvDownloadUrl;
+        $trainee->certification = $certificationDownloadUrl;
+        $trainee->otherFile = $otherFileDownloadUrls;
+
+//        Notification::where('id', $trainee->notification_id)->update(['status' => 'read']);
+        return view('Admin.TraineesManagement.show', compact('trainee'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public
-    function edit(Trainee $trainee)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public
-    function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public
-    function destroy($id)
+    //Advisor Management - delete specific advisor
+    public function destroy($id)
     {
         Trainee::findOrFail($id)->delete();
         return response()->json(['message' => 'Trainee deleted.']);
     }
 
-
-    public function password()
-    {
+    //All Actors - display View To change Password
+    public function password(){
         return view('Admin.updatePassword');
     }
 
-
+    //All Actors - Validate &  change Password
     public function updatePassword(Request $request, $id)
     {
         $user = User::findOrFail($id);
+
         $validator = Validator($request->all(), [
             'oldPassword' => 'required',
             'password' => 'required|string|confirmed',
         ]);
+
         if ($validator->fails() && !$validator->errors()->has('password_confirmation')) {
-            toastr()->warning('All fields should be entered');
+            return response()->json(['message' => 'All fields should be entered'], 422);
         } elseif ($validator->errors()->has('password_confirmation')) {
-            toastr()->warning('Password confirmation does not match');
+            return response()->json(['message' => 'Password confirmation does not match'], 422);
         } else {
             // Check if the previous password matches the one stored in the database
             if (!Hash::check($request->input('oldPassword'), $user->password)) {
-                toastr()->warning('Previous password is incorrect');
+                return response()->json(['message' => 'Previous password is incorrect'], 422);
             } else {
                 // Update the password
                 $user->password = Hash::make($request->input('password'));
                 $user->save();
-                toastr()->success('Password updated successfully');
+                return response()->json(['message' => 'Password updated successfully']);
             }
         }
-        return redirect()->route('password');
-
     }
+
 }

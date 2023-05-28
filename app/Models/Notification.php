@@ -10,6 +10,8 @@ class Notification extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $fillable=['message','status'];
+
     public function advisor(){
         return $this->hasOne(Advisor::class);
     }

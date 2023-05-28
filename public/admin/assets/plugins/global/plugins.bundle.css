@@ -7588,16 +7588,16 @@ Build date: 2019-12-19 16:51:02
 }
 
 /*!
- * 
+ *
  * Super simple wysiwyg editor v0.8.18
  * https://summernote.org
- * 
- * 
+ *
+ *
  * Copyright 2013- Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license.
- * 
+ *
  * Date: 2020-05-20T16:47Z
- * 
+ *
  */
 @font-face {
   font-family: "summernote";
@@ -12508,7 +12508,7 @@ button.toast-close-button {
 }
 
 .toast-success {
-  background-color: #51A351;
+  background-color: #1BC5BD;
 }
 
 .toast-error {
@@ -13903,7 +13903,7 @@ button.toast-close-button {
   border: 0;
   border-radius: 0.25em;
   background: initial;
-  background-color: #2778c4;
+  background-color: #1BC5BD;
   color: #fff;
   font-size: 1.0625em;
 }

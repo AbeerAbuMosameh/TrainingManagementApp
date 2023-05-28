@@ -199,13 +199,6 @@
                                         @foreach($fields as $field)
                                             <option value="{{ $field->id }}">{{ $field->name }}</option>
                                         @endforeach
-{{--                                        <option value="Computer Science">Computer Science</option>--}}
-{{--                                        <option value="Engineering">Engineering</option>--}}
-{{--                                        <option value="Business Administration">Business Administration</option>--}}
-{{--                                        <option value="Finance">Finance</option>--}}
-{{--                                        <option value="Marketing">Marketing</option>--}}
-{{--                                        <option value="Medicine">Medicine</option>--}}
-{{--                                        <option value="Law">Law</option>--}}
                                     </select>
 
 
@@ -295,8 +288,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="font-size-h6 font-weight-bolder text-dark">Other Files<span
-                                        class="text-danger">*</span></label>
+                                <label class="font-size-h6 font-weight-bolder text-dark">Other Filess</label>
                                 <input type="file"
                                        class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"
                                        name="otherFile[]" multiple id="otherFile" placeholder="Other File"

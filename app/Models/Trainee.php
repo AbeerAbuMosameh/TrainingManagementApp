@@ -15,6 +15,11 @@ class Trainee extends Model
 
     public function notification()
     {
-        return $this->belongsTo(Notification::class);
+        return $this->belongsTo(Notification::class, 'notification_id');
+    }
+
+    public function programs()
+    {
+        return $this->belongsToMany(Program::class, 'trainee_program');
     }
 }

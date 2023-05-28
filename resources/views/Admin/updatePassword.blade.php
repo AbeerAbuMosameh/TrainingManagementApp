@@ -1,7 +1,7 @@
 @extends('Dashboard.master')
 
 @section('title')
-    dashboard
+    Update Password
 @endsection
 
 @section('css')
@@ -24,7 +24,7 @@
         </div>
         <div class="card-body">
             <!--begin::Form-->
-            <form id="passwordForm" class="form" action="{{route('updatePassword',\Illuminate\Support\Facades\Auth::user()->id)}}"
+            <form id="passwordForm" class="form" action="{{route('password.update',\Illuminate\Support\Facades\Auth::user()->id)}}"
                   method="POST">
             @csrf
                 <!--end::Alert-->
@@ -65,19 +65,33 @@
 
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
         function submitForm() {
-            // Get the form element
             var form = document.getElementById('passwordForm');
+            var oldPassword = form.elements['oldPassword'].value;
+            var newPassword = form.elements['password'].value;
+            var confirmPassword = form.elements['password_confirmation'].value;
 
-            // Submit the form
-            form.submit();
+            axios.put('/password/update/{{ \Illuminate\Support\Facades\Auth::user()->id }}', {
+                oldPassword: oldPassword,
+                password: newPassword,
+                password_confirmation: confirmPassword
+            })
+                .then(function(response) {
+                    toastr.success(response.data.message);
+                    form.reset();
+                })
+                .catch(function(error) {
+                    toastr.error(error);
+                    console.error(error);
+                });
         }
-    </script>
-    <script>
+
         function resetForm() {
-            document.getElementById("myForm").reset();
+            var form = document.getElementById('passwordForm');
+            form.reset();
         }
     </script>
 @endsection

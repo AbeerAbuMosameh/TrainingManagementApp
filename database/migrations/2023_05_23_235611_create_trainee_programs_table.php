@@ -11,15 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('programmes', function (Blueprint $table) {
+        Schema::create('trainee_programs', function (Blueprint $table) {
             $table->id();
-            $table->string('image')->nullable();
-            $table->string('name');
-            $table->string('hours');
-            $table->enum('type',['free','payed']);
-            $table->string('email')->unique();
-            $table->string('phone');
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -29,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('programmes');
+        Schema::dropIfExists('trainee_programs');
     }
 };

@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\Manager\NewRegistration;
 use App\Http\Controllers\Controller;
 use App\Mail\TraineeCredentialsMail;
 use App\Models\Advisor;
+use App\Models\AdvisorField;
 use App\Models\Field;
 use App\Models\Notification;
-use App\Models\Rule;
-use App\Models\Trainee;
 use App\Models\User;
 use Google\Cloud\Storage\StorageClient;
 use Illuminate\Http\Request;
@@ -24,9 +22,10 @@ class AdvisorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $advisors = Advisor::all();
+
+    //Advisor Management - display View contain all advisors & his documents and files stored in firebase
+    public function index(){
+        $advisors = Advisor::with('fields')->get();
 
         foreach ($advisors as $advisor) {
             // Get the file paths for CV, certification, and other files
@@ -41,7 +40,6 @@ class AdvisorController extends Controller
             $otherFileDownloadUrls = [];
 
 
-
             // Handle the case when $otherFiles is empty or null
             if (!empty($otherFiles)) {
                 foreach ($otherFiles as $otherFile) {
@@ -49,26 +47,17 @@ class AdvisorController extends Controller
                 }
             }
 
-
-
             // Assign the download URLs to the trainee object
             $advisor->cv = $cvDownloadUrl;
             $advisor->certification = $certificationDownloadUrl;
             $advisor->otherFile = $otherFileDownloadUrls;
 
         }
-
         return view('Admin.AdvisorsManagement.index', ['advisors' => $advisors]);
     }
 
-    /**
-     * Generate a signed URL for the given file path
-     *
-     * @param string $filePath
-     * @return string|null
-     */
-    function generateDownloadUrl($filePath)
-    {
+    //generate URL for each file or document stored in firebase
+    function generateDownloadUrl($filePath){
         if (!empty($filePath)) {
             // Initialize Firebase Storage
             $storage = new StorageClient([
@@ -89,20 +78,14 @@ class AdvisorController extends Controller
         return null;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
+    //Advisor Management - display View contain all field to register new advisor
+    public function create(){
         $fields =Field::all();
         return view('Admin.AdvisorsManagement.create',compact('fields'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
+    //Advisor Management - Validate & Store advisor Information in database (Sql-NoSQL)
+    public function store(Request $request){
         $validator = Validator($request->all(), [
             'image' => 'nullable|mimes:jpeg,png|max:10240', //validate the file types and size
             'first_name' => 'required|string|max:255',
@@ -110,7 +93,6 @@ class AdvisorController extends Controller
             'email' => 'required|email|unique:advisors|max:255',
             'phone' => 'required|string|max:20',
             'education' => 'required|string|max:255',
-            'field' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'payment' => 'nullable|string|in:Card,PayPal,Bank',
@@ -126,7 +108,6 @@ class AdvisorController extends Controller
 
         }
 
-        // Generate a unique ID
         try {
             DB::beginTransaction();
             $advisor = new Advisor();
@@ -135,7 +116,6 @@ class AdvisorController extends Controller
             $advisor->email = $request->input('email');
             $advisor->phone = $request->input('phone');
             $advisor->education = $request->input('education');
-            $advisor->field = $request->input('field');
             $advisor->address = $request->input('address');
             $advisor->city = $request->input('city');
             $advisor->language = $request->input('language');
@@ -153,7 +133,7 @@ class AdvisorController extends Controller
             if ($request->hasFile('cv')) {
                 $cvFile = $request->file('cv');
                 $cvPath = 'CVs/' . time() + rand(1, 10000000) . '.' . $cvFile->getClientOriginalName();
-                $test = $bucket->upload(
+                $bucket->upload(
                     file_get_contents($cvFile),
                     [
                         'name' => $cvPath,
@@ -197,25 +177,31 @@ class AdvisorController extends Controller
                 $advisor->otherFile = json_encode($otherFilePaths);
             }
 
+
+            $notification = Notification::create([
+                'message' => $advisor->first_name . ' is a new Advisor registration',
+                'status' => 'unread'
+            ]);
+
+            $advisor->notification_id = $notification->id;
             $advisor->save();
 
 
-            $user = User::create([
+            //Store each field to this advior then accept or not-accept
+            $selectedFieldIds = $request->input('field');
+            foreach ($selectedFieldIds as $fieldId) {
+                AdvisorField::create([
+                    'advisor_id' => $advisor->id,
+                    'field_id' => $fieldId,
+                ]);
+            }
+
+            User::create([
                 'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make('123456'),
                 'level' => 2,
             ]);
-
-            $notification = new Notification();
-            $notification->message = $advisor->first_name. 'is a New trainee registration';
-            $notification->status = 'unread';
-            $notification->save();
-
-            // Assign the notification to the trainee
-            $advisor->notification()->associate($notification);
-            $advisor->save();
-
             DB::commit();
 
 
@@ -227,12 +213,8 @@ class AdvisorController extends Controller
 
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function accept($id)
-    {
+     //send email contain  unique ID and password and change status if first time or change activation of this advisor
+    public function accept($id){
         $advisor = Advisor::find($id); // Find the user by ID
         $user = User::where('email', $advisor->email)->first(); // Find the trainee by email
         $advisor_id = uniqid();
@@ -240,57 +222,88 @@ class AdvisorController extends Controller
             $advisor->is_approved = true;
             $advisor->save();
 
+
+            //by defualt accept all field he specific it in registeration
+            $advisor = Advisor::find($id);
+            $fields = $advisor->fields;
+            foreach ($fields as $field) {
+                AdvisorField::where('advisor_id', $id)->where('field_id', $field->id)->update(['status' => 'accept']);
+            }
+
+
             $user->unique_id = $advisor_id;
             $pass = Str::random(10);
             $user->password = Hash::make($pass);
 
             $user->save();
 
-            toastr()->success(' Advisor Is Active  & Mail Send Successfully with login data!');
 
             Mail::to($user->email)->send(new TraineeCredentialsMail($user->unique_id, $pass));
+            return response()->json(['message' =>'Advisor Is Active  & Mail Send Successfully with login data!']);
+
 
         } else {
             if ($advisor->is_approved) {
                 $advisor->is_approved = false;
-                toastr()->warning('Advisor now not active!');
+                $advisor->save();
 
-            } else{
+                return response()->json(['message' => "Advisor Not Active Now"]);
+
+            } else {
                 $advisor->is_approved = true;
-                toastr()->Info('Advisor Now active');
+                $advisor->save();
+
+                return response()->json(['message' => "Advisor Active Now"]);
 
             }
-            $advisor->save();
         }
-        return redirect()->route('advisors.index');
-    }
-    /**
-     * Display the specified resource.
-     */
-    public function show(Advisor $advisor)
-    {
-        //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Advisor $advisor)
-    {
-        //
+    //Advisor Management - Show specific advisor Information and their Documents & files
+    public function show($id){
+
+        $advisor = Advisor::findOrFail($id);
+        $cvPath = $advisor->cv;
+        $certificationPath = $advisor->certification;
+        $otherFiles = json_decode($advisor->otherFile);
+
+
+        // Generate download links or display the files
+        $cvDownloadUrl = $this->generateDownloadUrl($cvPath);
+        $certificationDownloadUrl = $this->generateDownloadUrl($certificationPath);
+        $otherFileDownloadUrls = [];
+
+
+        // Handle the case when $otherFiles is empty or null
+        if (!empty($otherFiles)) {
+            foreach ($otherFiles as $otherFile) {
+                $otherFileDownloadUrls[] = $this->generateDownloadUrl($otherFile);
+            }
+        }
+
+        // Assign the download URLs to the trainee object
+        $advisor->cv = $cvDownloadUrl;
+        $advisor->certification = $certificationDownloadUrl;
+        $advisor->otherFile = $otherFileDownloadUrls;
+//        Notification::where('id', $advisor->notification_id)->update(['status' => 'read']);
+        return view('Admin.AdvisorsManagement.show', compact('advisor'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Advisor $advisor)
-    {
-        //
+    //Advisor Management - get all Advisor in specific Fields
+    public function getAdvisors($fieldId){
+        $field = Field::find($fieldId);
+        $advisors = $field->advisors()->wherePivot('status', 'accept')->get();
+        return response()->json($advisors);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    //Advisor Management - display View contain all advisors and their field to accept or reject
+    public function advisorsFields(){
+        $advisor_fields= AdvisorField::all();
+        return view('Admin.AdvisorsManagement.advisors_fields', compact('advisor_fields'));
+
+    }
+
+    //Advisor Management - delete specific advisor
     public function destroy($id)
     {
         Advisor::findOrFail($id)->delete();

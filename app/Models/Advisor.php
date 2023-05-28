@@ -12,6 +12,16 @@ class Advisor extends Model
 
     public function notification()
     {
-        return $this->belongsTo(Notification::class);
+        return $this->belongsTo(Notification::class, 'notification_id');
+    }
+
+    public function programs()
+    {
+        return $this->belongsToMany(Program::class);
+    }
+
+    public function fields()
+    {
+        return $this->belongsToMany(Field::class, 'advisor_fields');
     }
 }

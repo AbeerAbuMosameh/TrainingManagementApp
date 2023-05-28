@@ -51102,7 +51102,7 @@ a.text-hover-secondary:hover .svg-icon svg:hover g [fill],
 }
 
 .text-success {
-  color: #3699FF !important;
+  color: #5de9e2 !important;
 }
 
 .text-inverse-success {
@@ -56498,7 +56498,7 @@ button {
   color: #1BC5BD;
 }
 .btn.btn-default {
-  color: #B5B5C3;
+  color: #fff;
   background-color: #0BB7AF;
   border-color: #F3F6F9;
 }
@@ -56508,7 +56508,30 @@ button {
 .btn.btn-default .svg-icon svg g [fill] {
   -webkit-transition: fill 0.3s ease;
   transition: fill 0.3s ease;
-  fill: #fffs;
+  fill: #fff;
+}
+
+.scrollable-element {
+    overflow-y: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.scrollable-element::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30px; /* Adjust the height of the shape as needed */
+    background-color: #ffffff; /* Set the background color of the shape */
+    z-index: -1;
+    transform: skewY(-4deg); /* Adjust the skew angle of the shape as needed */
+}
+
+.scrollable-element > * {
+    position: relative;
+    z-index: 2;
 }
 .btn.btn-default .svg-icon svg:hover g [fill] {
   -webkit-transition: fill 0.3s ease;
@@ -56578,7 +56601,7 @@ button {
   color: #1BC5BD;
 }
 .btn.btn-primary {
-  color: #000;
+  color: #fff;
   background-color: #1BC5BD;
   border-color: #1BC5BD;
 }
@@ -56588,7 +56611,7 @@ button {
 .btn.btn-primary .svg-icon svg g [fill] {
   -webkit-transition: fill 0.3s ease;
   transition: fill 0.3s ease;
-  fill: #000;
+  fill: #fff;
 }
 .btn.btn-primary .svg-icon svg:hover g [fill] {
   -webkit-transition: fill 0.3s ease;
@@ -81809,6 +81832,45 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown):not(.sweetalert
 body.swal2-height-auto {
   height: 100% !important;
 }
+.notification-list {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.notification-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notification-list li {
+    padding: 10px;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.notification-list li:last-child {
+    border-bottom: none;
+}
+
+.notification-list a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+}
+
+.notification-list .message {
+    font-weight: bold;
+}
+
+.notification-list .timestamp {
+    font-size: 12px;
+    color: #999;
+}
+
+/* Show/hide dropdown */
+.dropdown.show .dropdown-menu {
+    display: block;
+}
 
 .swal2-icon.swal2-warning {
   border-color: #FFA800;
@@ -81822,14 +81884,14 @@ body.swal2-height-auto {
   background-color: rgba(246, 78, 96, 0.75);
 }
 .swal2-icon.swal2-success {
-  border-color: #3699FF;
-  color: #3699FF;
+  border-color: #1BC5BD;
+  color: #1BC5BD;
 }
 .swal2-icon.swal2-success [class^=swal2-success-line] {
-  background-color: #3699FF;
+  background-color: #000;
 }
 .swal2-icon.swal2-success .swal2-success-ring {
-  border-color: rgba(54, 153, 255, 0.3);
+  border-color: #1BC5BD;
 }
 .swal2-icon.swal2-info {
   border-color: #6993FF;
@@ -82400,7 +82462,7 @@ body.swal2-height-auto {
   font-size: 1rem;
 }
 .toast.toast-success {
-  background-color: #3699FF;
+  background-color: #1BC5BD;
   color: #FFFFFF;
 }
 .toast.toast-info {

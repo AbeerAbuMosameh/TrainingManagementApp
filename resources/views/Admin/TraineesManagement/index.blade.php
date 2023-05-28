@@ -1,7 +1,7 @@
 @extends('Dashboard.master')
 
 @section('title')
-    dashboard
+    Trainees
 @endsection
 
 @section('css')
@@ -55,18 +55,28 @@
 
                         @if($trainee->is_approved == 1 )
                             <td data-field="Status" data-autohide-disabled="false" aria-label="3"
-                                class="datatable-cell"><span style="width: 108px;"><span
-                                        class="label font-weight-bold label-lg  label-light-primary label-inline">Approved</span></span>
+                                class="datatable-cell">
+        <span style="width: 108px;">
+            <span class="label font-weight-bold label-lg label-light-primary label-inline">Approved</span>
+        </span>
                             </td>
                         @else
                             <td data-field="Status" data-autohide-disabled="false" aria-label="2"
-                                class="datatable-cell"><span style="width: 108px;"><span
-                                        class="label font-weight-bold label-lg  label-light-danger label-inline">Not Approved</span></span>
+                                class="datatable-cell">
+        <span style="width: 108px;">
+            <span class="label font-weight-bold label-lg label-light-danger label-inline">Not Approved</span>
+        </span>
                             </td>
                         @endif
                         <td>{{$trainee->payment}}</td>
                         <td>{{$trainee->language}}</td>
                         <td>
+                            <a href="{{ route('trainees.show', $trainee->id) }}"
+                               class="btn btn-sm btn-clean btn-icon"
+                               title="Show details">
+                                <i class="la la-eye"></i>
+                            </a>
+
                             <a href="{{ route('trainees.edit', $trainee->id) }}"
                                class="btn btn-sm btn-clean btn-icon"
                                title="Edit details">
@@ -76,8 +86,8 @@
                                class="btn btn-sm btn-clean btn-icon btn-delete " title="Delete">
                                 <i class="nav-icon la la-trash"></i>
                             </a>
-                            <a href="{{ route('sendemail', $trainee->id) }}" class="btn btn-sm btn-clean btn-icon"
-                               title="Approve">
+                            <a class="btn btn-sm btn-clean btn-icon" title="Approve"
+                               onclick="sendEmail({{ $trainee->id }})">
                                 <i class="la la-check-circle"></i>
                             </a>
 
@@ -113,7 +123,39 @@
 @section('js')
     <script src="{{asset('admin/assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
     <script src="{{asset('admin/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+    <script>
+        function sendEmail(traineeId) {
+            // AJAX call to send email
+            $.ajax({
+                url: '/sendemail/' + traineeId,
+                type: 'GET',
+                success: function (response) {
+                    var message = response.message;
 
+                    if (message === 'Trainee Not Active Now') {
+                        toastr.error(message); // Display success message
+                        updateStatus('Not Approved'); // Update status display
+                    } else {
+                        toastr.success(message); // Display error message
+                        updateStatus('Approved'); // Update status display
+
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response
+                    toastr.error('Error occurred. Please try again.');
+                }
+            });
+        }
+
+        function updateStatus(status) {
+            var statusCell = $('.datatable-cell[data-field="Status"]');
+            var labelClass = (status === 'Approved') ? 'label-light-primary' : 'label-light-danger';
+            var labelContent = (status === 'Approved') ? 'Approved' : 'Not Approved';
+
+            statusCell.html('<span style="width: 108px;"><span class="label font-weight-bold label-lg ' + labelClass + ' label-inline">' + labelContent + '</span></span>');
+        }
+    </script>
     <script>
         function sweetees(id, reference) {
             Swal.fire({
@@ -159,6 +201,5 @@
 
 
     </script>
-
 
 @endsection

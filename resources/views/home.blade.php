@@ -4,6 +4,17 @@
     {{__('dashboard')}}
 @endsection
 
+@section('js')
+    <script>
+        $(document).ready(function () {
+            $('#kt_quick_panel_toggle').click(function () {
+                $('#notificationDropdown').toggleClass('show');
+            });
+        });
+    </script>
+
+@endsection
+
 
 @section('content')
     <!--Begin::Row-->
@@ -193,7 +204,8 @@
 													</svg>
                                                     <!--end::Svg Icon-->
 												</span>
-                    <span class="card-title font-weight-bolder text-white font-size-h2 mb-0 mt-6 d-block">2,044</span>
+                    <span
+                        class="card-title font-weight-bolder text-white font-size-h2 mb-0 mt-6 d-block">2,044</span>
                     <span class="font-weight-bold text-white font-size-sm">New Customers</span>
                 </div>
                 <!--end::Body-->
@@ -266,4 +278,5 @@
     </div>
     <!--End::Row-->
 @endsection
+
 
