@@ -84,8 +84,11 @@
                     form.reset();
                 })
                 .catch(function(error) {
-                    toastr.error(error);
-                    console.error(error);
+                    if (error.response && error.response.data && error.response.data.message) {
+                        toastr.warning(error.response.data.message);
+                    } else {
+                        toastr.error('An error occurred while updating the password.');
+                    }
                 });
         }
 

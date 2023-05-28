@@ -22,7 +22,7 @@
                    class="btn btn-sm btn-light-primary er fs-6 px-8 py-4" data-bs-toggle="modal"
                    data-bs-target="#kt_modal_new_target" data-toggle="modal"
                    data-target="#exampleModal">
-                    <i class="la la-plus"></i> Create new Role
+                    <i class="la la-plus"></i> Create new Field
                 </a>
 
                 <!--end::Button-->

@@ -324,10 +324,12 @@ class TraineeController extends Controller
             'password' => 'required|string|confirmed',
         ]);
 
-        if ($validator->fails() && !$validator->errors()->has('password_confirmation')) {
-            return response()->json(['message' => 'All fields should be entered'], 422);
-        } elseif ($validator->errors()->has('password_confirmation')) {
-            return response()->json(['message' => 'Password confirmation does not match'], 422);
+        if ($validator->fails()) {
+            if ($validator->errors()->has('password')) {
+                return response()->json(['message' => $validator->errors()->first('password')], 422);
+            } else {
+                return response()->json(['message' => 'All fields should be entered'], 422);
+            }
         } else {
             // Check if the previous password matches the one stored in the database
             if (!Hash::check($request->input('oldPassword'), $user->password)) {

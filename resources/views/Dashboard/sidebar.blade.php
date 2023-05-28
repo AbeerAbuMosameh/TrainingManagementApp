@@ -121,6 +121,34 @@
                     </li>
 
                     <li class="menu-section">
+                        <h4 class="menu-text">Fields Management</h4>
+                        <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
+                    </li>
+                    <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                        <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-icon fas fa-book"></i> <span class="menu-text">Fields</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <i class="menu-arrow"></i>
+
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                <li class="menu-item" aria-haspopup="true">
+                                    <a href="{{route('fields.index')}}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text">Show Fields</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+
+
+                    <li class="menu-section">
                         <h4 class="menu-text">Programs Management</h4>
                         <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                     </li>
@@ -157,12 +185,12 @@
                     </li>
 
                     <li class="menu-section">
-                        <h4 class="menu-text">Trainee Programes Request</h4>
+                        <h4 class="menu-text">Trainee Programs Request</h4>
                         <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                     </li>
                     <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                         <a href="javascript:;" class="menu-link menu-toggle">
-                            <i class="menu-icon fas fa-money-bill-wave"></i> <span class="menu-text">Payments</span>
+                            <i class="menu-icon fas fa-check-square"></i> <span class="menu-text">Trainee Requests</span>
                             <i class="menu-arrow"></i>
                         </a>
                         <i class="menu-arrow"></i>
@@ -171,43 +199,17 @@
                             <i class="menu-arrow"></i>
                             <ul class="menu-subnav">
                                 <li class="menu-item" aria-haspopup="true">
-                                    <a href="{{route('payments.index')}}" class="menu-link">
+                                    <a href="{{route('trainees-programs.index')}}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
-                                        <span class="menu-text">Show payments</span>
+                                        <span class="menu-text">Show Requests</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
-
-                    <li class="menu-section">
-                        <h4 class="menu-text">Fields Management</h4>
-                        <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
-                    </li>
-                    <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-                        <a href="javascript:;" class="menu-link menu-toggle">
-                            <i class="menu-icon fas fa-book"></i> <span class="menu-text">Fields</span>
-                            <i class="menu-arrow"></i>
-                        </a>
-                        <i class="menu-arrow"></i>
-
-                        <div class="menu-submenu">
-                            <i class="menu-arrow"></i>
-                            <ul class="menu-subnav">
-                                <li class="menu-item" aria-haspopup="true">
-                                    <a href="{{route('fields.index')}}" class="menu-link">
-                                        <i class="menu-bullet menu-bullet-dot">
-                                            <span></span>
-                                        </i>
-                                        <span class="menu-text">Show Fields</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
 
 
                     <li class="menu-section">
