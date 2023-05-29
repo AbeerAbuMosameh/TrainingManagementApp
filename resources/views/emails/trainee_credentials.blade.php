@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cambo Tutorial</title>
 </head>
 <body>
-<h1># Trainee Credentials</h1>
+<h1># Credentials</h1>
 <p>
     Your trainee ID is: {{ $trainee_id }}
     <br>

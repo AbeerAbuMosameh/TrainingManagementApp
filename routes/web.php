@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\TraineeProgramController;
 use App\Http\Controllers\Admin\TrainingProgramController;
 use App\Http\Controllers\API\SocialAuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\WebSiteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,8 @@ Route::resource('trainees' , TraineeController::class )->only('store','create');
 //authorize using google
 Route::get('login/google' , [SocialAuthController::class , 'redirectToProvider'])->name('google.login');
 Route::get('auth/google/callback' , [SocialAuthController::class , 'handleCallback'])->name('google.login.callback');
+Route::get('stripe',[StripePaymentController::class,'paymentStripe'])->name('addmoney.paymentstripe');
+Route::post('add-money-stripe',[StripePaymentController::class,'postPaymentStripe'])->name('addmoney.stripe');
 
 
 Auth::routes();
@@ -57,9 +60,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Trainee Programs Request Component
     Route::resource('trainees-programs' , TrainingProgramController::class );
+//    Route::get('trainees-programs-request' , [TrainingProgramController::class,'apply'])->name('apply');
 
     //Program Component
     Route::resource('programs' , ProgramController::class );
+    Route::get('/get-available-programs/{fieldId}', [ProgramController::class, 'getAvailablePrograms'])->name('get.available.programs');
 
     //Fields or Discipline  Component
     Route::resource('fields' , FieldController::class );
@@ -71,6 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
     //Change Password Component
     Route::get('/updatePassword', [TraineeController::class, 'password'])->name('password');;
     Route::put('/password/update/{id}', [TraineeController::class, 'updatePassword'])->name('password.update');
+    Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
 
 
 });

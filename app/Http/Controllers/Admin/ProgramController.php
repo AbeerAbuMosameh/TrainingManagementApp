@@ -41,7 +41,7 @@ class ProgramController extends Controller
             'image' => 'nullable',
             'name' => 'required|string',
             'hours' => 'required|string',
-            'start_date' => 'required|date|date_equals:today',
+            'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
             'type' => 'required|in:free,paid',
             'price' => 'nullable|integer',
@@ -85,7 +85,7 @@ class ProgramController extends Controller
             'image' => 'nullable',
             'name' => 'required|string',
             'hours' => 'required|string',
-            'start_date' => 'required|date|date_equals:today',
+            'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
             'type' => 'required|in:free,paid',
             'price' => 'nullable|integer',
@@ -125,6 +125,13 @@ class ProgramController extends Controller
         return redirect()->route('programs.index');
     }
 
+    public function getAvailablePrograms(Request $request, $fieldId){
+        // Fetch the available programs based on the selected field
+        $programs = Program::where('field_id', $fieldId)->get();
+
+        // Return the programs as a JSON response
+        return response()->json($programs);
+    }
     //Program Management - Delete Program
     public function destroy($id)
     {

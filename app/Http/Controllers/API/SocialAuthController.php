@@ -19,27 +19,23 @@ class SocialAuthController extends Controller
     {
         try {
             $user = Socialite::driver('google')->user();
-
         } catch (\Exception $e) {
-            redirect('/login');
+            return redirect('/login');
         }
 
-        $existingUser = User::where('google_id',$user->id)->first();
+        $existingUser = User::where('google_id', $user->id)->first();
 
-        if($existingUser){
-            Auth::login($existingUser,true);
-        }else{
-           $newUser = User::create([
+        if ($existingUser) {
+            Auth::login($existingUser, true);
+        } else {
+            $newUser = User::create([
                 'name' => $user->name,
                 'email' => $user->email,
                 'google_id' => $user->id,
                 'password' => Hash::make('123456'),
-
-
-           ]);
-            Auth::login($newUser,true);
-
+            ]);
         }
-       return redirect('/home');
+
+        return redirect('/login')->with('success', 'Your form has been submitted! Check your email to login.');
     }
 }

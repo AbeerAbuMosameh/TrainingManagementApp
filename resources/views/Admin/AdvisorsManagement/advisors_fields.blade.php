@@ -70,6 +70,9 @@
         const checkboxes = document.getElementsByName('select');
 
         // Attach a change event listener to each checkbox
+        // Create an object to store the displayed toastr messages
+        const displayedMessages = {};
+
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', function() {
                 const advisorFieldId = this.dataset.id;
@@ -78,10 +81,30 @@
                 // Send an AJAX request to update the advisor field status
                 axios.put(`/update-status/${advisorFieldId}`, { status })
                     .then(response => {
-                        if(status == 'accept'){
-                        toastr.success(response.data.message);}
-                        else if(status == 'not-accept') {
-                            toastr.warning(response.data.message);
+                        if (status === 'accept') {
+                            if (response.data.isAccepted) {
+                                const message = response.data.message;
+                                // Display the toastr message only if it hasn't been displayed before
+                                if (!displayedMessages[message]) {
+                                    toastr.success(message);
+                                    displayedMessages[message] = true;
+                                }
+                            } else {
+                                toastr.error("The advisor is not accepted yet !");
+                            }
+                        } else if (status === 'not-accept') {
+                            if (response.data.isAccepted) {
+                                const message = response.data.message;
+                                // Display the toastr message only if it hasn't been displayed before
+                                if (!displayedMessages[message]) {
+                                    toastr.warning(message);
+                                    displayedMessages[message] = true;
+                                }
+                            } else {
+                                toastr.error("The advisor is not accepted yet ! ");
+                            }
+                        } else {
+                            toastr.error(response.data.message);
                         }
                     })
                     .catch(error => {
@@ -89,6 +112,9 @@
                     });
             });
         });
+
+
+
     </script>
     <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

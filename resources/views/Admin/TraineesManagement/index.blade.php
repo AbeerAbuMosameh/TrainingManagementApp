@@ -77,11 +77,6 @@
                                 <i class="la la-eye"></i>
                             </a>
 
-                            <a href="{{ route('trainees.edit', $trainee->id) }}"
-                               class="btn btn-sm btn-clean btn-icon"
-                               title="Edit details">
-                                <i class="la la-edit"></i>
-                            </a>
                             <a onclick="sweetees('{{$trainee->id}}', this)"
                                class="btn btn-sm btn-clean btn-icon btn-delete " title="Delete">
                                 <i class="nav-icon la la-trash"></i>

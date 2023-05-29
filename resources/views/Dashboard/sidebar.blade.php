@@ -146,8 +146,6 @@
                         </div>
                     </li>
 
-
-
                     <li class="menu-section">
                         <h4 class="menu-text">Programs Management</h4>
                         <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
@@ -210,8 +208,6 @@
                         </div>
                     </li>
 
-
-
                     <li class="menu-section">
                         <h4 class="menu-text">Payments Management</h4>
                         <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
@@ -240,6 +236,68 @@
 
                 @endif
 
+                @if(auth()->user()->level == 2)
+
+
+                    <li class="menu-section">
+                        <h4 class="menu-text">Trainee Programs Apply</h4>
+                        <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
+                    </li>
+                    <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                        <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-icon fas fa-check-square"></i> <span class="menu-text">Trainee on Program</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <i class="menu-arrow"></i>
+
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                <li class="menu-item" aria-haspopup="true">
+                                    <a href="{{route('trainees-programs.index')}}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text">Trainees</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                @endif
+
+                @if(auth()->user()->level == 3)
+
+
+                    <li class="menu-section">
+                        <h4 class="menu-text">Program Component</h4>
+                        <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
+                    </li>
+                    <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                        <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-icon fas fa-check-square"></i> <span class="menu-text">Apply in Program</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <i class="menu-arrow"></i>
+
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                <li class="menu-item" aria-haspopup="true">
+                                    <a href="{{route('trainees-programs.index')}}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text">all Applied Program</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </li>
+
+                @endif
 
                 <li class="menu-section">
                     <h4 class="menu-text">SETTINGS</h4>

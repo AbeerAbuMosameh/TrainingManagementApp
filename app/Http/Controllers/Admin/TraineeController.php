@@ -203,7 +203,9 @@ class TraineeController extends Controller
 
             $notification = Notification::create([
                 'message' => $trainee->first_name . ' is a new trainee registration',
-                'status' => 'unread'
+                'status' => 'unread',
+                'level' => 1,
+
             ]);
 
             $trainee->notification_id = $notification->id;

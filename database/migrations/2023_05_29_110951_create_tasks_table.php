@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('training_programs', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('trainee_id');
+
             $table->unsignedBigInteger('program_id');
-            $table->enum('payment_status', ['unpaid', 'paid'])->default('unpaid');
-            $table->enum('status', ['accepted', 'rejected'])->default('rejected');
-            $table->text('reason')->nullable();
-            // Define foreign key constraints
-            $table->foreign('trainee_id')->references('id')->on('trainees')->onDelete('cascade');
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+
+            $table->unsignedBigInteger('advisor_id');
+            $table->foreign('advisor_id')->references('id')->on('advisors')->onDelete('cascade');
+
+            $table->text('description');
 
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('training_programs');
+        Schema::dropIfExists('tasks');
     }
 };

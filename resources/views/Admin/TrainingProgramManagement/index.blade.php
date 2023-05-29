@@ -26,90 +26,20 @@
                 <tr>
 
                     <th>#</th>
-                    <th>Name</th>
-                    <th>email</th>
-                    <th>phone</th>
-                    <th>education</th>
-                    <th>gpa</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>Status</th>
-                    <th>payment</th>
-                    <th>Language</th>
-                    <th>Actions</th>
-                    <th>Documents</th>
+                    <th>Program</th>
+                    <th>Payment Status</th>
+                    <th>status for Request</th>
+                    <th>Reason</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($trainees as $trainee)
-                    <tr data-entry-id="{{ $trainee->id }}">
+                @foreach ($prgrams as $prgram)
+                    <tr data-entry-id="{{ $prgram->id }}">
                         <td>{{$loop->iteration}}</td>
-                        <td>{{$trainee->first_name}} {{$trainee->last_name}}</td>
-                        <td>{{$trainee->email}}</td>
-                        <td>{{$trainee->phone}}</td>
-                        <td>{{$trainee->education}}</td>
-                        <td>{{$trainee->gpa}}</td>
-                        <td>{{$trainee->address}}</td>
-                        <td>{{$trainee->city}}</td>
-
-
-                        @if($trainee->is_approved == 1 )
-                            <td data-field="Status" data-autohide-disabled="false" aria-label="3"
-                                class="datatable-cell">
-        <span style="width: 108px;">
-            <span class="label font-weight-bold label-lg label-light-primary label-inline">Approved</span>
-        </span>
-                            </td>
-                        @else
-                            <td data-field="Status" data-autohide-disabled="false" aria-label="2"
-                                class="datatable-cell">
-        <span style="width: 108px;">
-            <span class="label font-weight-bold label-lg label-light-danger label-inline">Not Approved</span>
-        </span>
-                            </td>
-                        @endif
-                        <td>{{$trainee->payment}}</td>
-                        <td>{{$trainee->language}}</td>
-                        <td>
-                            <a href="{{ route('trainees.show', $trainee->id) }}"
-                               class="btn btn-sm btn-clean btn-icon"
-                               title="Show details">
-                                <i class="la la-eye"></i>
-                            </a>
-
-                            <a href="{{ route('trainees.edit', $trainee->id) }}"
-                               class="btn btn-sm btn-clean btn-icon"
-                               title="Edit details">
-                                <i class="la la-edit"></i>
-                            </a>
-                            <a onclick="sweetees('{{$trainee->id}}', this)"
-                               class="btn btn-sm btn-clean btn-icon btn-delete " title="Delete">
-                                <i class="nav-icon la la-trash"></i>
-                            </a>
-                            <a class="btn btn-sm btn-clean btn-icon" title="Approve"
-                               onclick="sendEmail({{ $trainee->id }})">
-                                <i class="la la-check-circle"></i>
-                            </a>
-
-                        </td>
-                        <td>
-                            @if($trainee->cv)
-                                <a href="{{ $trainee->cv}}" class="btn btn-primary" target="_blank"
-                                   rel="noopener noreferrer">Download CV</a>
-                            @endif
-
-                            @if($trainee->certification)
-                                <a href="{{ $trainee->certification }}" class="btn btn-primary" target="_blank"
-                                   rel="noopener noreferrer">Download Certification</a>
-                            @endif
-
-                            @if(count($trainee->otherFile ?? []) > 0)
-                                @foreach($trainee->otherFile as $otherFileUrl)
-                                    <a href="{{ $otherFileUrl }}" class="btn btn-primary" target="_blank"
-                                       rel="noopener noreferrer">Related File</a>
-                                @endforeach
-                            @endif
-                        </td>
+                        <td>{{$prgram->program_id}}</td>
+                        <td>{{$prgram->payment_status}}</td>
+                        <td>{{$prgram->status}}</td>
+                        <td>{{$prgram->reason}}</td>
                     </tr>
                 @endforeach
 

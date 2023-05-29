@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('message');
             $table->enum('status',['read','unread'])->default('unread');
+            $table->enum('level', [1, 2,3])->default(1);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -42,7 +42,7 @@
 												<!--begin::Svg Icon | path:assets/media/svg/icons/Code/Compiling.svg-->
 												<i class="flaticon-bell text-success icon-lg"></i>
                                             </span>
-                                @if($count > 0)
+                                @if(isset($count) && $count > 0)
                                     <span
                                         class="label label-sm label-light-danger label-rounded font-weight-bolder position-absolute top-0 right-0 mt-1 mr-1">{{ $count }}</span>
                                 @endif
@@ -63,21 +63,23 @@
                                         <!--begin::Item-->
                                         <div class=" align-items-center ">
                                             <!--begin::Symbol-->
-                                            @foreach($notifications as $notification)
-                                                <li>
-                                                    <a href="{{ $notification->link }}" class="navi-item">
-                                                        <div class="navi-link">
-                                                            <div class="navi-text">
-                                                                <div
-                                                                    class="font-weight-bold">{{ $notification->message }}</div>
-                                                                <div
-                                                                    class="text-muted">{{ $notification->created_at->diffForHumans() }}</div>
+                                            @if(isset($notifications))
+                                                @foreach($notifications as $notification)
+                                                    <li>
+                                                        <a href="{{ $notification->link }}" class="navi-item">
+                                                            <div class="navi-link">
+                                                                <div class="navi-text">
+                                                                    <div
+                                                                        class="font-weight-bold">{{ $notification->message }}</div>
+                                                                    <div
+                                                                        class="text-muted">{{ $notification->created_at->diffForHumans() }}</div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <hr>
-                                            @endforeach
+                                                        </a>
+                                                    </li>
+                                                    <hr>
+                                                @endforeach
+                                            @endif
                                             <!--end::Text-->
                                         </div>
                                         <!--end::Action-->

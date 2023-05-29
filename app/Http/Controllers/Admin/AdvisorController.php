@@ -187,7 +187,9 @@ class AdvisorController extends Controller
 
             $notification = Notification::create([
                 'message' => $advisor->first_name . ' is a new Advisor registration',
-                'status' => 'unread'
+                'status' => 'unread',
+                'level' => 1,
+
             ]);
 
             $advisor->notification_id = $notification->id;
@@ -203,12 +205,13 @@ class AdvisorController extends Controller
                 ]);
             }
 
-            User::create([
+            $user= User::create([
                 'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                'level'=> '2',
                 'email' => $request->input('email'),
                 'password' => Hash::make('123456'),
-                'level' => 2,
             ]);
+
             DB::commit();
 
 
