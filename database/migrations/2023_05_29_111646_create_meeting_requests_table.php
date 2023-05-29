@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('advisor_id');
             $table->foreign('advisor_id')->references('id')->on('advisors')->onDelete('cascade');
             $table->enum('status', ['accepted', 'rejected'])->default('rejected');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

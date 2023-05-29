@@ -22,4 +22,11 @@ class Trainee extends Model
     {
         return $this->belongsToMany(Program::class, 'trainee_program');
     }
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'training_tasks', 'trainee_id', 'task_id')
+            ->withTimestamps();
+    }
+
 }

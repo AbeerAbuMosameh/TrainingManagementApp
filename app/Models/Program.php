@@ -23,6 +23,17 @@ class Program extends Model
 
     public function trainees()
     {
-        return $this->belongsToMany(Trainee::class, 'trainee_program');
+        return $this->belongsToMany(Trainee::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+
+    public function trainingPrograms()
+    {
+        return $this->hasMany(TrainingProgram::class);
     }
 }

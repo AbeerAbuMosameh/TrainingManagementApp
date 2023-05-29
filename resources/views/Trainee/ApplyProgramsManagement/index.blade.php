@@ -1,7 +1,7 @@
 @extends('Dashboard.master')
 
 @section('title')
-    Courses
+     Join Program Request
 @endsection
 
 @section('css')
@@ -15,7 +15,7 @@
 				<span class="card-icon">
                     <i class="flaticon2-favourite text-primary"></i>
 				</span>
-                <h3 class="card-label">Courses </h3>
+                <h3 class="card-label">Join Program Request </h3>
             </div>
             <div class="card-toolbar">
                 <a href="{{route('trainees-programs.create')}}" class="btn btn-sm btn-light-primary er fs-6 px-8 py-4"
@@ -48,11 +48,12 @@
                 @foreach ($programs as $program)
                     <tr data-entry-id="{{ $program->id }}">
                         <td>{{$loop->iteration}}</td>
-                        <td>{{$program->program_id}}</td>
+                        <td>{{$program->program_name}}</td>
                         <td>
                             @if ($program->program_type == 'paid')
                                 @if ($program->payment_status == 'paid')
-                                    <span class="label font-weight-bold label-lg label-light-primary label-inline">Paid</span>
+                                    <span
+                                        class="label font-weight-bold label-lg label-light-primary label-inline">Paid</span>
                                 @else
                                     <span class="label font-weight-bold label-lg label-light-danger label-inline">Not Paid</span>
                                 @endif
@@ -66,6 +67,9 @@
                             @if ($program->status == 'rejected')
                                 <span
                                     class="label font-weight-bold label-lg label-light-danger label-inline">Reject</span>
+                            @elseif ($program->status == 'pending')
+                                <span
+                                    class="label font-weight-bold label-lg label-light-warning label-inline">Pending</span>
                             @else
                                 <span
                                     class="label font-weight-bold label-lg label-light-success label-inline">Accept</span>

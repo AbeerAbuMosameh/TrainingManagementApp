@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trainee_programs', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('training_programs', function (Blueprint $table) {
+            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending')->change();
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('trainee_programs');
+        Schema::table('training_programs', function (Blueprint $table) {
+            //
+        });
     }
 };

@@ -9,9 +9,11 @@ use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\TraineeController;
 use App\Http\Controllers\Admin\TraineeProgramController;
 use App\Http\Controllers\Admin\TrainingProgramController;
+use App\Http\Controllers\Advisor\TaskController;
 use App\Http\Controllers\API\SocialAuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StripePaymentController;
+use App\Http\Controllers\Trainee\TrainingTaskController;
 use App\Http\Controllers\WebSiteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -77,6 +79,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/updatePassword', [TraineeController::class, 'password'])->name('password');;
     Route::put('/password/update/{id}', [TraineeController::class, 'updatePassword'])->name('password.update');
     Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
+
+    //Trainee Programs Request Component
+    Route::resource('tasks' , TaskController::class );
+    Route::post('/save-mark',  [TaskController::class, 'saveMark'])->name('save.mark');
+    Route::get('/Training-task', [TaskController::class, 'index1'])->name('Training-tasks.solution');
+
+
+    //solution of tasks
+    Route::resource('Training-tasks' , TrainingTaskController::class );
+
+
 
 
 });

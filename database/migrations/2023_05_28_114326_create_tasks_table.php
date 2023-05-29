@@ -20,8 +20,12 @@ return new class extends Migration
             $table->unsignedBigInteger('advisor_id');
             $table->foreign('advisor_id')->references('id')->on('advisors')->onDelete('cascade');
 
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->Integer('mark');
             $table->text('description');
-
+            $table->json('related_file')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

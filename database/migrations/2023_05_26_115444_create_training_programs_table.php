@@ -21,7 +21,7 @@ return new class extends Migration
             // Define foreign key constraints
             $table->foreign('trainee_id')->references('id')->on('trainees')->onDelete('cascade');
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

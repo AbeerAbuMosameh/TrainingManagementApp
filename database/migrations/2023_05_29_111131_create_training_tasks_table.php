@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreign('trainee_id')->references('id')->on('trainees')->onDelete('cascade');
 
             $table->string('solution');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -238,14 +238,13 @@
 
                 @if(auth()->user()->level == 2)
 
-
                     <li class="menu-section">
-                        <h4 class="menu-text">Trainee Programs Apply</h4>
+                        <h4 class="menu-text">Task Management</h4>
                         <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
                     </li>
                     <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                         <a href="javascript:;" class="menu-link menu-toggle">
-                            <i class="menu-icon fas fa-check-square"></i> <span class="menu-text">Trainee on Program</span>
+                            <i class="menu-icon fas fa-tasks"></i> <span class="menu-text">Tasks</span>
                             <i class="menu-arrow"></i>
                         </a>
                         <i class="menu-arrow"></i>
@@ -254,16 +253,31 @@
                             <i class="menu-arrow"></i>
                             <ul class="menu-subnav">
                                 <li class="menu-item" aria-haspopup="true">
-                                    <a href="{{route('trainees-programs.index')}}" class="menu-link">
+                                    <a href="{{route('tasks.index')}}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
-                                        <span class="menu-text">Trainees</span>
+                                        <span class="menu-text">All Tasks</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                <li class="menu-item" aria-haspopup="true">
+                                    <a href="{{route('Training-tasks.solution')}}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text">All Tasks Solution</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
+
 
                 @endif
 
@@ -290,6 +304,33 @@
                                             <span></span>
                                         </i>
                                         <span class="menu-text">all Applied Program</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </li>
+
+                    <li class="menu-section">
+                        <h4 class="menu-text">Training material To Tasks </h4>
+                        <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
+                    </li>
+                    <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                        <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-icon fas fa-tasks"></i> <span class="menu-text">All Tasks</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <i class="menu-arrow"></i>
+
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                <li class="menu-item" aria-haspopup="true">
+                                    <a href="{{route('Training-tasks.index')}}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text"> Tasks</span>
                                     </a>
                                 </li>
                             </ul>
