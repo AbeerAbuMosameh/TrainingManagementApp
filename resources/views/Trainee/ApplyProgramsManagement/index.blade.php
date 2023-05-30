@@ -38,6 +38,7 @@
 
                     <th>#</th>
                     <th>Program</th>
+                    <th>Advisor</th>
                     <th>Payment Status</th>
                     <th>status for Request</th>
                     <th>Reason</th>
@@ -49,6 +50,7 @@
                     <tr data-entry-id="{{ $program->id }}">
                         <td>{{$loop->iteration}}</td>
                         <td>{{$program->program_name}}</td>
+                        <td>{{$program->advisor}}</td>
                         <td>
                             @if ($program->program_type == 'paid')
                                 @if ($program->payment_status == 'paid')
@@ -78,9 +80,12 @@
                         <td>{{$program->reason}}</td>
                         <td>
                             @if ($program->program_type == 'paid')
-                                <div class="text-center">
-                                    <a href="{{ route('payment.index') }}" class="btn btn-primary">Pay Now</a>
-                                </div>
+
+                                <a href="#" class="btn btn-sm btn-light-primary er fs-6 px-8 py-4"
+                                   data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                                    Pay Now
+                                </a>
+
                             @endif
                         </td>
                     </tr>
@@ -92,63 +97,84 @@
             <!--end: Datatable-->
         </div>
     </div>
-    <form method="POST" action="{{ route("trainees-programs.store") }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route("addmoney.stripe") }}" enctype="multipart/form-data">
         @csrf
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Apply to new Program</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <i aria-hidden="true" class="ki ki-close"></i>
+                        <h5 class="modal-title" id="exampleModalLabel">Payment Modal</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group row pt-4">
-
-                            <div class="col-lg-12">
-                                <label>Program Field<span class="text-danger">*</span></label>
-                                <select required name="" id="field_id" class="form-control">
-                                    <option value="">Select Option</option>
-                                    @foreach($fields as $field)
-                                        <option value="{{ $field->id }}">{{ $field->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                        </div>
-
-                        <div class="form-group row pt-4">
-
-
-                            <div class="col-lg-12">
-                                <label>Available Program<span class="text-danger">*</span></label>
-                                <select required name="program_id" id="program_id" class="form-control">
-                                    <option value="">Select Option</option>
-                                </select>
-                            </div>
+                        <!-- Add your payment form or content here -->
+                        <!-- For example, you can add an input field for the payment amount -->
+                        <div class="form-group">
+                            <label for="payment-amount">Payment Amount</label>
+                            <input type="text" class="form-control" id="payment-amount">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close
-                        </button>
-                        <button type="submit" class="btn btn-primary font-weight-bold">
-                            <span class="indicator-label">Add</span>
-                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="confirm-payment-btn">Confirm Payment</button>
                     </div>
                 </div>
             </div>
         </div>
+
     </form>
 
 @endsection
 
 
 @section('js')
+
     <script src="{{asset('admin/assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
     <script src="{{asset('admin/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.stripe.com/v3/"></script>
     <script>
+        const stripe = Stripe('{{ config('services.stripe.key') }}');
+        const form = document.getElementById('payment-form');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            // Create a payment intent
+            const response = await fetch('{{ route('process-payment') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify({
+                    amount: form.amount.value,
+                }),
+            });
+
+            const { clientSecret } = await response.json();
+
+            // Confirm the card payment
+            const result = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: {
+                        // Provide card details if necessary
+                    },
+                },
+            });
+
+            if (result.error) {
+                console.error(result.error.message);
+            } else {
+                console.log('Payment succeeded!');
+            }
+        });
+    </script>
+    <script>
+
         function deleteRows(id, reference) {
             Swal.fire({
                 title: 'Are you sure?',

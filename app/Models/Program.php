@@ -23,7 +23,7 @@ class Program extends Model
 
     public function trainees()
     {
-        return $this->belongsToMany(Trainee::class);
+        return $this->hasMany(Trainee::class, 'program_id');
     }
 
     public function tasks()
@@ -31,9 +31,4 @@ class Program extends Model
         return $this->hasMany(Task::class);
     }
 
-
-    public function trainingPrograms()
-    {
-        return $this->hasMany(TrainingProgram::class);
-    }
 }

@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Field;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Pusher\ApiErrorException;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
 
 class PaymentController extends Controller
 {
@@ -62,4 +65,6 @@ class PaymentController extends Controller
         Payment::findOrFail($id)->delete();
         return response()->json(['message' => 'Tier deleted.']);
     }
+
+
 }

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\downloadUrtTrait;
 use App\Mail\TraineeCredentialsMail;
+use App\Models\Advisor;
 use App\Models\Notification;
 use App\Models\Payment;
+use App\Models\Program;
 use App\Models\Trainee;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,8 +21,9 @@ use Google\Cloud\Storage\StorageClient;
 class TraineeController extends Controller
 {
 
+    use downloadUrtTrait;
+
     function __construct(){
-        $this->middleware('permission:trainee-list', ['only' => ['index', 'show']]);
         $this->middleware('permission:trainee-accept', ['only' => ['accept']]);
         $this->middleware('permission:trainee-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:trainee-delete', ['only' => ['destroy']]);
@@ -71,28 +75,6 @@ class TraineeController extends Controller
 
 
         return view('Admin.TraineesManagement.index', ['trainees' => $trainees]);
-    }
-
-    //generate URL for each file or document stored in firebase
-    function generateDownloadUrl($filePath){
-        if (!empty($filePath)) {
-            // Initialize Firebase Storage
-            $storage = new StorageClient([
-                'projectId' => 'it-training-app-386209',
-                'keyFilePath' => 'C:\xampp\htdocs\TrainingManagementApp\app\Http\Controllers\it-training-app-386209-firebase-adminsdk-20xbx-c933a61e7b.json',
-            ]);
-
-            // Get the bucket name from the Firebase configuration or replace it with your bucket name
-            $bucket = $storage->bucket('it-training-app-386209.appspot.com');
-
-            // Generate the signed URL for the file
-            $object = $bucket->object($filePath);
-            $downloadUrl = $object->signedUrl(now()->addHour());
-
-            return $downloadUrl;
-        }
-
-        return null;
     }
 
 
@@ -343,6 +325,95 @@ class TraineeController extends Controller
                 return response()->json(['message' => 'Password updated successfully']);
             }
         }
+    }
+
+
+    //display trainee to specific advisor
+    public function displayTrainees(){
+        $advisorId = Advisor::where('email', Auth()->user()->email)->value('id');
+        $programIds = Program::where('advisor_id', $advisorId)->pluck('id');
+
+        $trainees = Trainee::whereHas('programs', function ($query) use ($programIds) {
+            $query->whereIn('program_id', $programIds)
+                ->where('status', 'accepted');
+        })->with(['programs' => function ($query) use ($programIds) {
+            $query->whereIn('program_id', $programIds)->where('status', 'accepted')->select('name');
+        }])->get();
+
+        return view('Advisor.TraineesManagement.index', compact('trainees'));
+    }
+
+    //Trainee Management - Show specific trainee Information and their Documents & files
+    public function showTrainees($id){
+        $trainee = Trainee::findOrFail($id);
+        // Get the file paths for CV, certification, and other files
+        $cvPath = $trainee->cv;
+        $certificationPath = $trainee->certification;
+        $otherFiles = json_decode($trainee->otherFile);
+
+
+        // Generate download links or display the files
+        $cvDownloadUrl = $this->generateDownloadUrl($cvPath);
+        $certificationDownloadUrl = $this->generateDownloadUrl($certificationPath);
+        $otherFileDownloadUrls = [];
+
+
+        // Handle the case when $otherFiles is empty or null
+        if (!empty($otherFiles)) {
+            foreach ($otherFiles as $otherFile) {
+                $otherFileDownloadUrls[] = $this->generateDownloadUrl($otherFile);
+            }
+        }
+
+
+        // Assign the download URLs to the trainee object
+        $trainee->cv = $cvDownloadUrl;
+        $trainee->certification = $certificationDownloadUrl;
+        $trainee->otherFile = $otherFileDownloadUrls;
+
+//        Notification::where('id', $trainee->notification_id)->update(['status' => 'read']);
+        return view('Advisor.TraineesManagement.show', compact('trainee'));
+    }
+
+    public function showTraineesinProgram($programId){
+        // Retrieve the trainees associated with the program ID where status is accepted
+        $trainees = Trainee::whereHas('programs', function ($query) use ($programId) {
+            $query->where('program_id', $programId)
+                ->where('status', 'accepted');
+        })->get();
+
+        $programName = Program::where('id', $programId)->value('name');
+
+        foreach ($trainees as $trainee) {
+            // Get the file paths for CV, certification, and other files
+            $cvPath = $trainee->cv;
+            $certificationPath = $trainee->certification;
+            $otherFiles = json_decode($trainee->otherFile);
+
+
+            // Generate download links or display the files
+            $cvDownloadUrl = $this->generateDownloadUrl($cvPath);
+            $certificationDownloadUrl = $this->generateDownloadUrl($certificationPath);
+            $otherFileDownloadUrls = [];
+
+
+            // Handle the case when $otherFiles is empty or null
+            if (!empty($otherFiles)) {
+                foreach ($otherFiles as $otherFile) {
+                    $otherFileDownloadUrls[] = $this->generateDownloadUrl($otherFile);
+                }
+            }
+
+
+            // Assign the download URLs to the trainee object
+            $trainee->cv = $cvDownloadUrl;
+            $trainee->certification = $certificationDownloadUrl;
+            $trainee->otherFile = $otherFileDownloadUrls;
+
+        }
+
+
+        return view('Advisor.TraineesManagement.index', compact('trainees' , 'programName'));
     }
 
 }

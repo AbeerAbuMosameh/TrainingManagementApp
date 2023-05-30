@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Advisor;
 use App\Models\Field;
 use App\Models\Program;
 use App\Models\Trainee;
@@ -26,6 +27,9 @@ class TrainingProgramController extends Controller
         $programs = TrainingProgram::where('trainee_id', $traineeId)->get();
         foreach ($programs as $program) {
             $program->program_name = Program::where('id', $program->program_id)->value('name');
+            $fname = Advisor::where('id', $program->program->advisor_id)->value('first_name');
+            $lname = Advisor::where('id', $program->program->advisor_id)->value('last_name');
+            $program->advisor = $fname . " ". $lname;
             $program->program_type = Program::where('id', $program->program_id)->value('type');
         }
 
@@ -50,7 +54,7 @@ class TrainingProgramController extends Controller
     {
         $traineeId = Trainee::where('email', Auth::user()->email)->first();
 
-// Check if the trainee has already applied for the program
+           // Check if the trainee has already applied for the program
         $existingProgram = TrainingProgram::where('trainee_id', $traineeId->id)
             ->where('program_id', $request->input('program_id'))
             ->first();
@@ -63,7 +67,7 @@ class TrainingProgramController extends Controller
         $traineeProgram = new TrainingProgram();
         $traineeProgram->trainee_id = $traineeId->id;
         $traineeProgram->program_id = $request->input('program_id');
-        $traineeProgram->status = 'rejected';
+        $traineeProgram->status = 'pending';
         $traineeProgram->save();
 
         $program = Program::find($request->input('program_id'));

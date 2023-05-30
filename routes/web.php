@@ -38,8 +38,7 @@ Route::resource('trainees' , TraineeController::class )->only('store','create');
 //authorize using google
 Route::get('login/google' , [SocialAuthController::class , 'redirectToProvider'])->name('google.login');
 Route::get('auth/google/callback' , [SocialAuthController::class , 'handleCallback'])->name('google.login.callback');
-Route::get('stripe',[StripePaymentController::class,'paymentStripe'])->name('addmoney.paymentstripe');
-Route::post('add-money-stripe',[StripePaymentController::class,'postPaymentStripe'])->name('addmoney.stripe');
+Route::post('/process-payment', [StripePaymentController::class, 'processPayment'])->name('process-payment');
 
 
 Auth::routes();
@@ -56,6 +55,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Trainee Component
     Route::resource('trainees' , TraineeController::class )->except('store','create');
+    Route::get('trainees', [TraineeController::class,'displayTrainees'])->name('trainees_to_advisor');
+    Route::get('show_trainee/{id}', [TraineeController::class,'showTrainees'])->name('show_trainees_to_advisor');
 
     //Payment Component
     Route::resource('payments' , PaymentController::class );
@@ -67,6 +68,8 @@ Route::group(['middleware' => 'auth'], function () {
     //Program Component
     Route::resource('programs' , ProgramController::class );
     Route::get('/get-available-programs/{fieldId}', [ProgramController::class, 'getAvailablePrograms'])->name('get.available.programs');
+    Route::get('show_programs', [ProgramController::class,'displayPrograms'])->name('programs_to_advisor');
+    Route::get('/show_program_trainee/{program}', [TraineeController::class,'showTraineesinProgram'])->name('showTrainees');
 
     //Fields or Discipline  Component
     Route::resource('fields' , FieldController::class );
@@ -85,12 +88,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/save-mark',  [TaskController::class, 'saveMark'])->name('save.mark');
     Route::get('/Training-task', [TaskController::class, 'index1'])->name('Training-tasks.solution');
 
-
     //solution of tasks
-    Route::resource('Training-tasks' , TrainingTaskController::class );
+    Route::resource('Training-tasks', TrainingTaskController::class);
 
-
-
+    Route::get('program-tasks/{id}', [TrainingTaskController::class, 'task'])->name('task');
 
 });
 

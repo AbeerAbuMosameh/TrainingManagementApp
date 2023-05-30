@@ -20,7 +20,7 @@ class Trainee extends Model
 
     public function programs()
     {
-        return $this->belongsToMany(Program::class, 'trainee_program');
+        return $this->belongsToMany(Program::class, 'training_programs');
     }
 
     public function tasks()

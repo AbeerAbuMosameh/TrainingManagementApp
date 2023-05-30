@@ -16,8 +16,7 @@ class Task extends Model
 
     public function trainees()
     {
-        return $this->belongsToMany(Trainee::class, 'training_tasks', 'task_id', 'trainee_id')
-            ->withTimestamps();
+        return $this->belongsToMany(Trainee::class, 'training_tasks', 'task_id', 'trainee_id');
     }
 
     public function isSolvedByTrainee($traineeId): bool
@@ -33,6 +32,11 @@ class Task extends Model
     public function trainingTasks()
     {
         return $this->hasMany(TrainingTask::class);
+    }
+
+    public function advisor()
+    {
+        return $this->belongsTo(Advisor::class);
     }
 
 }

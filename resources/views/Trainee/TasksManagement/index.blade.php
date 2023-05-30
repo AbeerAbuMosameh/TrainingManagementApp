@@ -27,11 +27,10 @@
                     <th>#</th>
                     <th>Program</th>
                     <th>Task Description</th>
-                    <th>Task File</th>
-                    <th>Task End Date</th>
-                    <th>Evaluation</th>
-                    <th>Solve</th>
-                    <th>Solution File</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Mark</th>
+                    <th>Files</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -40,8 +39,11 @@
                 @foreach ($tasks as $task)
                     <tr data-entry-id="{{ $task->id }}">
                         <td>{{$loop->iteration}}</td>
-                        <td>{{ $task->program->name }}</td>
-                        <td>{{ $task->description }}</td>
+                        <td>{{$task->program->name}}</td>
+                        <td>{{$task->description}}</td>
+                        <td>{{$task->start_date}}</td>
+                        <td>{{$task->end_date}}</td>
+                        <td>{{$task->mark}}</td>
                         <td>
                             @if(count($task->related_file ?? []) > 0)
                                 @foreach($task->related_file as $otherFileUrl)
@@ -54,57 +56,29 @@
                                     No Task File</span>
                             @endif
                         </td>
-                        <td>{{ $task->end_date }}</td>
-                        <td>{{ $task->mark }}</td>
-
-                        <td style="width: 158px;">
-                            @if ($task->isSolvedByTrainee(\App\Models\Trainee::where('email', Auth()->user()->email)->value('id')))
-                                <button class="btn btn-sm btn-clean btn-icon" disabled>
-                                    <span>
-                                        <span
-                                            class="label font-weight-bold label-lg  label-light-danger label-inline">
-                                           Task is Solved
-                                        </span>
-                                    </span>
-                                </button>
-
-                            @else
-                                <a href="{{ route('Training-tasks.store', $task->id) }}"
-                                   class="btn btn-sm btn-clean btn-icon" data-toggle="modal"
-                                   data-target="#solveModal" title="Solve Task">
-                                    <i class="la la-check-circle"></i> Solve Task
-                                </a>
-                            @endif
-                        </td>
-
-                        <td>{{ $task->solution }}</td>
-
-
                         <td>
-                            <a href="{{ route('Training-tasks.edit', $task->id) }}"
-                               class="btn btn-sm btn-clean btn-icon" data-toggle="modal"
-                               data-target="#editModal" title="Edit details">
-                                <i class="la la-edit"></i>
+                            <a href="{{ route('task', $task->id) }}" class="btn btn-sm btn-clean btn-icon"
+                               title="Solve Task">
+                                <i class="la la-send"> </i>Submit
                             </a>
                         </td>
+
                     </tr>
                 @endforeach
-
                 </tbody>
             </table>
-
             <!--end: Datatable-->
         </div>
     </div>
 
     <form method="POST" action="{{ route('Training-tasks.store') }}" enctype="multipart/form-data">
         @csrf
-        <div class="modal fade" id="solveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal fade" id="exampleModalLabel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Solve {{ $task->program->name }} Task</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Solve {{ $task->program->name}} Task</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <i aria-hidden="true" class="ki ki-close"></i>
                         </button>
@@ -141,52 +115,6 @@
         </div>
     </form>
 
-    @if(!$tasks->isEmpty())
-        <form method="POST" action="{{ route("Training-tasks.update", $task->id) }}" enctype="multipart/form-data">
-            @method('PUT')
-            @csrf
-            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Solve {{ $task->program->name }} Task</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <i aria-hidden="true" class="ki ki-close"></i>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group row pt-4">
-                                <div class="col-lg-12">
-                                    <label for="name">Submit Solution<span class="text-danger">*</span></label>
-                                    <input type="file"
-                                           class="form-control {{ $errors->has('solution') ? 'is-invalid' : '' }}"
-                                           name="solution" id="solution" value="{{ old('solution') }}"
-                                           placeholder="Enter Field Name" required/>
-                                    @if($errors->has('solution'))
-                                        <div class="invalid-feedback">
-                                            {{ $errors->first('solution') }}
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <!-- Include a hidden input field for the task ID -->
-                            <input type="hidden" name="task_id" value="{{ $task->id }}">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">
-                                Close
-                            </button>
-                            <button type="submit" class="btn btn-primary font-weight-bold">
-                                <span class="indicator-label">Add</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    @endif
 
 @endsection
 

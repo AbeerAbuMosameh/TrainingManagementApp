@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Advisor;
 use App\Models\Field;
 use App\Models\Program;
+use App\Models\Trainee;
+use App\Models\TrainingProgram;
 use Illuminate\Http\Request;
 
 class ProgramController extends Controller
@@ -107,16 +109,7 @@ class ProgramController extends Controller
                 $program->image = $imageName; // Set the 'image' attribute with the image file name
             }
 
-            $program->name = $request->name;
-            $program->hours = $request->hours;
-            $program->level = $request->level;
-            $program->type = $request->type;
-            $program->field_id = $request->field_id;
-            $program->language = $request->language;
-            $program->description = $request->description;
-
-            $program->save();
-
+            $program->update($request->all());
             toastr()->success('Program Updated Successfully!');
         } else {
             toastr()->error($validator->getMessageBag()->first());
@@ -132,10 +125,23 @@ class ProgramController extends Controller
         // Return the programs as a JSON response
         return response()->json($programs);
     }
+
     //Program Management - Delete Program
     public function destroy($id)
     {
         Program::findOrFail($id)->delete();
         return response()->json(['message' => 'Advisor deleted.']);
     }
+
+    //Program Management - display advisor Program
+    public function displayPrograms()
+    {
+        $advisorId = Advisor::where('email', Auth()->user()->email)->value('id');
+        $programs = Program::where('advisor_id', $advisorId)->get();
+
+        return view('Advisor.ProgramsManagement.index', compact('programs'));
+    }
+
+
+
 }

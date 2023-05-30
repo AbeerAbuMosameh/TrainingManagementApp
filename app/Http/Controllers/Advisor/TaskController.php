@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Advisor;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\downloadUrtTrait;
 use App\Models\Advisor;
 use App\Models\Program;
 use App\Models\Task;
@@ -14,6 +15,8 @@ use Kreait\Firebase\Contract\Auth;
 
 class TaskController extends Controller
 {
+
+    use downloadUrtTrait;
     /**
      * Display a listing of the resource.
      */
@@ -37,12 +40,27 @@ class TaskController extends Controller
 
             $task->related_file = $otherFileDownloadUrls;
 
+            foreach ($task->trainingTasks as $trainingTask) {
+                $solutionPath = $trainingTask->solution;
+
+                // Generate download links or display the files
+                $SolutionDownloadUrl = $this->generateDownloadUrl($solutionPath);
+
+                // Assign the download URLs to the trainee object
+                $trainingTask->solution = $SolutionDownloadUrl;
+            }
+
 
         }
+
 
         return view('Advisor.TasksManagement.index', compact('tasks', 'programs'));
 
     }
+
+
+
+
 
     public function index1()
     {
@@ -253,26 +271,4 @@ class TaskController extends Controller
     }
 
 
-    //generate URL for each file or document stored in firebase
-    function generateDownloadUrl($filePath)
-    {
-        if (!empty($filePath)) {
-            // Initialize Firebase Storage
-            $storage = new StorageClient([
-                'projectId' => 'it-training-app-386209',
-                'keyFilePath' => 'C:\xampp\htdocs\TrainingManagementApp\app\Http\Controllers\it-training-app-386209-firebase-adminsdk-20xbx-c933a61e7b.json',
-            ]);
-
-            // Get the bucket name from the Firebase configuration or replace it with your bucket name
-            $bucket = $storage->bucket('it-training-app-386209.appspot.com');
-
-            // Generate the signed URL for the file
-            $object = $bucket->object($filePath);
-            $downloadUrl = $object->signedUrl(now()->addHour());
-
-            return $downloadUrl;
-        }
-
-        return null;
-    }
 }

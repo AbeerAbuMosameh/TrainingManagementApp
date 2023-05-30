@@ -2,67 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Cartalyst\Stripe\Laravel\Facades\Stripe;
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 
 class StripePaymentController extends Controller
 {
-    public function paymentStripe()
+    public function processPayment(Request $request)
     {
-        return view('stripe');
-    }
+        // Set your Stripe secret key
+        Stripe::setApiKey(config('pk_test_51NCpWIC2PxI10leUSKlcbw1SwSOxDtFNmyJkWeLhukQjdGmuI7SgGSXiw3YDiyR5KpGwzQl8Dt2aH7urc7uhVfjX00iD6bkQAu'));
 
-    public function postPaymentStripe(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'card_no' => 'required',
-            'ccExpiryMonth' => 'required',
-            'ccExpiryYear' => 'required',
-            'cvvNumber' => 'required',
-            // 'amount' => 'required',
+        // Create a PaymentIntent
+        $paymentIntent = PaymentIntent::create([
+            'amount' => $request->amount,
+            'currency' => 'usd',
         ]);
 
-        $input = $request->except('_token');
-
-        if ($validator->passes()) {
-            $stripe = Stripe::setApiKey(env('STRIPE_SECRET'));
-
-            try {
-                $token = $stripe->tokens()->create([
-                    'card' => [
-                        'number' => $request->get('card_no'),
-                        'exp_month' => $request->get('ccExpiryMonth'),
-                        'exp_year' => $request->get('ccExpiryYear'),
-                        'cvc' => $request->get('cvvNumber'),
-                    ],
-                ]);
-
-                if (!isset($token['id'])) {
-                    return redirect()->route('stripe.add.money');
-                }
-
-                $charge = $stripe->charges()->create([
-                    'card' => $token['id'],
-                    'currency' => 'USD',
-                    'amount' => 20.49,
-                    'description' => 'wallet',
-                ]);
-
-                if($charge['status'] == 'succeeded') {
-                    dd($charge);
-                    return redirect()->route('addmoney.paymentstripe');
-                } else {
-                    return redirect()->route('addmoney.paymentstripe')->with('error','Money not add in wallet!');
-                }
-            } catch (Exception $e) {
-                return redirect()->route('addmoney.paymentstripe')->with('error',$e->getMessage());
-            } catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
-                return redirect()->route('addmoney.paymentstripe')->with('error',$e->getMessage());
-            } catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
-                return redirect()->route('addmoney.paymentstripe')->with('error',$e->getMessage());
-            }
-        }
+        return response()->json([
+            'clientSecret' => $paymentIntent->client_secret,
+        ]);
     }
 }

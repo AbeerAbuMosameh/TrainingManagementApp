@@ -20,4 +20,10 @@ class TrainingProgram extends Model
     {
         return $this->belongsTo(Program::class);
     }
+
+    public function trainees()
+    {
+        return $this->belongsToMany(Trainee::class, 'training_programs');
+    }
+
 }
