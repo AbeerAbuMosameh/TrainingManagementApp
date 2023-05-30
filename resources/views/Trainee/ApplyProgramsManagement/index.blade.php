@@ -41,7 +41,6 @@
                     <th>Advisor</th>
                     <th>Payment Status</th>
                     <th>status for Request</th>
-                    <th>Reason</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -60,7 +59,7 @@
                                     <span class="label font-weight-bold label-lg label-light-danger label-inline">Not Paid</span>
                                 @endif
                             @else
-                                <span class="label font-weight-bold label-lg label-light-info label-inline">Course is Free</span>
+                                <span class="label font-weight-bold label-lg label-light-info label-inline"> Free Course</span>
 
                             @endif
                         </td>
@@ -77,12 +76,14 @@
                                     class="label font-weight-bold label-lg label-light-success label-inline">Accept</span>
                             @endif
                         </td>
-                        <td>{{$program->reason}}</td>
                         <td>
                             @if ($program->program_type == 'paid')
 
-                                <a href="#" class="btn btn-sm btn-light-primary er fs-6 px-8 py-4"
-                                   data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                                <a
+                                   class="btn btn-sm btn-light-primary er fs-6 px-8 py-4"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#kt_modal_new_target" data-toggle="modal"
+                                   data-target="#exampleModal2">
                                     Pay Now
                                 </a>
 
@@ -99,33 +100,118 @@
     </div>
     <form method="POST" action="{{ route("addmoney.stripe") }}" enctype="multipart/form-data">
         @csrf
-        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Payment Modal</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                        <h5 class="modal-title" id="exampleModalLabel">Pay To Program</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true" class="ki ki-close"></i>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!-- Add your payment form or content here -->
-                        <!-- For example, you can add an input field for the payment amount -->
-                        <div class="form-group">
-                            <label for="payment-amount">Payment Amount</label>
-                            <input type="text" class="form-control" id="payment-amount">
+                        <div class="form-group row pt-4">
+
+                            <div class="mb-3">
+                                <label class='control-label'>Card Number</label>
+                                <input autocomplete='off' class='form-control card-number' size='20' type='text' name="card_no">
+                            </div>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label class='control-label'>CVV</label>
+                                    <input autocomplete='off' class='form-control card-cvc' placeholder='ex. 311' size='4' type='text' name="cvvNumber">
+                                </div>
+                                <div class="col-auto">
+                                    <label class='control-label'>Expiration</label>
+                                    <input class='form-control card-expiry-month' placeholder='MM' size='4' type='text' name="ccExpiryMonth">
+                                </div>
+                                <div class="col-auto">
+                                    <label class='control-label'>Year</label>
+                                    <input class='form-control card-expiry-year' placeholder='YYYY' size='4' type='text' name="ccExpiryYear">
+                                    <input class='form-control card-expiry-year' placeholder='YYYY' size='4' type='hidden' name="amount" value="300">
+                                </div>
+                            </div>
+
+                            <div class="mb-3" style="padding-top:20px;">
+                                <h5 class='total' >Total:<span class='amount'>$10</span></h5>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <div class='alert-danger alert' style="display:none;">
+                                    Please correct the errors and try again.
+                                </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="confirm-payment-btn">Confirm Payment</button>
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close
+                        </button>
+                        <button class='btn btn-primary font-weight-bold' type='submit'>
+                            <span class="indicator-label">Pay »</span>
+
+                        </button>
+
                     </div>
                 </div>
             </div>
         </div>
-
+        </div>
     </form>
+    <form method="POST" action="{{ route("trainees-programs.store") }}" enctype="multipart/form-data">
+        @csrf
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Apply to new Program</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row pt-4">
 
+                            <div class="col-lg-12">
+                                <label>Program Field<span class="text-danger">*</span></label>
+                                <select required name="" id="field_id" class="form-control">
+                                    <option value="">Select Option</option>
+                                    @foreach($fields as $field)
+                                        <option value="{{ $field->id }}">{{ $field->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row pt-4">
+                            <div class="col-lg-12">
+                                <label>Available Program<span class="text-danger">*</span></label>
+                                <select required name="program_id" id="program_id" class="form-control">
+                                    <option value="">Select Option</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row pt-4">
+                            <div class="col-lg-12">
+                                <label>Advisor of Program<span class="text-danger">*</span></label>
+                                <input type="text" name="advisor_name" id="advisor_name" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close
+                        </button>
+                        <button type="submit" class="btn btn-primary font-weight-bold">
+                            <span class="indicator-label">Add</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 @endsection
 
 
@@ -134,45 +220,30 @@
     <script src="{{asset('admin/assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
     <script src="{{asset('admin/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script src="https://js.stripe.com/v3/"></script>
-    <script src="https://js.stripe.com/v3/"></script>
-    <script src="https://js.stripe.com/v3/"></script>
     <script>
-        const stripe = Stripe('{{ config('services.stripe.key') }}');
-        const form = document.getElementById('payment-form');
-
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            // Create a payment intent
-            const response = await fetch('{{ route('process-payment') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                },
-                body: JSON.stringify({
-                    amount: form.amount.value,
-                }),
+        $(document).ready(function() {
+            $('#program_id').change(function() {
+                var programId = $(this).val();
+                if (programId) {
+                    $.ajax({
+                        url: '/getAdvisor',
+                        type: 'GET',
+                        data: { program_id: programId },
+                        success: function(response) {
+                            $('#advisor_name').val(response);
+                        },
+                        error: function(xhr) {
+                            // Handle error if any
+                            console.log(xhr.responseText);
+                        }
+                    });
+                } else {
+                    $('#advisor_name').val('');
+                }
             });
-
-            const { clientSecret } = await response.json();
-
-            // Confirm the card payment
-            const result = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: {
-                    card: {
-                        // Provide card details if necessary
-                    },
-                },
-            });
-
-            if (result.error) {
-                console.error(result.error.message);
-            } else {
-                console.log('Payment succeeded!');
-            }
         });
     </script>
+
     <script>
 
         function deleteRows(id, reference) {

@@ -20,18 +20,13 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index(){
         $id = Advisor::where('email', Auth()->user()->email)->value('id');
         $tasks = Task::where('advisor_id', $id)->get();
         $programs = Program::where('advisor_id', $id)->get();
         foreach ($tasks as $task) {
-
             $related_files = json_decode($task->related_file);
-
             $otherFileDownloadUrls = [];
-
-
             if (!empty($related_files)) {
                 foreach ($related_files as $related_file) {
                     $otherFileDownloadUrls[] = $this->generateDownloadUrl($related_file);
@@ -52,7 +47,6 @@ class TaskController extends Controller
 
 
         }
-
 
         return view('Advisor.TasksManagement.index', compact('tasks', 'programs'));
 

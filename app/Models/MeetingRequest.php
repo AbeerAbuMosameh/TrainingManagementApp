@@ -11,4 +11,14 @@ class MeetingRequest extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded=[];
+
+    public function advisor()
+    {
+        return $this->belongsTo(Advisor::class);
+    }
+
+    public function trainee()
+    {
+        return $this->belongsTo(Trainee::class);
+    }
 }

@@ -12,6 +12,7 @@ use App\Models\Notification;
 use App\Models\User;
 use Google\Cloud\Storage\StorageClient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
@@ -298,5 +299,49 @@ class AdvisorController extends Controller
     {
         Advisor::findOrFail($id)->delete();
         return response()->json(['message' => 'Advisor deleted.']);
+    }
+
+    public function save(Request $request)
+    {
+        // Retrieve the advisor record
+        $id=Advisor::where('email',Auth::user()->email)->value('id');
+        $advisor = Advisor::findOrFail($id);
+
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('images'), $imageName);
+            $requestData = $request->except('image','field');
+            $requestData['image'] = $imageName;
+            $advisor->update($requestData);
+            dd($requestData);
+        } else {
+            $advisor->update($request->except('field'));
+        }
+
+        // Update the advisor record with the submitted form data
+        $advisor->first_name = $request->input('first_name');
+        $advisor->last_name = $request->input('last_name');
+        $advisor->education = $request->input('education');
+        $advisor->address = $request->input('address');
+        $advisor->city = $request->input('city');
+        $advisor->language = $request->input('language');
+        $advisor->phone = $request->input('phone');
+
+        $advisor->save();
+
+        // Save the new advisor fields
+        $selectedFieldIds = $request->input('field');
+        foreach ($selectedFieldIds as $fieldId) {
+            AdvisorField::create([
+                'advisor_id' => $advisor->id,
+                'field_id' => $fieldId,
+            ]);
+        }
+
+        toastr()->success('Advisor Information Updated Successfully!');
+
+
+        // Redirect back or to a success page
+        return redirect()->back();
     }
 }

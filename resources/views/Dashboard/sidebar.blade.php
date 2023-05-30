@@ -345,6 +345,28 @@
                     </li>
                     <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                         <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-icon fas fa-chevron-circle-down"></i> <span class="menu-text">Accepted Program</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <i class="menu-arrow"></i>
+
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                <li class="menu-item" aria-haspopup="true">
+                                    <a href="{{route('program_to_trainee')}}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text">Accepted Program</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </li>
+                    <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                        <a href="javascript:;" class="menu-link menu-toggle">
                             <i class="menu-icon fas fa-check-square"></i> <span class="menu-text">Apply in Program</span>
                             <i class="menu-arrow"></i>
                         </a>
@@ -365,6 +387,34 @@
                         </div>
 
                     </li>
+
+                    <li class="menu-section">
+                        <h4 class="menu-text">Meeting Component </h4>
+                        <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
+                    </li>
+                    <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                        <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-icon fas fa-tasks"></i> <span class="menu-text">Meetings</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <i class="menu-arrow"></i>
+
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                <li class="menu-item" aria-haspopup="true">
+                                    <a href="{{route('meetings.index')}}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text"> All meeting</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </li>
+
 
                     <li class="menu-section">
                         <h4 class="menu-text">Training material To Tasks </h4>
@@ -410,6 +460,18 @@
 
                     </a>
                 </li>
+                @if(auth()->user()->level != 1)
+                <li class="menu-item" aria-haspopup="true">
+                    <a class="menu-link" href="{{route('profile')}}">
+                        <i class="menu-icon  far fa-user-circle">
+
+                        </i>
+
+                        <span class="menu-text">Profile</span>
+
+                    </a>
+                </li>
+                @endif
                 <li class="menu-item" aria-haspopup="true">
                     <a class="menu-link" onclick="document.getElementById('logout').submit()">
                         <i class="menu-icon

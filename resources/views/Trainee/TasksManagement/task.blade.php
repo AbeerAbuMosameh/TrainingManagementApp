@@ -69,12 +69,15 @@
                                                       </span>Can Solve or Edit Task
                                                 </td>
                                                 <td class="border-top-0 text-center py-4">
-                                                    @if ($task->start_date <= now() && $task->end_date >= now())
+                                                    @if ($task->start_date <= now() && $task->end_date >= now() && !$task->marks)
                                                         <span
                                                             class="label font-weight-bold label-lg label-light-success label-inline">Yes</span>
                                                     @elseif($task->start_date > now())
                                                         <span
                                                             class="label font-weight-bold label-lg label-light-danger label-inline">No , Submission not available yet </span>
+                                                    @elseif($task->marks)
+                                                        <span
+                                                            class="label font-weight-bold label-lg label-light-danger label-inline">No , Task is  Evaluated </span>
                                                     @else
                                                         <span
                                                             class="label font-weight-bold label-lg label-light-danger label-inline">No , The specified time for solving the task has been completed </span>
@@ -162,7 +165,8 @@
                                                         {{ $task->marks }}
                                                         <br>
 
-                                                    <span class="label font-weight-bold label-lg label-light-danger label-inline">Cannot Edit Your Submission</span>
+                                                        <span
+                                                            class="label font-weight-bold label-lg label-light-danger label-inline">Cannot Edit Your Submission</span>
                                                     @else
                                                         Not Evaluated Yet
                                                     @endif

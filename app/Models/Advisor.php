@@ -10,6 +10,8 @@ class Advisor extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $guarded =[];
+
     public function notification()
     {
         return $this->belongsTo(Notification::class, 'notification_id');
@@ -23,5 +25,12 @@ class Advisor extends Model
     public function fields()
     {
         return $this->belongsToMany(Field::class, 'advisor_fields');
+
     }
+
+    public function meetings()
+    {
+        return $this->hasMany(MeetingRequest::class);
+    }
+
 }

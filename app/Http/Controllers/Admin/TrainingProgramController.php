@@ -29,7 +29,7 @@ class TrainingProgramController extends Controller
             $program->program_name = Program::where('id', $program->program_id)->value('name');
             $fname = Advisor::where('id', $program->program->advisor_id)->value('first_name');
             $lname = Advisor::where('id', $program->program->advisor_id)->value('last_name');
-            $program->advisor = $fname . " ". $lname;
+            $program->advisor = $fname . " " . $lname;
             $program->program_type = Program::where('id', $program->program_id)->value('type');
         }
 
@@ -54,7 +54,7 @@ class TrainingProgramController extends Controller
     {
         $traineeId = Trainee::where('email', Auth::user()->email)->first();
 
-           // Check if the trainee has already applied for the program
+        // Check if the trainee has already applied for the program
         $existingProgram = TrainingProgram::where('trainee_id', $traineeId->id)
             ->where('program_id', $request->input('program_id'))
             ->first();
@@ -84,33 +84,34 @@ class TrainingProgramController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TrainingProgram $trainingProgram)
+    public function displayAcceptedProgram()
     {
-        //
+        // Get the authenticated trainee
+        $trainee_id = Trainee::where('email', Auth::user()->email)->value('id');
+
+        // Get the accepted training program for the trainee
+        $programs = TrainingProgram::with('program')->where('trainee_id', $trainee_id)
+            ->where('status', 'accepted')
+            ->get();
+
+        if ($programs->count() > 0) {
+            // If programs exist, pass them to the view
+            return view('Trainee.ApplyProgramsManagement.program', compact('programs'));
+        } else {
+            // If no accepted program exists, you can handle the case accordingly
+            return view('Trainee.ApplyProgramsManagement.program', compact('programs'));
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TrainingProgram $trainingProgram)
+    public function getAdvisor(Request $request)
     {
-        //
+        $programId = $request->input('program_id');
+        $advisorId = Program::where('id', $programId)->value('advisor_id');
+        $advisorName = Advisor::where('id', $advisorId)->value('first_name') . ' ' . Advisor::where('id', $advisorId)->value('last_name');
+        return $advisorName;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, TrainingProgram $trainingProgram)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(TrainingProgram $trainingProgram)
     {
         //

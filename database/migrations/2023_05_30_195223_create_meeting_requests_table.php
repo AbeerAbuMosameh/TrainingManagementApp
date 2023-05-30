@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('meeting_requests', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->time('time');
+
             $table->unsignedBigInteger('trainee_id');
             $table->foreign('trainee_id')->references('id')->on('trainees')->onDelete('cascade');
             $table->unsignedBigInteger('advisor_id');
             $table->foreign('advisor_id')->references('id')->on('advisors')->onDelete('cascade');
-            $table->enum('status', ['accepted', 'rejected'])->default('rejected');
+            $table->unsignedBigInteger('program_id');
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+            $table->date('date');
+            $table->time('time');
+            $table->enum('status', ['accepted','pending', 'rejected'])->default('pending');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -55,6 +55,11 @@ class AdminPermissionsSeeder extends Seeder
             ['name' => 'payment-create'],
             ['name' => 'payment-edit'],
             ['name' => 'payment-delete'],
+
+
+            ['name' => 'password-list'],
+            ['name' => 'password-edit'],
+
         ];
 
         foreach ($permissions as $permission) {

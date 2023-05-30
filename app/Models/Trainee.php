@@ -28,5 +28,9 @@ class Trainee extends Model
         return $this->belongsToMany(Task::class, 'training_tasks', 'trainee_id', 'task_id')
             ->withTimestamps();
     }
+    public function meetings()
+    {
+        return $this->hasMany(MeetingRequest::class);
+    }
 
 }

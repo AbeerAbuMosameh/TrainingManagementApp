@@ -79,13 +79,18 @@
                         <td>{{ $program->start_date }}</td>
                         <td>{{ $program->end_date }}</td>
                         <td>{{ $program->type }}</td>
-                        <td>{{ $program->price }}</td>
+                        <td>
+                            @if($program->type == 'free')
+                                No fees
+                            @else
+                                {{ $program->price }}
+                            @endif</td>
                         <td>{{ $program->number }}</td>
                         <td>{{ $program->duration }}</td>
                         <td>{{ $program->level }}</td>
                         <td>{{ $program->language }}</td>
                         <td>{{ $program->field->name ?? 'N/A' }}</td>
-                        <td>{{ $program->description }}</td>
+                        <td>{{ $program->description ?? 'No Description'}}</td>
                         <td>
                             <a href="{{ route('programs.edit', $program->id) }}"
                                class="btn btn-sm btn-clean btn-icon"

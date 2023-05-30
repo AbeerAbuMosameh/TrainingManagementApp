@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\downloadUrtTrait;
 use App\Mail\TraineeCredentialsMail;
 use App\Models\Advisor;
+use App\Models\AdvisorField;
 use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Program;
 use App\Models\Trainee;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -293,41 +295,6 @@ class TraineeController extends Controller
         return response()->json(['message' => 'Trainee deleted.']);
     }
 
-    //All Actors - display View To change Password
-    public function password(){
-        return view('Admin.updatePassword');
-    }
-
-    //All Actors - Validate &  change Password
-    public function updatePassword(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-
-        $validator = Validator($request->all(), [
-            'oldPassword' => 'required',
-            'password' => 'required|string|confirmed',
-        ]);
-
-        if ($validator->fails()) {
-            if ($validator->errors()->has('password')) {
-                return response()->json(['message' => $validator->errors()->first('password')], 422);
-            } else {
-                return response()->json(['message' => 'All fields should be entered'], 422);
-            }
-        } else {
-            // Check if the previous password matches the one stored in the database
-            if (!Hash::check($request->input('oldPassword'), $user->password)) {
-                return response()->json(['message' => 'Previous password is incorrect'], 422);
-            } else {
-                // Update the password
-                $user->password = Hash::make($request->input('password'));
-                $user->save();
-                return response()->json(['message' => 'Password updated successfully']);
-            }
-        }
-    }
-
-
     //display trainee to specific advisor
     public function displayTrainees(){
         $advisorId = Advisor::where('email', Auth()->user()->email)->value('id');
@@ -416,4 +383,39 @@ class TraineeController extends Controller
         return view('Advisor.TraineesManagement.index', compact('trainees' , 'programName'));
     }
 
+    public function save(Request $request)
+    {
+        // Retrieve the advisor record
+        $id=Trainee::where('email',Auth::user()->email)->value('id');
+        $trainee = Trainee::findOrFail($id);
+
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('images'), $imageName);
+            $requestData = $request->except('image','field');
+            $requestData['image'] = $imageName;
+            $trainee->update($requestData);
+        } else {
+            $trainee->update($request->all());
+        }
+
+        // Update the advisor record with the submitted form data
+        $trainee->first_name = $request->input('first_name');
+        $trainee->last_name = $request->input('last_name');
+        $trainee->education = $request->input('education');
+        $trainee->address = $request->input('address');
+        $trainee->payment = $request->input('payment');
+        $trainee->city = $request->input('city');
+        $trainee->language = $request->input('language');
+        $trainee->phone = $request->input('phone');
+
+        $trainee->save();
+
+
+        toastr()->success('Trainee Information Updated Successfully!');
+
+
+        // Redirect back or to a success page
+        return redirect()->back();
+    }
 }
