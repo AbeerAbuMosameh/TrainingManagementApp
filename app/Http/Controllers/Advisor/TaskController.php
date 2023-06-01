@@ -19,12 +19,13 @@ class TaskController extends Controller
     use downloadUrtTrait;
 
     function __construct(){
-//        $this->middleware('permission:a-task-list', ['only' => ['index', 'show']]);
-//        $this->middleware('permission:advisor-task-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:admin-program-alltask', ['only' => ['alltasks']]);
         $this->middleware('permission:a-task-mark', ['only' => ['saveMark']]);
-        $this->middleware('permission:a-task-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:a-task-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:a-task-create', ['only' => ['create','store']]);
+        $this->middleware('permission:advisor-task-list', ['only' => ['index','show']]);
+        $this->middleware('permission:advisor-task-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:advisor-task-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:advisor-task-create', ['only' => ['create','store']]);
+        $this->middleware('permission:advisor-task-solution', ['only' => ['tasksSolution']]);
     }
     /**
      * Display a listing of the resource.
@@ -62,7 +63,7 @@ class TaskController extends Controller
     }
 
 
-    public function index1(){
+    public function tasksSolution(){
         $advisorId = Advisor::where('email', Auth()->user()->email)->value('id');
 
         // Get the tasks with programs and solutions belonging to the advisor
@@ -87,8 +88,7 @@ class TaskController extends Controller
         return view('Advisor.TasksManagement.tasksSolutions', compact('tasks'));
     }
 
-    public function saveMark(Request $request)
-    {
+    public function saveMark(Request $request){
         $trainingTaskId = $request->input('trainingTaskId');
         $mark = $request->input('mark');
 
@@ -104,10 +104,6 @@ class TaskController extends Controller
 
         return redirect()->route('Training-tasks.solution');
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
 
     //Admin - display task on specific program
     public function alltasks($id)
@@ -130,9 +126,6 @@ class TaskController extends Controller
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request){
         // Validate the form input
         $validator = Validator::make($request->all(), [
@@ -194,29 +187,7 @@ class TaskController extends Controller
         return redirect()->route('tasks.index');
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Task $task)
-    {
-        //
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Task $task)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $taskId)
-    {
+    public function update(Request $request, $taskId){
         // Validate the form input
         $validator = Validator::make($request->all(), [
             'description' => 'required',
@@ -277,9 +248,6 @@ class TaskController extends Controller
         return redirect()->route('tasks.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         Task::findOrFail($id)->delete();

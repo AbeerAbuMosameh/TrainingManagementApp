@@ -17,6 +17,13 @@ use Kreait\Firebase\Contract\Auth;
 class TrainingTaskController extends Controller
 {
 
+
+    function __construct(){
+        $this->middleware('permission:trainee-task-list', ['only' => ['index']]);
+        $this->middleware('permission:trainee-task-create', ['only' => ['store']]);
+        $this->middleware('permission:trainee-task-edit', ['only' => ['update']]);
+        $this->middleware('permission:trainee-meeting-create', ['only' => ['store']]);
+    }
     use downloadUrtTrait;
     /**
      * Display a listing of the resource.
@@ -55,8 +62,6 @@ class TrainingTaskController extends Controller
         return view('Trainee.TasksManagement.task', compact('task'));
     }
 
-
-
     public function index(){
         $id = Trainee::where('email',Auth()->user()->email)->value('id');
 
@@ -83,10 +88,6 @@ class TrainingTaskController extends Controller
 
         return view('Trainee.TasksManagement.index', compact('tasks'));
 
-    }
-
-    public function create(){
-        //
     }
 
     public function store(Request $request){
@@ -205,10 +206,6 @@ class TrainingTaskController extends Controller
         return redirect()->route('Training-tasks.index');
     }
 
-    public function destroy(TrainingTask $trainingTask)
-    {
-        //
-    }
 
 
 }

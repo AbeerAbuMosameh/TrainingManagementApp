@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-
     use downloadUrtTrait;
     //All Actors - display View To change Password
     public function password()
@@ -51,8 +50,7 @@ class ProfileController extends Controller
         }
     }
 
-    public function profile()
-    {
+    public function profile(){
         // Check if the user is authenticated
         if (Auth::check()) {
             // User is authenticated

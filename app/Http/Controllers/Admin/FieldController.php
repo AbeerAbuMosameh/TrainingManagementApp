@@ -12,10 +12,10 @@ class FieldController extends Controller
      * Display a listing of the resource.
      */
     function __construct(){
-        $this->middleware('permission:field-list', ['only' => ['index', 'show']]);
-        $this->middleware('permission:field-accept', ['only' => ['accept']]);
-        $this->middleware('permission:field-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:field-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:admin-field-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:admin-field-accept', ['only' => ['accept']]);
+        $this->middleware('permission:admin-field-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:admin-field-delete', ['only' => ['destroy']]);
     }
 
     //Fields Management - display View contain all Fields or disciplines

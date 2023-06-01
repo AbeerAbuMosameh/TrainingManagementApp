@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\TraineeProgramController;
 use App\Http\Controllers\Admin\TrainingProgramController;
 use App\Http\Controllers\Advisor\TaskController;
 use App\Http\Controllers\API\SocialAuthController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\ProfileController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\Trainee\MeetingRequestController;
 use App\Http\Controllers\Trainee\PaymentInformationController;
 use App\Http\Controllers\Trainee\TrainingTaskController;
+use App\Http\Controllers\TrainingAttendanceController;
 use App\Http\Controllers\WebSiteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -110,7 +112,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/save-mark',  [TaskController::class, 'saveMark'])->name('save.mark');
     Route::get('/alltasks/{id}',  [TaskController::class, 'alltasks'])->name('alltask');
     Route::get('/alltrainees/{id}',  [TrainingProgramController::class, 'alltrainee'])->name('alltrainees');
-    Route::get('/Training-task', [TaskController::class, 'index1'])->name('Training-tasks.solution');
+    Route::get('/Training-task', [TaskController::class, 'tasksSolution'])->name('Training-tasks.solution');
 
 
     //Trainee meeting Request Component
@@ -124,7 +126,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Change Profile Component
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');;
-    Route::put('/profile/update/{id}', [TraineeController::class, 'updatePassword'])->name('password.update');
+
+
+    Route::get('/calendar/{id}', [CalendarController::class , 'view'])->name('calendar.view');
+    Route::post('/add-attendance', [TrainingAttendanceController::class,'addAttendance'])->name('add.attendance');
 
 
     Route::get('/logs', [LogController::class, 'showLogs'])->name('logs');

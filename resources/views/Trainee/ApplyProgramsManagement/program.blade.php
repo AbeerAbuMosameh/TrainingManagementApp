@@ -44,6 +44,8 @@
                     <th>Language</th>
                     <th>Field</th>
                     <th>Program Description</th>
+                    <th>Action</th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -74,15 +76,15 @@
                             </td>
                             <td>{{ $program->program->hours }}</td>
 
-                                @if($program->program->start_date <= now() && $program->program->end_date > now())
-                            <td data-field="Status" data-autohide-disabled="false" aria-label="3"
-                                class="datatable-cell"><span style="width: 108px;"><span
-                                        class="label font-weight-bold label-lg  label-light-primary label-inline">Available</span></span>
-                            </td>
+                            @if($program->program->start_date <= now() && $program->program->end_date > now())
+                                <td data-field="Status" data-autohide-disabled="false" aria-label="3"
+                                    class="datatable-cell"><span style="width: 108px;"><span
+                                            class="label font-weight-bold label-lg  label-light-primary label-inline">Available</span></span>
+                                </td>
                             @elseif($program->program->start_date >= now())
                                 <td data-field="Status" data-autohide-disabled="false" aria-label="3"
                                     class="datatable-cell"><span style="width: 108px;"><span
-                                            class="label font-weight-bold label-lg  label-light-danger label-inline">Not Available Yet</span></span>
+                                            class="label font-weight-bold label-lg  label-light-danger label-inline">Not Start Yet</span></span>
                                 </td>
 
                             @else
@@ -105,6 +107,13 @@
                             <td>{{ $program->program->language }}</td>
                             <td>{{ $program->program->field->name ?? 'N/A' }}</td>
                             <td>{{ $program->program->description ?? 'No Description' }}</td>
+                            <td>
+                                <a href="{{ route('calendar.view', $program->id) }}"
+                                   class="btn btn-sm btn-clean btn-icon" title="View Calendar">
+                                    <i class="la la-calendar"></i>
+                                </a>
+                            </td>
+
                         </tr>
                     @endforeach
                 @endif

@@ -17,50 +17,61 @@ class AdminPermissionsSeeder extends Seeder
             //Home
          //  ['name' => 'home'],
 //
-//            //Roles
-//            ['name' => 'role-list'],
-//            ['name' => 'role-create'],
-//            ['name' => 'role-edit'],
-//            ['name' => 'role-delete'],
-//
-//            //Trainees
-//            ['name' => 'trainee-list'],
-//            ['name' => 'trainee-create'],
-//            ['name' => 'trainee-accept'],
-//            ['name' => 'trainee-edit'],
-//            ['name' => 'trainee-delete'],
-//
-//            //Advisor
-//            ['name' => 'advisor-list'],
-//            ['name' => 'advisor-create'],
-//            ['name' => 'advisor-edit'],
-//            ['name' => 'advisor-delete'],
-//            ['name' => 'advisor-accept'],
-//
-//            //Field
-//            ['name' => 'field-list'],
-//            ['name' => 'field-create'],
-//            ['name' => 'field-edit'],
-//            ['name' => 'field-delete'],
-//
-//            //Programs
-//            ['name' => 'program-list'],
-//            ['name' => 'program-create'],
-//            ['name' => 'program-edit'],
-//            ['name' => 'program-delete'],
-//            ['name' => 'program-accept'],
-//
-//            //payment
-//            ['name' => 'payment-list'],
-//            ['name' => 'payment-create'],
-//            ['name' => 'payment-edit'],
-//            ['name' => 'payment-delete'],
-//
-//
-//            ['name' => 'password-list'],
-//            ['name' => 'password-edit'],
-            ['name' => 'advisor-task-list'],
-            ['name' => 'advisor-student-list'],
+            //Roles
+            ['name' => 'role-list'],
+            ['name' => 'role-create'],
+            ['name' => 'role-edit'],
+            ['name' => 'role-delete'],
+
+            //Trainees
+            ['name' => 'admin-trainee-list'],
+            ['name' => 'admin-trainee-create'],
+            ['name' => 'admin-trainee-accept'],
+            ['name' => 'admin-trainee-edit'],
+            ['name' => 'admin-trainee-delete'],
+
+            //Advisor
+            ['name' => 'admin-advisor-list'],
+            ['name' => 'admin-advisor-create'],
+            ['name' => 'admin-advisor-edit'],
+            ['name' => 'admin-advisor-delete'],
+            ['name' => 'admin-advisor-accept'],
+
+            //Field
+            ['name' => 'admin-field-list'],
+            ['name' => 'admin-field-create'],
+            ['name' => 'admin-field-edit'],
+            ['name' => 'admin-field-delete'],
+
+            //Programs
+            ['name' => 'admin-program-list'],
+            ['name' => 'admin-program-create'],
+            ['name' => 'admin-program-edit'],
+            ['name' => 'admin-program-delete'],
+            ['name' => 'admin-program-accept'],
+            ['name' => 'admin-program-alltask'],
+            ['name' => 'admin-program-alltrainee'],
+
+            //payment
+            ['name' => 'admin-payment-list'],
+            ['name' => 'admin-payment-create'],
+            ['name' => 'admin-payment-edit'],
+            ['name' => 'admin-payment-delete'],
+
+            //TraineeRequest
+            ['name' => 'admin-trainee-requests-list'],
+            ['name' => 'admin-trainee-requests-changeStatus'],
+
+            //BillingIssues
+            ['name' => 'admin-BillingIssues-List'],
+            ['name' => 'admin-BillingIssues-change'],
+
+            //General
+            ['name' => 'admin-password-list'],
+            ['name' => 'admin-password-edit'],
+
+            ['name' => 'admin-logfile-download'],
+
 
         ];
 

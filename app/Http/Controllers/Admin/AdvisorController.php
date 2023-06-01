@@ -26,10 +26,11 @@ class AdvisorController extends Controller
     use downloadUrtTrait;
 
     function __construct(){
-        $this->middleware('permission:advisor-list', ['only' => ['index', 'show']]);
-        $this->middleware('permission:advisor-accept', ['only' => ['accept']]);
-        $this->middleware('permission:advisor-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:advisor-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:admin-advisor-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:admin-advisor-accept', ['only' => ['accept']]);
+        $this->middleware('permission:admin-advisor-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:admin-advisor-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:advisor-profile-edit', ['only' => ['save']]);
     }
     /**
      * Display a listing of the resource.
@@ -318,7 +319,6 @@ class AdvisorController extends Controller
             $requestData = $request->except('image','field');
             $requestData['image'] = $imageName;
             $advisor->update($requestData);
-            dd($requestData);
         } else {
             $advisor->update($request->except('field'));
         }

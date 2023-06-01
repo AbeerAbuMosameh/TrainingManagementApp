@@ -15,10 +15,10 @@ class ProgramController extends Controller
 {
 
     function __construct(){
-        $this->middleware('permission:program-list', ['only' => ['index', 'show']]);
-        $this->middleware('permission:program-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:program-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:program-create')->only(['create', 'store']);
+        $this->middleware('permission:admin-program-list', ['only' => ['index']]);
+        $this->middleware('permission:admin-program-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:admin-program-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:admin-program-create')->only(['create', 'store']);
     }
     /**
      * Display a listing of the resource.

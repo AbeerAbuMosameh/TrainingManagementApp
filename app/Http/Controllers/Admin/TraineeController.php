@@ -29,9 +29,13 @@ class TraineeController extends Controller
     use downloadUrtTrait;
 
     function __construct(){
-        $this->middleware('permission:trainee-accept', ['only' => ['accept']]);
-        $this->middleware('permission:trainee-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:trainee-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:admin-trainee-list', ['only' => ['index','show']]);
+        $this->middleware('permission:admin-trainee-accept', ['only' => ['accept']]);
+        $this->middleware('permission:admin-trainee-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:admin-trainee-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:admin-BillingIssues-change', ['only' => ['updateStatus']]);
+        $this->middleware('permission:advisor-program-trainees', ['only' => ['showTraineesinProgram']]);
+        $this->middleware('permission:advisor-program-trainees-list', ['only' => ['displayTrainees']]);
     }
 
     /**
@@ -81,7 +85,6 @@ class TraineeController extends Controller
 
         return view('Admin.TraineesManagement.index', ['trainees' => $trainees]);
     }
-
 
     //Trainee Management - display View contain all payment way to register new trainee
     public function create(){
@@ -386,8 +389,7 @@ class TraineeController extends Controller
     }
 
     //Training Management - edit profile
-    public function save(Request $request)
-    {
+    public function save(Request $request){
         // Retrieve the advisor record
         $id=Trainee::where('email',Auth::user()->email)->value('id');
         $trainee = Trainee::findOrFail($id);

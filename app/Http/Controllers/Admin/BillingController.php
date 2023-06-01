@@ -7,6 +7,11 @@ use App\Models\Trainee;
 
 class BillingController extends Controller
 {
+
+    function __construct(){
+        $this->middleware('permission:admin-BillingIssues-List', ['only' => ['index']]);
+    }
+
     //Advisor Management - display View contain all trainees and their billing issues
     public function index()
     {

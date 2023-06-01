@@ -16,46 +16,50 @@ class TraineePermissionsSeeder extends Seeder
     {
         $permissions = [
             //Home
-            ['name' => 't-home'],
+            ['name' => 'trainee-home'],
 
             //Trainees
-            ['name' => 't-program-list'],
-            ['name' => 't-program-join'],
+            ['name' => 'trainee-training-program-accepted'],
+            ['name' => 'trainee-training-program-join'],
+            ['name' => 'trainee-training-program-all'],
+            ['name' => 'trainee-meeting-list'],
 
 
-            ['name' => 't-pay-list'],
-            ['name' => 't-pay-create'],
-            ['name' => 't-pay-show'],
-            ['name' => 't-pay-edit'],
-            ['name' => 't-pay-delete'],
+            ['name' => 'trainee-pay-list'],
+            ['name' => 'trainee-pay-create'],
+            ['name' => 'trainee-pay-show'],
+            ['name' => 'trainee-pay-edit'],
+            ['name' => 'trainee-pay-delete'],
 
             //meeting
-            ['name' => 't-meeting-create'],
-            ['name' => 't-meeting-edit'],
-            ['name' => 't-meeting-delete'],
-            ['name' => 't-meeting-list'],
-            ['name' => 't-meeting-show'],
+            ['name' => 'trainee-meeting-create'],
+            ['name' => 'trainee-meeting-edit'],
+            ['name' => 'trainee-meeting-delete'],
+            ['name' => 'trainee-meeting-show'],
+
+            //meeting
+            ['name' => 'trainee-task-list'],
+            ['name' => 'trainee-task-create'],
+            ['name' => 'trainee-task-edit'],
+            ['name' => 'trainee-task-delete'],
+            ['name' => 'trainee-task-show'],
+
+
+            ['name' => 'trainee-attendance-list'],
+            ['name' => 'trainee-attendance-create'],
+            ['name' => 'trainee-attendance-show'],
+            ['name' => 'trainee-attendance-edit'],
+            ['name' => 'trainee-attendance-delete'],
 
 
             //Profile
-            ['name' => 't-profile-edit'],
-            ['name' => 't-profile-create'],
-            ['name' => 't-profile-show'],
-            ['name' => 't-profile-delete'],
-            ['name' => 't-profile-list'],
+            ['name' => 'trainee-profile-edit'],
+            ['name' => 'trainee-profile-show'],
+            ['name' => 'trainee-profile-list'],
 
-            ['name' => 't-password-list'],
-            ['name' => 't-password-edit'],
-            ['name' => 't-password-show'],
-            ['name' => 't-password-delete'],
-            ['name' => 't-password-create'],
-
-            ['name' => 't-attendance-list'],
-            ['name' => 't-attendance-create'],
-            ['name' => 't-attendance-show'],
-            ['name' => 't-attendance-edit'],
-            ['name' => 't-attendance-delete'],
-
+            ['name' => 'trainee-password-list'],
+            ['name' => 'trainee-password-edit'],
+            ['name' => 'trainee-password-show'],
 
 
         ];

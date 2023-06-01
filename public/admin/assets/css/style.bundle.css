@@ -7544,13 +7544,13 @@ button.bg-success:focus {
 }
 
 .bg-info {
-  background-color: #6993FF !important;
+  background-color: #1BC5BD !important;
 }
 
 a.bg-info:hover, a.bg-info:focus,
 button.bg-info:hover,
 button.bg-info:focus {
-  background-color: #366eff !important;
+  background-color: #1BC5BD !important;
 }
 
 .bg-warning {

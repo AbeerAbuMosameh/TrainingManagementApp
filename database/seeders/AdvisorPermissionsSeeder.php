@@ -19,39 +19,42 @@ class AdvisorPermissionsSeeder extends Seeder
             ['name' => 'a-home'],
 
             //Trainees
-            ['name' => 'a-trainee-list'],
-            ['name' => 'a-trainee-edit'],
-            ['name' => 'a-trainee-delete'],
-            ['name' => 'a-trainee-show'],
-            ['name' => 'a-trainee-create'],
+            ['name' => 'advisor-trainee-list'],
+            ['name' => 'advisor-trainee-edit'],
+            ['name' => 'advisor-trainee-delete'],
+            ['name' => 'advisor-trainee-show'],
+            ['name' => 'advisor-trainee-create'],
+
+            //program
+            ['name' => 'advisor-program-list'],
+            ['name' => 'advisor-program-show'],
+            ['name' => 'advisor-program-trainees'],
+            ['name' => 'advisor-program-trainees-list'],
 
             //meeting
-            ['name' => 'a-meeting-accept'],
-            ['name' => 'a-meeting-list'],
-            ['name' => 'a-meeting-create'],
-            ['name' => 'a-meeting-show'],
-            ['name' => 'a-meeting-edit'],
+            ['name' => 'advisor-meeting-accept'],
+            ['name' => 'advisor-meeting-list'],
+            ['name' => 'advisor-meeting-create'],
+            ['name' => 'advisor-meeting-show'],
+            ['name' => 'advisor-meeting-edit'],
 
             //Programs
-            ['name' => 'a-task-list'],
-            ['name' => 'a-task-create'],
-            ['name' => 'a-task-edit'],
-            ['name' => 'a-task-delete'],
-            ['name' => 'a-task-mark'],
-            ['name' => 'a-task-show'],
+            ['name' => 'advisor-task-list'],
+            ['name' => 'advisor-task-create'],
+            ['name' => 'advisor-task-edit'],
+            ['name' => 'advisor-task-delete'],
+            ['name' => 'advisor-task-mark'],
+            ['name' => 'advisor-task-show'],
+            ['name' => 'advisor-task-solution'],
 
             //Profile
-            ['name' => 'a-profile-edit'],
-            ['name' => 'a-profile-show'],
-            ['name' => 'a-profile-create'],
-            ['name' => 'a-profile-delete'],
-            ['name' => 'a-profile-list'],
+            ['name' => 'advisor-profile-edit'],
+            ['name' => 'advisor-profile-show'],
+            ['name' => 'advisor-profile-list'],
 
-            ['name' => 'a-password-list'],
-            ['name' => 'a-password-edit'],
-            ['name' => 'a-password-show'],
-            ['name' => 'a-password-create'],
-            ['name' => 'a-password-delete'],
+            ['name' => 'advisor-password-list'],
+            ['name' => 'advisor-password-edit'],
+            ['name' => 'advisor-password-show'],
 
 
 

@@ -63,12 +63,12 @@
 
 
                         <td data-entry-id="{{ $trainee->trainee->id }}" class="datatable-cell status-cell">
-    <span style="width: 108px;">
-        <span
-            class="label font-weight-bold label-lg label-light-{{ $trainee->is_approved ? 'primary' : 'danger' }} label-inline">
-            {{ $trainee->is_approved ? 'Approved' : 'Not Approved' }}
-        </span>
-    </span>
+                             <span style="width: 108px;">
+                                 <span
+                                     class="label font-weight-bold label-lg label-light-{{ $trainee->trainee->is_approved == '1' ? 'primary' : 'danger' }} label-inline">
+                                     {{ $trainee->trainee->is_approved == 1 ? 'Approved' : 'Not Approved' }}
+                                 </span>
+                             </span>
                         </td>
                         <td>{{$trainee->trainee->payment}}</td>
                         <td>{{$trainee->trainee->language}}</td>

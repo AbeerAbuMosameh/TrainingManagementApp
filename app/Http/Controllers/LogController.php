@@ -8,8 +8,12 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class LogController extends Controller
 {
-    public function showLogs()
-    {
+
+    function __construct(){
+        $this->middleware('permission:admin-logfile-download', ['only' => ['showLogs']]);
+    }
+
+    public function showLogs(){
         $logFile = storage_path('logs/laravel.log');
 
         if (File::exists($logFile)) {

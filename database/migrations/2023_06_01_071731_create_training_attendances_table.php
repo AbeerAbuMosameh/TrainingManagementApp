@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('training_programs', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('trainee_id');
+        Schema::create('training_attendances', function (Blueprint $table) {
             $table->unsignedBigInteger('program_id');
-            $table->enum('payment_status', ['unpaid', 'paid'])->default('unpaid');
-            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
-            $table->boolean('send_email')->default(0);
-            $table->foreign('trainee_id')->references('id')->on('trainees')->onDelete('cascade');
+            $table->unsignedBigInteger('trainee_id');
+            $table->enum('status', ['present', 'absent']);
+            $table->date('date');
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+            $table->foreign('trainee_id')->references('id')->on('trainees')->onDelete('cascade');
+            $table->primary(['program_id', 'trainee_id']);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('training_programs');
+        Schema::dropIfExists('training_attendances');
     }
 };

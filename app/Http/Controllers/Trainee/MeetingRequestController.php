@@ -18,9 +18,13 @@ use DateTime;
 
 class MeetingRequestController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    function __construct(){
+        $this->middleware('permission:advisor-meeting-list', ['only' => ['meetings']]);
+        $this->middleware('permission:advisor-meeting-accept', ['only' => ['update']]);
+        $this->middleware('permission:trainee-meeting-list', ['only' => ['index']]);
+        $this->middleware('permission:trainee-meeting-create', ['only' => ['store']]);
+    }
+
     public function index()
     {
         $id = Trainee::where('email', Auth()->user()->email)->value('id');
@@ -121,8 +125,7 @@ class MeetingRequestController extends Controller
         return view('Advisor.MeetingManagement.index', compact('meetings', 'acceptedPrograms'));
     }
 
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $status = $request->input('status');
 
 

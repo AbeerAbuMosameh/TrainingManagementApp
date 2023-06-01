@@ -18,6 +18,16 @@ use Illuminate\Support\Facades\Auth;
 
 class TrainingProgramController extends Controller
 {
+
+
+    function __construct(){
+
+        $this->middleware('permission:admin-program-alltrainee', ['only' => ['alltrainee']]);
+        $this->middleware('permission:trainee-training-program-join', ['only' => ['create','store']]);
+        $this->middleware('permission:trainee-training-program-accepted', ['only' => ['displayAcceptedProgram']]);
+        $this->middleware('permission:trainee-training-program-all', ['only' => ['index']]);
+    }
+
     use downloadUrtTrait;
     /**
      * Display a listing of the resource.
