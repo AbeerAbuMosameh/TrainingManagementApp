@@ -17,7 +17,6 @@ class LogUserActivity
      */
     public function handle($request, Closure $next)
     {
-        $response = $next($request);
         if (Auth::check()) {
             $user = Auth::user();
             if ($user) {
@@ -25,6 +24,8 @@ class LogUserActivity
                 Log::info($logMessage);
             }
         }
+        $response = $next($request);
+
         return $response;
     }
 }
