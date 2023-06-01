@@ -11,6 +11,7 @@ use App\Models\Program;
 use App\Models\Trainee;
 use App\Models\TrainingProgram;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Kreait\Firebase\Contract\Auth;
 use DateTime;
@@ -149,6 +150,9 @@ class MeetingRequestController extends Controller
 
 
                 if (!$advisorConflict && !$traineeConflict) {
+                    $logFileName = 'advisor_' . $meeting->advisor_id . '.log';
+                    Log::info('Advisor scheduled meeting with trainee: ' .  $meeting->trainee_id . ' at ' .$meeting->date . " ".$meeting->time.date('Y-m-d H:i:s'));
+
                     $meeting->status = $status;
                     $meeting->save();
 

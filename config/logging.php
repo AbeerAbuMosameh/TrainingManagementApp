@@ -126,6 +126,11 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        'advisor' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/advisor.log'), // This path will not be used, but a placeholder is required
+            'level' => 'info',
+        ],
     ],
 
 ];

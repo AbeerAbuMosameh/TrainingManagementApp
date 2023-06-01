@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\TrainingProgramController;
 use App\Http\Controllers\Advisor\TaskController;
 use App\Http\Controllers\API\SocialAuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\Trainee\MeetingRequestController;
@@ -126,6 +127,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/profile/update/{id}', [TraineeController::class, 'updatePassword'])->name('password.update');
 
 
+    Route::get('/logs', [LogController::class, 'showLogs'])->name('logs');
 
 });
 

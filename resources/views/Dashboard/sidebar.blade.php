@@ -526,6 +526,18 @@
                     </a>
                 </li>
                 @endif
+                @if(auth()->user()->level == 1)
+                    <li class="menu-item" aria-haspopup="true">
+                        <a class="menu-link" href="{{route('logs')}}">
+                            <i class="menu-icon  far fa-file">
+
+                            </i>
+
+                            <span class="menu-text">All user activities</span>
+
+                        </a>
+                    </li>
+                @endif
                 <li class="menu-item" aria-haspopup="true">
                     <a class="menu-link" onclick="document.getElementById('logout').submit()">
                         <i class="menu-icon
