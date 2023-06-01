@@ -18,11 +18,13 @@ class LogUserActivity
     public function handle($request, Closure $next)
     {
         $response = $next($request);
-
         if (Auth::check()) {
-            Log::info('User activity: ' . Auth::user()->id . ' ' . Auth::user()->name . ' ' . $request->method() . ' ' . $request->getRequestUri());
+            $user = Auth::user();
+            if ($user) {
+                $logMessage = 'User activity: ' . $user->id . ' ' . $user->name . ' ' . $request->method() . ' ' . $request->getRequestUri();
+                Log::info($logMessage);
+            }
         }
-
         return $response;
     }
 }
