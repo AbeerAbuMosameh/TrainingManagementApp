@@ -47,6 +47,7 @@ class TraineeSeeder extends Seeder
         $user = User::create([
             'name' => 'Abeer Abu Mosameh',
             'email' => 'abeermosameh@gmail.com',
+            'unique_id' => '123456788',
             'password' => Hash::make('123456'),
             'level'=> '3'
         ]);
