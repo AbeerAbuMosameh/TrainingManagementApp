@@ -13,6 +13,7 @@ trait downloadUrtTrait
             // Initialize Firebase Storage
             $firebaseCredentialsPath = storage_path(env('FIREBASE_CREDENTIALS_PATH'));
             // Initialize Google Cloud Storage
+            dd($firebaseCredentialsPath);
             $storage = new StorageClient([
                 'projectId' => 'it-training-app-386209',
                 'keyFilePath' => $firebaseCredentialsPath,
