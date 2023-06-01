@@ -16,14 +16,15 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
+            FieldSeeder::class,
+            PaymentSeeder::class,
             AdminPermissionsSeeder::class,
             AdminSeeder::class,
            AdvisorPermissionsSeeder::class,
            AdvisorSeeder::class,
            TraineePermissionsSeeder::class,
             TraineeSeeder::class,
-            FieldSeeder::class,
-           PaymentSeeder::class
+
         ]);
     }
 }

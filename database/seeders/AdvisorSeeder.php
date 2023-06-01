@@ -50,6 +50,7 @@ class AdvisorSeeder extends Seeder
                 'password' => Hash::make('123456'),
                 'level'=> '2'
             ]);
+
         AdvisorField::create([
             'advisor_id' => 1,
             'field_id' => 1,
