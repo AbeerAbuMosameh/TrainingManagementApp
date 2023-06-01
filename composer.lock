@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f4c8edbfde216465f6a455eac3d3ad88",
+    "content-hash": "5a5fa0c93ccd8ab1aa9f130e45539d8a",
     "packages": [
         {
             "name": "beste/clock",
@@ -1807,6 +1807,60 @@
                 }
             ],
             "time": "2023-03-30T11:24:10+00:00"
+        },
+        {
+            "name": "laravel-validation-rules/credit-card",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-validation-rules/credit-card.git",
+                "reference": "1cc7196f3d3fd41b65c0843fc03e6f525517baf7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-validation-rules/credit-card/zipball/1cc7196f3d3fd41b65c0843fc03e6f525517baf7",
+                "reference": "1cc7196f3d3fd41b65c0843fc03e6f525517baf7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.5|^6.0|^7.0|^8.0|^9.0|^10.0",
+                "illuminate/translation": "^5.5|^6.0|^7.0|^8.0|^9.0|^10.0",
+                "illuminate/validation": "^5.5|^6.0|^7.0|^8.0|^9.0|^10.0",
+                "php": "7.*|8.*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.5|^3.14",
+                "orchestra/testbench": "^3.5|^4.0|^5.0|^8.0",
+                "phpunit/phpunit": "6.2.*|^8.5.8|^9.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LVR\\CreditCard\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Darius Matulionis",
+                    "email": "darius@matulionis.lt"
+                }
+            ],
+            "description": "Validate credit card number, expiration date, cvc",
+            "keywords": [
+                "credit card",
+                "laravel",
+                "validation",
+                "validator"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-validation-rules/credit-card/issues",
+                "source": "https://github.com/laravel-validation-rules/credit-card/tree/1.8.0"
+            },
+            "time": "2023-03-08T10:26:12+00:00"
         },
         {
             "name": "laravel/framework",
@@ -4917,67 +4971,6 @@
                 }
             ],
             "time": "2023-04-12T17:08:32+00:00"
-        },
-        {
-            "name": "stripe/stripe-php",
-            "version": "v10.14.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "c88a80fa7f361c2d30d6c81fb71f2bb30be1001f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/c88a80fa7f361c2d30d6c81fb71f2bb30be1001f",
-                "reference": "c88a80fa7f361c2d30d6c81fb71f2bb30be1001f",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "3.5.0",
-                "php-coveralls/php-coveralls": "^2.5",
-                "phpstan/phpstan": "^1.2",
-                "phpunit/phpunit": "^5.7 || ^9.0",
-                "squizlabs/php_codesniffer": "^3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Stripe\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Stripe and contributors",
-                    "homepage": "https://github.com/stripe/stripe-php/contributors"
-                }
-            ],
-            "description": "Stripe PHP Library",
-            "homepage": "https://stripe.com/",
-            "keywords": [
-                "api",
-                "payment processing",
-                "stripe"
-            ],
-            "support": {
-                "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v10.14.0"
-            },
-            "time": "2023-05-25T18:09:32+00:00"
         },
         {
             "name": "symfony/cache",

@@ -445,6 +445,8 @@ var KTLogin = function () {
                             });
                         },
                         error: function (error) {
+
+                            console.log(error.responseJSON.errors)
                             var errors = error.responseJSON.errors;
                             var message = '';
 

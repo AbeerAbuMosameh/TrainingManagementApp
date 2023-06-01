@@ -428,7 +428,7 @@ var KTLogin = function () {
                         contentType: false,
                         success: function (response) {
 
-                            console.log($("#kt_login_signup_form").serialize());
+                            console.log($("#kt_login_signup_form1").serialize());
                             Swal.fire({
                                     text: "Your form has  been submitted! Check Your email to login",
                                     icon: "success",
@@ -444,6 +444,8 @@ var KTLogin = function () {
                             });
                         },
                         error: function (error) {
+
+                            console.log(error)
                             var errors = error.responseJSON.errors;
                             var message = '';
 

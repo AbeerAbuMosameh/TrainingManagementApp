@@ -21,4 +21,9 @@ class MeetingRequest extends Model
     {
         return $this->belongsTo(Trainee::class);
     }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
+    }
 }

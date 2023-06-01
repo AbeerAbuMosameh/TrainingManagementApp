@@ -48,17 +48,13 @@
                         <td>{{$advisor->education}}</td>
                         <td>{{$advisor->address}}</td>
                         <td>{{$advisor->city}}</td>
-                        @if($advisor->is_approved == 1 )
-                            <td data-field="Status" data-autohide-disabled="false" aria-label="3"
-                                class="datatable-cell"><span style="width: 108px;"><span
-                                        class="label font-weight-bold label-lg  label-light-primary label-inline">Approved</span></span>
-                            </td>
-                        @else
-                            <td data-field="Status" data-autohide-disabled="false" aria-label="2"
-                                class="datatable-cell"><span style="width: 108px;"><span
-                                        class="label font-weight-bold label-lg  label-light-danger label-inline">Not Approved</span></span>
-                            </td>
-                        @endif
+                        <td data-entry-id="{{ $advisor->id }}" class="datatable-cell status-cell">
+    <span style="width: 108px;">
+        <span class="label font-weight-bold label-lg label-light-{{ $advisor->is_approved ? 'primary' : 'danger' }} label-inline">
+            {{ $advisor->is_approved ? 'Approved' : 'Not Approved' }}
+        </span>
+    </span>
+                        </td>
                         <td>{{$advisor->language}}</td>
                         <td>
                             <a href="{{ route('advisors.show', $advisor->id) }}"
@@ -70,8 +66,7 @@
                                class="btn btn-sm btn-clean btn-icon btn-delete" title="Delete">
                                 <i class="nav-icon la la-trash"></i>
                             </a>
-                            <a  class="btn btn-sm btn-clean btn-icon" title="Approve"
-                               onclick="sendEmail({{ $advisor->id }})">
+                            <a class="btn btn-sm btn-clean btn-icon" title="Approve" onclick="sendEmail({{ $advisor->id }})">
                                 <i class="la la-check-circle"></i>
                             </a>
                         </td>
@@ -102,7 +97,8 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="advisorModal" tabindex="-1" role="dialog" aria-labelledby="advisorModalLabel" aria-hidden="true">
+    <div class="modal fade" id="advisorModal" tabindex="-1" role="dialog" aria-labelledby="advisorModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -163,12 +159,11 @@
                     var message = response.message;
 
                     if (message === 'Advisor Not Active Now') {
-                        toastr.error(message); // Display success message
-                        updateStatus('Not Approved'); // Update status display
+                        toastr.error(message); // Display error message
+                        updateStatus(advisorId, 'Not Approved'); // Update status display
                     } else {
-                        toastr.success(message); // Display error message
-                        updateStatus('Approved'); // Update status display
-
+                        toastr.success(message); // Display success message
+                        updateStatus(advisorId, 'Approved'); // Update status display
                     }
                 },
                 error: function (xhr, status, error) {
@@ -177,14 +172,17 @@
                 }
             });
         }
-        function updateStatus(status) {
-            var statusCell = $('.datatable-cell[data-field="Status"]');
+
+        function updateStatus(advisorId, status) {
+            // Update the status cell in the table
+            var statusCell = $('.status-cell[data-entry-id="' + advisorId + '"]');
             var labelClass = (status === 'Approved') ? 'label-light-primary' : 'label-light-danger';
             var labelContent = (status === 'Approved') ? 'Approved' : 'Not Approved';
 
             statusCell.html('<span style="width: 108px;"><span class="label font-weight-bold label-lg ' + labelClass + ' label-inline">' + labelContent + '</span></span>');
         }
     </script>
+
     <script>
         function deleteRows(id, reference) {
             Swal.fire({

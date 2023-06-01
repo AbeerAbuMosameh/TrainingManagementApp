@@ -9,6 +9,7 @@ use App\Models\Program;
 use App\Models\Trainee;
 use App\Models\TrainingProgram;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProgramController extends Controller
 {
@@ -83,33 +84,52 @@ class ProgramController extends Controller
 
     //Program Management - Validate & Update Program
     public function update(Request $request, $id){
-        $validator = Validator($request->all(), [
-            'image' => 'nullable',
-            'name' => 'required|string',
-            'hours' => 'required|string',
-            'start_date' => 'required|date|after_or_equal:today',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'type' => 'required|in:free,paid',
-            'price' => 'nullable|integer',
-            'number' => 'required|integer',
-            'duration' => 'required|in:days,weeks,months,years',
-            'level' => 'required|in:beginner,intermediate,advanced',
-            'language' => 'required|in:English,Arabic,French',
-            'field_id' => 'required|exists:fields,id',
-            'description' => 'nullable|string',
-        ]);
+        $program = Program::findOrFail($id);
+        if ($request->start_date === $program->start_date && $request->end_date === $program->end_date) {
+            // Start date and end date values haven't changed, no need to validate
+            $validator = Validator::make($request->all(), [
+                'image' => 'nullable',
+                'name' => 'required|string',
+                'hours' => 'required|string',
+                'type' => 'required|in:free,paid',
+                'price' => 'nullable|integer',
+                'number' => 'required|integer',
+                'duration' => 'required|in:days,weeks,months,years',
+                'level' => 'required|in:beginner,intermediate,advanced',
+                'language' => 'required|in:English,Arabic,French',
+                'field_id' => 'required|exists:fields,id',
+                'description' => 'nullable|string',
+            ]);
+        } else {
+            // Start date or end date values have changed, perform full validation
+            $validator = Validator::make($request->all(), [
+                'image' => 'nullable',
+                'name' => 'required|string',
+                'hours' => 'required|string',
+                'start_date' => 'required|date|after_or_equal:today',
+                'end_date' => 'required|date|after_or_equal:start_date',
+                'type' => 'required|in:free,paid',
+                'price' => 'nullable|integer',
+                'number' => 'required|integer',
+                'duration' => 'required|in:days,weeks,months,years',
+                'level' => 'required|in:beginner,intermediate,advanced',
+                'language' => 'required|in:English,Arabic,French',
+                'field_id' => 'required|exists:fields,id',
+                'description' => 'nullable|string',
+            ]);
+        }
+
 
         if (!$validator->fails()) {
-            $program = Program::findOrFail($id);
-
             if ($request->hasFile('image')) {
-                $imageName = time() . '.' . $request->image->extension();
-                $request->image->move(public_path('images'), $imageName);
-                $program = Program::create($request->except('image')); // Exclude 'image' field from mass assignment
-                $program->image = $imageName; // Set the 'image' attribute with the image file name
+                $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
+                $request->file('image')->move(public_path('images'), $imageName);
+                $requestData = $request->except('image');
+                $requestData['image'] = $imageName;
+                $program->update($requestData);
+            } else {
+                $program->updated($request->all());
             }
-
-            $program->update($request->all());
             toastr()->success('Program Updated Successfully!');
         } else {
             toastr()->error($validator->getMessageBag()->first());

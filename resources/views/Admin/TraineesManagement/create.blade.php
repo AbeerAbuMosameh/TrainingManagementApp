@@ -546,7 +546,6 @@
 
 @include('Dashboard.js')
 <script src="{{asset('admin/assets/js/pages/custom/login/login-3.js')}}"></script>
-<script src="{{asset('admin/assets/js/pages/crud/file-upload/dropzonejs.js')}}"></script>
 <!--end::Page Scripts-->
 </body>
 <!--end::Body-->

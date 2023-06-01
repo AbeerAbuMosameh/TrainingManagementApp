@@ -1,14 +1,15 @@
 @extends('Dashboard.master')
 
 @section('title')
-    dashboard
+    Edit Program
 @endsection
 
-@section('css')
-
-@endsection
 
 @section('js')
+    <script src="{{asset('admin/assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
+    <script src="{{asset('admin/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
@@ -38,7 +39,22 @@
         });
     </script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to be executed when the page is loaded
+            console.log('Page loaded');
+
+            // Your code here...
+            // ...
+
+            // Call the function or code that needs to be executed on page load
+            togglePriceField();
+            $("#msg").show().delay(7000).fadeOut();
+            var avatar1 = new KTImageInput('kt_image_5');
+        });
+
         function togglePriceField() {
+            console.log('Function called');
+
             var typeSelect = document.getElementById('type');
             var priceField = document.getElementById('price');
 
@@ -58,6 +74,7 @@
         var avatar1 = new KTImageInput('kt_image_5');
     </script>
 @endsection
+
 
 @section('content')
     <div class="card card-custom">
@@ -335,15 +352,3 @@
     </div>
 @endsection
 
-
-@section('js')
-    <script>
-        document.getElementById("save-Program-btn").addEventListener("click", function () {
-            document.getElementById("Program-form").submit();
-        });
-    </script>
-
-    <script src="{{asset('admin/assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
-    <script src="{{asset('admin/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
-
-@endsection

@@ -87,7 +87,7 @@
             <div class="form-group row">
                 <label class="col-xl-3 col-lg-3 col-form-label">Payment</label>
                 <div class="col-lg-9 col-xl-6">
-                    <select name="payment" id="payment" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
+                    <select name="payment" id="payment" class="form-control form-control-solid h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
                         <option value="Card" selected="selected">Select a payment Option</option>
                         @foreach($payments as $payment)
                             <option value="{{ $payment->id }}" @if($trainee->payment == $payment->id) selected @endif>{{ $payment->name }}</option>
@@ -192,7 +192,7 @@
             <div class="form-group row">
                 <label class="col-xl-3 col-lg-3 col-form-label">other file</label>
                 <div class="col-lg-9 col-xl-6">
-                    <div class="input-group input-group-lg input-group-solid">
+                    <div class="input-group input-group-lg ">
                         @if(count($trainee->otherFile ?? []) > 0)
                             @foreach($trainee->otherFile as $otherFileUrl)
                                 <a href="{{ $otherFileUrl }}" class="btn btn-primary" target="_blank"

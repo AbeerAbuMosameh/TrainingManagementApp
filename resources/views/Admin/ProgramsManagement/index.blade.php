@@ -42,7 +42,7 @@
                     <th>End Date</th>
                     <th>Type</th>
                     <th>Price</th>
-                    <th>Number</th>
+                    <th>Available Number</th>
                     <th>Duration</th>
                     <th>Level</th>
                     <th>Language</th>
@@ -58,11 +58,11 @@
                         <td>{{$loop->iteration}}</td>
                         <td>
                             @if ($program->image)
-                                <img class="pr-4"  src="{{ asset('images/' . $program->image) }}" height="50px"
+                                <img class="pr-4" src="{{ asset('images/' . $program->image) }}" height="50px"
                                      width="50px"
                                      alt="Logo">
-                                @else
-                                <img class="pr-4"  src="{{asset('admin/assets/media/users/blank2.jpg')}}" height="50px"
+                            @else
+                                <img class="pr-4" src="{{asset('admin/assets/media/users/blank2.jpg')}}" height="50px"
                                      width="50px"
                                      alt="Logo">
                             @endif
@@ -85,7 +85,19 @@
                             @else
                                 {{ $program->price }}
                             @endif</td>
-                        <td>{{ $program->number }}</td>
+
+                        @if($program->number == 0 )
+                            <td data-field="Status" data-autohide-disabled="false" aria-label="2"
+                                class="datatable-cell">
+        <span style="width: 108px;">advisors_fields.blade.php
+            <span class="label font-weight-bold label-lg label-light-danger label-inline">Program full now</span>
+        </span>
+                            </td>
+                        @else
+                            <td>
+                                {{ $program->number }}   </td>
+                        @endif
+
                         <td>{{ $program->duration }}</td>
                         <td>{{ $program->level }}</td>
                         <td>{{ $program->language }}</td>
@@ -96,6 +108,16 @@
                                class="btn btn-sm btn-clean btn-icon"
                                title="Edit details">
                                 <i class="la la-edit"></i>
+                            </a>
+                            <a href="{{ route('alltask', $program->id) }}"
+                               class="btn btn-sm btn-clean btn-icon"
+                               title="Tasks">
+                                <i class="la la-tasks"></i>
+                            </a>
+                            <a href="{{ route('alltrainees', $program->id) }}"
+                               class="btn btn-sm btn-clean btn-icon"
+                               title="Trainee in this course">
+                                <i class="la la-graduation-cap"></i>
                             </a>
 
                             <a onclick="deleteRows('{{$program->id}}', this)"
@@ -162,6 +184,5 @@
 
         }
     </script>
-
 
 @endsection

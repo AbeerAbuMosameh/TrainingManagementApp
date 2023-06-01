@@ -25,12 +25,17 @@ class Trainee extends Model
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class, 'training_tasks', 'trainee_id', 'task_id')
-            ->withTimestamps();
+        return $this->belongsToMany(Task::class, 'training_tasks', 'trainee_id', 'task_id');
     }
     public function meetings()
     {
         return $this->hasMany(MeetingRequest::class);
     }
+
+    public function paymentInformation()
+    {
+        return $this->hasOne(PaymentInformation::class);
+    }
+
 
 }

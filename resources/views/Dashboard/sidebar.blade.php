@@ -197,7 +197,7 @@
                             <i class="menu-arrow"></i>
                             <ul class="menu-subnav">
                                 <li class="menu-item" aria-haspopup="true">
-                                    <a href="{{route('trainees-programs.index')}}" class="menu-link">
+                                    <a href="{{route('trainees-programs-request')}}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
@@ -228,6 +228,33 @@
                                             <span></span>
                                         </i>
                                         <span class="menu-text">Show payments</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                     <li class="menu-section">
+
+                        <h4 class="menu-text">Billing issues Management</h4>
+                        <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
+                    </li>
+                    <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                        <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-icon fas fa-money-check"></i> <span class="menu-text">Billing issues</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <i class="menu-arrow"></i>
+
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                <li class="menu-item" aria-haspopup="true">
+                                    <a href="{{route('trainees-billings')}}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text">paid programs</span>
                                     </a>
                                 </li>
                             </ul>
@@ -333,6 +360,33 @@
                         </div>
                     </li>
 
+                    <li class="menu-section">
+                        <h4 class="menu-text">Meetings Component</h4>
+                        <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
+                    </li>
+                    <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                        <a href="javascript:;" class="menu-link menu-toggle">
+                            <i class="menu-icon fas fa-clock"></i> <span class="menu-text">Meetings Request</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <i class="menu-arrow"></i>
+
+                        <div class="menu-submenu">
+                            <i class="menu-arrow"></i>
+                            <ul class="menu-subnav">
+                                <li class="menu-item" aria-haspopup="true">
+                                    <a href="{{route('advisor.meetings.index')}}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text">All Requests</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </li>
+
 
                 @endif
 
@@ -367,7 +421,7 @@
                     </li>
                     <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                         <a href="javascript:;" class="menu-link menu-toggle">
-                            <i class="menu-icon fas fa-check-square"></i> <span class="menu-text">Apply in Program</span>
+                            <i class="menu-icon fas fa-registered"></i> <span class="menu-text">Apply in Program</span>
                             <i class="menu-arrow"></i>
                         </a>
                         <i class="menu-arrow"></i>
@@ -394,7 +448,7 @@
                     </li>
                     <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                         <a href="javascript:;" class="menu-link menu-toggle">
-                            <i class="menu-icon fas fa-tasks"></i> <span class="menu-text">Meetings</span>
+                            <i class="menu-icon fas fa-clock"></i> <span class="menu-text">Meetings</span>
                             <i class="menu-arrow"></i>
                         </a>
                         <i class="menu-arrow"></i>

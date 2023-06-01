@@ -36,10 +36,10 @@
                 <tr>
                     <th>#</th>
                     <th>Advisor</th>
+                    <th>Program</th>
                     <th>Date</th>
                     <th>Time</th>
                     <th>Status</th>
-                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -47,19 +47,27 @@
                 @foreach ($meetings as $meeting)
                     <tr data-entry-id="{{ $meeting->id }}">
                         <td>{{$loop->iteration}}</td>
-                        <td>{{$meeting->advisor->first_name}}</td>
+                        <td>{{$meeting->advisor->first_name ." " .$meeting->advisor->last_name}}</td>
+                        <td>{{$meeting->program->name}}</td>
                         <td>{{$meeting->date}}</td>
                         <td>{{$meeting->time}}</td>
-                        <td>{{$meeting->status}}</td>
                         <td>
-
-                            {{--                            <a href="{{ route('meetings.edit', $meetings->id) }}"--}}
-                            {{--                               class="btn btn-sm btn-clean btn-icon" data-toggle="modal"--}}
-                            {{--                               data-target="#editModal" title="Edit details">--}}
-                            {{--                                <i class="la la-edit"></i>--}}
-                            {{--                            </a>--}}
+                            <span style="width: 108px;">
+                                @if ($meeting->status === 'accepted')
+                                    <span class="label font-weight-bold label-lg label-light-primary label-inline">
+                                        Accepted
+                                    </span>
+                                @elseif ($meeting->status === 'rejected')
+                                    <span class="label font-weight-bold label-lg label-light-danger label-inline">
+                                        Rejected
+                                    </span>
+                                @else
+                                    <span class="label font-weight-bold label-lg label-light-warning label-inline">
+                                        Pending
+                                    </span>
+                                @endif
+                            </span>
                         </td>
-
                     </tr>
                 @endforeach
                 </tbody>
@@ -83,14 +91,34 @@
                     <div class="modal-body">
                         <div class="form-group row pt-4">
                             <div class="col-lg-12">
-                                <label for="Advisor">Advisor<span class="text-danger">*</span></label>
-                                <input type="advisor_id"
-                                       class="form-control {{ $errors->has('advisor_id') ? 'is-invalid' : '' }}"
-                                       name="date" id="date" value="{{ old('advisor_id') }}"
-                                       placeholder="Enter Ad" required/>
-                                @if($errors->has('date'))
+                                <label for="advisor_id">Advisor<span class="text-danger">*</span></label>
+                                <select class="form-control {{ $errors->has('advisor_id') ? 'is-invalid' : '' }}"
+                                        name="advisor_id" id="advisor_id" required>
+                                    <option value="">Select Advisor</option>
+                                    @foreach ($distinctAdvisors as $program)
+                                        <option
+                                            value="{{ $program->program->advisor_id }}">{{ $program->program->advisor->first_name . ' ' . $program->program->advisor->last_name }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('advisor_id'))
                                     <div class="invalid-feedback">
-                                        {{ $errors->first('date') }}
+                                        {{ $errors->first('advisor_id') }}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row pt-4">
+                            <div class="col-lg-12">
+                                <label for="program_id">Program<span class="text-danger">*</span></label>
+                                <select class="form-control {{ $errors->has('program_id') ? 'is-invalid' : '' }}"
+                                        name="program_id" id="program_id" required>
+                                    <option value="">Select Program</option>
+
+                                </select>
+                                @if ($errors->has('program_id'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('program_id') }}
                                     </div>
                                 @endif
                             </div>
@@ -100,9 +128,8 @@
                             <div class="col-lg-12">
                                 <label for="name">Date<span class="text-danger">*</span></label>
                                 <input type="date"
-                                       class="form-control {{ $errors->has('date') ? 'is-invalid' : '' }}"
-                                       name="date" id="date" value="{{ old('date') }}"
-                                       placeholder="Enter Date" required/>
+                                       class="form-control {{ $errors->has('date') ? 'is-invalid' : '' }}" name="date"
+                                       id="date" value="{{ old('date') }}" placeholder="Enter Date" required/>
                                 @if($errors->has('date'))
                                     <div class="invalid-feedback">
                                         {{ $errors->first('date') }}
@@ -115,9 +142,129 @@
                             <div class="col-lg-12">
                                 <label for="name">Time<span class="text-danger">*</span></label>
                                 <input type="time"
-                                       class="form-control {{ $errors->has('time') ? 'is-invalid' : '' }}"
-                                       name="time" id="time" value="{{ old('time') }}"
-                                       placeholder="Enter Time" required/>
+                                       class="form-control {{ $errors->has('time') ? 'is-invalid' : '' }}" name="time"
+                                       id="time" value="{{ old('time') }}" placeholder="Enter Time" required/>
+                                @if($errors->has('time'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('time') }}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Include a hidden input field for the task ID -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary font-weight-bold">
+                            <span class="indicator-label">Add</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+@endsection
+
+
+@section('js')
+    <script>
+        $(document).ready(function () {
+            // Handler for advisor selection change event
+            $('#advisor_id').on('change', function () {
+                var advisorId = $(this).val();
+                var programOptions = $('#program_id');
+                programOptions.empty(); // Clear existing options
+
+                if (advisorId) {
+                    // Send an AJAX request to fetch the programs for the selected advisor
+                    $.ajax({
+                        url: '/get-programs-by-advisor/' + advisorId,
+                        type: 'GET',
+                        success: function (response) {
+                            // Add the fetched programs as options without clearing existing options
+                            response.forEach(function (program) {
+                                programOptions.append('<option value="' + program.id + '">' + program.name + '</option>');
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle the error if necessary
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    <form method="POST" action="{{ route('meetings.store') }}" enctype="multipart/form-data">
+        @csrf
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Meeting Request</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row pt-4">
+                            <div class="col-lg-12">
+                                <label for="advisor_id">Advisor<span class="text-danger">*</span></label>
+                                <select class="form-control {{ $errors->has('advisor_id') ? 'is-invalid' : '' }}"
+                                        name="advisor_id" id="advisor_id" required>
+                                    <option value="">Select Advisor</option>
+                                    @foreach ($distinctAdvisors as $program)
+                                        <option
+                                            value="{{ $program->program->advisor_id }}">{{ $program->program->advisor->first_name . ' ' . $program->program->advisor->last_name }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('advisor_id'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('advisor_id') }}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row pt-4">
+                            <div class="col-lg-12">
+                                <label for="program_id">Program<span class="text-danger">*</span></label>
+                                <select class="form-control {{ $errors->has('program_id') ? 'is-invalid' : '' }}"
+                                        name="program_id" id="program_id" required>
+                                    <option value="">Select Program</option>
+
+                                </select>
+                                @if ($errors->has('program_id'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('program_id') }}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row pt-4">
+                            <div class="col-lg-12">
+                                <label for="name">Date<span class="text-danger">*</span></label>
+                                <input type="date"
+                                       class="form-control {{ $errors->has('date') ? 'is-invalid' : '' }}" name="date"
+                                       id="date" value="{{ old('date') }}" placeholder="Enter Date" required/>
+                                @if($errors->has('date'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('date') }}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group row pt-4">
+
+                            <div class="col-lg-12">
+                                <label for="name">Time<span class="text-danger">*</span></label>
+                                <input type="time"
+                                       class="form-control {{ $errors->has('time') ? 'is-invalid' : '' }}" name="time"
+                                       id="time" value="{{ old('time') }}" placeholder="Enter Time" required/>
                                 @if($errors->has('time'))
                                     <div class="invalid-feedback">
                                         {{ $errors->first('time') }}
@@ -141,17 +288,9 @@
         </div>
     </form>
 
-@endsection
-
-
-@section('js')
-
     <script>
-
-        function showTaskSolvedNotification() {
-            toastr.error('You have already solved this task. You can edit the solution before the end date.');
-        }
     </script>
+
     <script src="{{asset('admin/assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
     <script src="{{asset('admin/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>

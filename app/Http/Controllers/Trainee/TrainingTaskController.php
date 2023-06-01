@@ -22,8 +22,7 @@ class TrainingTaskController extends Controller
      * Display a listing of the resource.
      */
 
-    public function task($task_id)
-    {
+    public function task($task_id){
         $task = Task::findOrFail($task_id);
 
         $related_files = json_decode($task->related_file);

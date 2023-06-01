@@ -53,21 +53,14 @@
                         <td>{{$trainee->city}}</td>
 
 
-                        @if($trainee->is_approved == 1 )
-                            <td data-field="Status" data-autohide-disabled="false" aria-label="3"
-                                class="datatable-cell">
-        <span style="width: 108px;">
-            <span class="label font-weight-bold label-lg label-light-primary label-inline">Approved</span>
+                        <td data-entry-id="{{ $trainee->id }}" class="datatable-cell status-cell">
+    <span style="width: 108px;">
+        <span
+            class="label font-weight-bold label-lg label-light-{{ $trainee->is_approved ? 'primary' : 'danger' }} label-inline">
+            {{ $trainee->is_approved ? 'Approved' : 'Not Approved' }}
         </span>
-                            </td>
-                        @else
-                            <td data-field="Status" data-autohide-disabled="false" aria-label="2"
-                                class="datatable-cell">
-        <span style="width: 108px;">
-            <span class="label font-weight-bold label-lg label-light-danger label-inline">Not Approved</span>
-        </span>
-                            </td>
-                        @endif
+    </span>
+                        </td>
                         <td>{{$trainee->payment}}</td>
                         <td>{{$trainee->language}}</td>
                         <td>
@@ -85,6 +78,7 @@
                                onclick="sendEmail({{ $trainee->id }})">
                                 <i class="la la-check-circle"></i>
                             </a>
+
 
                         </td>
                         <td>
@@ -128,12 +122,11 @@
                     var message = response.message;
 
                     if (message === 'Trainee Not Active Now') {
-                        toastr.error(message); // Display success message
-                        updateStatus('Not Approved'); // Update status display
+                        toastr.error(message); // Display error message
+                        updateStatus(traineeId, 'Not Approved'); // Update status display
                     } else {
-                        toastr.success(message); // Display error message
-                        updateStatus('Approved'); // Update status display
-
+                        toastr.success(message); // Display success message
+                        updateStatus(traineeId, 'Approved'); // Update status display
                     }
                 },
                 error: function (xhr, status, error) {
@@ -143,14 +136,16 @@
             });
         }
 
-        function updateStatus(status) {
-            var statusCell = $('.datatable-cell[data-field="Status"]');
+        function updateStatus(traineeId, status) {
+            // Update the status cell in the table
+            var statusCell = $('.status-cell[data-entry-id="' + traineeId + '"]');
             var labelClass = (status === 'Approved') ? 'label-light-primary' : 'label-light-danger';
             var labelContent = (status === 'Approved') ? 'Approved' : 'Not Approved';
 
             statusCell.html('<span style="width: 108px;"><span class="label font-weight-bold label-lg ' + labelClass + ' label-inline">' + labelContent + '</span></span>');
         }
     </script>
+
     <script>
         function sweetees(id, reference) {
             Swal.fire({

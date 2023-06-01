@@ -3,7 +3,7 @@
 <html lang="en">
 <!--begin::Head-->
 <head>
-    <title>Trainee Sign Up </title>
+    <title>Advisor Sign Up </title>
     @include('Dashboard.css')
 
 </head>
@@ -474,8 +474,7 @@
     const lastNameInput = document.getElementById('last_name');
     const phoneInput = document.getElementById('phone');
     const emailInput = document.getElementById('email');
-    const fieldSelect = document.querySelector('select[name="field"]');
-    const fieldDiv = document.querySelector('#field_output');
+
 
     const educationSelect = document.querySelector('select[name="education"]');
     const educationDiv = document.querySelector('#education_output');
@@ -535,15 +534,12 @@
     languageSelect.addEventListener('change', () => {
         languageDiv.textContent = 'Preferred Language : ' + languageSelect.value;
     });
-    fieldSelect.addEventListener('change', () => {
-        fieldDiv.textContent = 'Specialization : ' + fieldSelect.value;
-    });
+
 
 </script>
 
 @include('Dashboard.js')
 <script src="{{asset('admin/assets/js/pages/custom/login/singup.js')}}"></script>
-<script src="{{asset('admin/assets/js/pages/crud/file-upload/dropzonejs.js')}}"></script>
 <!--end::Page Scripts-->
 </body>
 <!--end::Body-->

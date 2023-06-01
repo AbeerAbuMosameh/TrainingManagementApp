@@ -12,46 +12,118 @@
     <div class="card card-custom">
         <div class="card-header">
             <div class="card-title">
-				<span class="card-icon">
+                <span class="card-icon">
                     <i class="flaticon2-favourite text-primary"></i>
-				</span>
+                </span>
                 <h3 class="card-label">Trainee Data</h3>
             </div>
         </div>
         <div class="card-body">
             <!--begin: Datatable-->
-            <table class="table table-bordered table-hover table-checkable" id="kt_datatable"
-                   style="margin-top: 13px !important">
+            <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                 <thead>
                 <tr>
-
                     <th>#</th>
                     <th>Program</th>
-                    <th>Payment Status</th>
-                    <th>status for Request</th>
-                    <th>Reason</th>
+                    <th>Advisor</th>
+                    <th>Trainee</th>
+                    <th>Status of Request</th>
+                    <th>Course Type</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($prgrams as $prgram)
-                    <tr data-entry-id="{{ $prgram->id }}">
+                @foreach ($programs as $program)
+                    <tr data-entry-id="{{ $program->id }}">
                         <td>{{$loop->iteration}}</td>
-                        <td>{{$prgram->program_id}}</td>
-                        <td>{{$prgram->payment_status}}</td>
-                        <td>{{$prgram->status}}</td>
-                        <td>{{$prgram->reason}}</td>
+                        <td>{{$program->program_name}}</td>
+                        <td>{{$program->advisor}}</td>
+                        <td>{{$program->trainee_name }}</td>
+                        <td>
+                            @if ($program->status == 'rejected')
+                                <span class="label font-weight-bold label-lg label-light-danger label-inline">Reject</span>
+                            @elseif ($program->status == 'pending')
+                                <span class="label font-weight-bold label-lg label-light-warning label-inline">Pending</span>
+                            @else
+                                <span class="label font-weight-bold label-lg label-light-success label-inline">Accept</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($program->program_type == 'paid')
+                                @if ($program->payment_status == 'paid')
+                                    <span class="label font-weight-bold label-lg label-light-primary label-inline">Paid</span>
+                                @else
+                                    <span class="label font-weight-bold label-lg label-light-danger label-inline">Not Paid</span>
+                                @endif
+                            @else
+                                <span class="label font-weight-bold label-lg label-light-info label-inline"> Free Course</span>
+                            @endif
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-clean btn-icon edit-button" data-toggle="modal"
+                               data-target="#editModal" data-program-id="{{ $program->id }}" title="Edit details">
+                                <i class="la la-edit"></i>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
-
                 </tbody>
             </table>
             <!--end: Datatable-->
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Change Status</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <form id="editForm" method="POST" action="{{ route("trainees-programs.update", ":programId") }}" enctype="multipart/form-data">
+                    @method('PUT')
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group row pt-4">
+                            <label for="status" class="col-lg-4 col-form-label text-lg-right">Status</label>
+                            <div class="col-lg-8">
+                                <select class="form-control" name="status" id="status" required>
+                                    <option value="accepted">Accepted</option>
+                                    <option value="rejected">Rejected</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary font-weight-bold">
+                            <span class="indicator-label">Edit</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 @endsection
 
 @section('js')
     <script src="{{asset('admin/assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.edit-button').click(function() {
+                var programId = $(this).data('program-id');
+                var formAction = "{{ route('trainees-programs.update', ':programId') }}";
+                formAction = formAction.replace(':programId', programId);
+                $('#editForm').attr('action', formAction);
+            });
+        });
+    </script>
     <script src="{{asset('admin/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
         function sendEmail(traineeId) {

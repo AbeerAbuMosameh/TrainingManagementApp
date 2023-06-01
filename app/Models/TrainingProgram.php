@@ -23,7 +23,15 @@ class TrainingProgram extends Model
 
     public function trainees()
     {
-        return $this->belongsToMany(Trainee::class, 'training_programs');
+        return $this->belongsTo(Trainee::class);
     }
 
+    public function trainee()
+    {
+        return $this->belongsTo(Trainee::class, 'trainee_id');
+    }
+    public function advisor()
+    {
+        return $this->belongsTo(Advisor::class, 'advisor_id');
+    }
 }

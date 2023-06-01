@@ -71,6 +71,7 @@
         </div>
     </div>
 
+    @if(!$tasks->isEmpty())
     <form method="POST" action="{{ route('Training-tasks.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="modal fade" id="exampleModalLabel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -114,7 +115,7 @@
             </div>
         </div>
     </form>
-
+    @endif
 
 @endsection
 

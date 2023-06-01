@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\downloadUrtTrait;
+use App\Mail\PendingProgramMail;
 use App\Mail\TraineeCredentialsMail;
 use App\Models\Advisor;
 use App\Models\AdvisorField;
@@ -11,6 +12,7 @@ use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\Program;
 use App\Models\Trainee;
+use App\Models\TrainingProgram;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Google\Cloud\Storage\StorageClient;
+use Spatie\Permission\Models\Role;
 
 class TraineeController extends Controller
 {
@@ -92,7 +95,7 @@ class TraineeController extends Controller
             'image' => 'nullable|mimes:jpeg,png|max:10240', //validate the file types and size
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:trainees|max:255',
+            'email' => 'required|email|unique:trainees|unique:users|max:255',
             'phone' => 'required|string|max:20',
             'education' => 'required|string|max:255',
             'gpa' => 'nullable|numeric|min:0|max:4',
@@ -106,117 +109,116 @@ class TraineeController extends Controller
 
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+        if (!$validator->fails()) {
+            // Generate a unique ID
+            try {
+                DB::beginTransaction();
+                $trainee = new Trainee();
+                $trainee->first_name = $request->input('first_name');
+                $trainee->last_name = $request->input('last_name');
+                $trainee->email = $request->input('email');
+                $trainee->phone = $request->input('phone');
+                $trainee->education = $request->input('education');
+                $trainee->gpa = $request->input('gpa');
+                $trainee->address = $request->input('address');
+                $trainee->city = $request->input('city');
+                $trainee->payment = $request->input('payment');
+                $trainee->language = $request->input('language');
+                $trainee->password = Hash::make('123456');
 
-        }
+                // Initialize Google Cloud Storage
+                $storage = new StorageClient([
+                    'projectId' => 'it-training-app-386209',
+                    'keyFilePath' => 'C:\xampp\htdocs\TrainingManagementApp\app\Http\Controllers\it-training-app-386209-firebase-adminsdk-20xbx-c933a61e7b.json',
+                ]);
 
-        // Generate a unique ID
-        try {
-            DB::beginTransaction();
-            $trainee = new Trainee();
-            $trainee->first_name = $request->input('first_name');
-            $trainee->last_name = $request->input('last_name');
-            $trainee->email = $request->input('email');
-            $trainee->phone = $request->input('phone');
-            $trainee->education = $request->input('education');
-            $trainee->gpa = $request->input('gpa');
-            $trainee->address = $request->input('address');
-            $trainee->city = $request->input('city');
-            $trainee->payment = $request->input('payment');
-            $trainee->language = $request->input('language');
-            $trainee->password = Hash::make('123456');
+                $bucket = $storage->bucket('it-training-app-386209.appspot.com');
 
-            // Initialize Google Cloud Storage
-            $storage = new StorageClient([
-                'projectId' => 'it-training-app-386209',
-                'keyFilePath' => 'C:\xampp\htdocs\TrainingManagementApp\app\Http\Controllers\it-training-app-386209-firebase-adminsdk-20xbx-c933a61e7b.json',
-            ]);
-
-            $bucket = $storage->bucket('it-training-app-386209.appspot.com');
-
-            // Store CV Files
-            if ($request->hasFile('cv')) {
-                $cvFile = $request->file('cv');
-                $cvPath = 'CVs/' . time() + rand(1, 10000000) . '.' . $cvFile->getClientOriginalName();
-                $test = $bucket->upload(
-                    file_get_contents($cvFile),
-                    [
-                        'name' => $cvPath,
-                    ]
-                );
-                $trainee->cv = $cvPath;
-
-            }
-
-            // Store Certification Files
-            if ($request->hasFile('certification')) {
-                $certificationFile = $request->file('certification');
-
-                $certificationPath = 'Certifications/' . time() + rand(1, 10000000) . '.' . $certificationFile->getClientOriginalName();
-                $bucket->upload(
-                    file_get_contents($certificationFile),
-                    [
-                        'name' => $certificationPath,
-                    ]
-                );
-                $trainee->certification = $certificationPath;
-
-            }
-
-            // Store Other Files
-            if ($request->hasFile('otherFile')) {
-                $otherFiles = $request->file('otherFile');
-
-                foreach ($otherFiles as $otherFile) {
-                    $otherPath = 'otherFiles/' . time() + rand(1, 10000000) . '.' . $otherFile->getClientOriginalName();
-                    $bucket->upload(
-                        file_get_contents($otherFile),
+                // Store CV Files
+                if ($request->hasFile('cv')) {
+                    $cvFile = $request->file('cv');
+                    $cvPath = 'CVs/' . time() + rand(1, 10000000) . '.' . $cvFile->getClientOriginalName();
+                    $test = $bucket->upload(
+                        file_get_contents($cvFile),
                         [
-                            'name' => $otherPath,
+                            'name' => $cvPath,
                         ]
                     );
-                    $otherFilePaths[] = $otherPath;
+                    $trainee->cv = $cvPath;
+
                 }
 
-                // Convert file paths to JSON array and save them in the trainee model
-                $trainee->otherFile = json_encode($otherFilePaths);
+                // Store Certification Files
+                if ($request->hasFile('certification')) {
+                    $certificationFile = $request->file('certification');
+
+                    $certificationPath = 'Certifications/' . time() + rand(1, 10000000) . '.' . $certificationFile->getClientOriginalName();
+                    $bucket->upload(
+                        file_get_contents($certificationFile),
+                        [
+                            'name' => $certificationPath,
+                        ]
+                    );
+                    $trainee->certification = $certificationPath;
+
+                }
+
+                // Store Other Files
+                if ($request->hasFile('otherFile')) {
+                    $otherFiles = $request->file('otherFile');
+
+                    foreach ($otherFiles as $otherFile) {
+                        $otherPath = 'otherFiles/' . time() + rand(1, 10000000) . '.' . $otherFile->getClientOriginalName();
+                        $bucket->upload(
+                            file_get_contents($otherFile),
+                            [
+                                'name' => $otherPath,
+                            ]
+                        );
+                        $otherFilePaths[] = $otherPath;
+                    }
+
+                    // Convert file paths to JSON array and save them in the trainee model
+                    $trainee->otherFile = json_encode($otherFilePaths);
+                }
+
+
+
+                $notification = Notification::create([
+                    'message' => $trainee->first_name . ' is a new trainee registration',
+                    'status' => 'unread',
+                    'level' => 1,
+
+                ]);
+
+                $trainee->notification_id = $notification->id;
+                $trainee->save();
+
+
+                $user= User::create([
+                    'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                    'email' => $request->input('email'),
+                    'password' => Hash::make('123456'),
+                    'level' => 3,
+                ]);
+
+
+                $role = Role::where('name', 'trainee')->first(); // Assuming 'advisor' is the role name you want to assign
+                $user->assignRole($role);
+
+                DB::commit();
+
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+                toastr()->error($e);
+
             }
-
-
-
-            $notification = Notification::create([
-                'message' => $trainee->first_name . ' is a new trainee registration',
-                'status' => 'unread',
-                'level' => 1,
-
-            ]);
-
-            $trainee->notification_id = $notification->id;
-            $trainee->save();
-
-
-            User::create([
-                'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
-                'email' => $request->input('email'),
-                'password' => Hash::make('123456'),
-                'level' => 3,
-            ]);
-
-
-
-            DB::commit();
-
-            // Save the trainee instance and other data to the database
-
-
-            // save the trainee instance to the database
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            toastr()->error($e);
-
+        }else{
+            return response()->json(['errors' => $validator->errors()], 422);
         }
+
+
 
     }
 
@@ -338,7 +340,7 @@ class TraineeController extends Controller
         $trainee->certification = $certificationDownloadUrl;
         $trainee->otherFile = $otherFileDownloadUrls;
 
-//        Notification::where('id', $trainee->notification_id)->update(['status' => 'read']);
+        Notification::where('id', $trainee->notification_id)->update(['status' => 'read']);
         return view('Advisor.TraineesManagement.show', compact('trainee'));
     }
 
@@ -383,6 +385,7 @@ class TraineeController extends Controller
         return view('Advisor.TraineesManagement.index', compact('trainees' , 'programName'));
     }
 
+    //Training Management - edit profile
     public function save(Request $request)
     {
         // Retrieve the advisor record
@@ -417,5 +420,28 @@ class TraineeController extends Controller
 
         // Redirect back or to a success page
         return redirect()->back();
+    }
+
+    //Training Management - make trainee pending in course he not paid for
+    public function updateStatus(Request $request, $id){
+        $trainee = Trainee::find($id);
+        $Program_id=$request->input('program_id');
+        $programTraining = TrainingProgram::where('id', $Program_id)->first();
+
+        if ($trainee && $programTraining) {
+            $programTraining->status = 'pending';
+            $programTraining->send_email = 1;
+            $programTraining->save();
+
+            $program = Program::find($programTraining->program_id);
+
+            // Send payment reminder email
+            Mail::to($trainee->email)->send(new PendingProgramMail($program->name , $trainee->first_name ." " . $trainee->last_name ,$program->price));
+
+
+            return response()->json(['message' => 'Trainee status updated to pending & Email Send ']);
+        }
+
+        return response()->json(['message' => 'Trainee or program training not found.'], 404);
     }
 }

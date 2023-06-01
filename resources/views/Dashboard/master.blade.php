@@ -34,6 +34,8 @@
                         </div>
                         <!--end::Page Heading-->
                     </div>
+
+                    @if(Auth()->user()->level == 1)
                     <div class="dropdown">
                         <!--begin::Toggle-->
                         <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px" aria-expanded="false">
@@ -94,7 +96,8 @@
 
                         </div>
                         <!-- Notification dropdown -->
-                    </div>                    <!--end::Toolbar-->
+                    </div>
+                    @endif<!--end::Toolbar-->
                 </div>
             </div>
 

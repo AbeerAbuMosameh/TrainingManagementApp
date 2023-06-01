@@ -39,7 +39,6 @@
                     <th>End Date</th>
                     <th>Type</th>
                     <th>Price</th>
-                    <th>Number</th>
                     <th>Duration</th>
                     <th>Level</th>
                     <th>Language</th>
@@ -101,7 +100,6 @@
                                     {{ $program->program->price }}
                                 @endif
                             </td>
-                            <td>{{ $program->program->number }}</td>
                             <td>{{ $program->program->duration }}</td>
                             <td>{{ $program->program->level }}</td>
                             <td>{{ $program->program->language }}</td>
@@ -116,72 +114,6 @@
             <!--end: Datatable-->
         </div>
     </div>
-    <form method="POST" action="{{ route("addmoney.stripe") }}" enctype="multipart/form-data">
-        @csrf
-        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Pay To Program</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <i aria-hidden="true" class="ki ki-close"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group row pt-4">
-
-                            <div class="mb-3">
-                                <label class='control-label'>Card Number</label>
-                                <input autocomplete='off' class='form-control card-number' size='20' type='text'
-                                       name="card_no">
-                            </div>
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <label class='control-label'>CVV</label>
-                                    <input autocomplete='off' class='form-control card-cvc' placeholder='ex. 311'
-                                           size='4' type='text' name="cvvNumber">
-                                </div>
-                                <div class="col-auto">
-                                    <label class='control-label'>Expiration</label>
-                                    <input class='form-control card-expiry-month' placeholder='MM' size='4' type='text'
-                                           name="ccExpiryMonth">
-                                </div>
-                                <div class="col-auto">
-                                    <label class='control-label'>Year</label>
-                                    <input class='form-control card-expiry-year' placeholder='YYYY' size='4' type='text'
-                                           name="ccExpiryYear">
-                                    <input class='form-control card-expiry-year' placeholder='YYYY' size='4'
-                                           type='hidden' name="amount" value="300">
-                                </div>
-                            </div>
-
-                            <div class="mb-3" style="padding-top:20px;">
-                                <h5 class='total'>Total:<span class='amount'>$10</span></h5>
-                            </div>
-
-
-                            <div class="mb-3">
-                                <div class='alert-danger alert' style="display:none;">
-                                    Please correct the errors and try again.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">
-                                Close
-                            </button>
-                            <button class='btn btn-primary font-weight-bold' type='submit'>
-                                <span class="indicator-label">Pay »</span>
-
-                            </button>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
 
 @endsection
 
@@ -190,7 +122,6 @@
 
     <script src="{{asset('admin/assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
     <script src="{{asset('admin/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
-    <script src="https://js.stripe.com/v3/"></script>
 
     <script>
 

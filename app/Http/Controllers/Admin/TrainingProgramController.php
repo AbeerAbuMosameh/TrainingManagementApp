@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Trainee\PaymentInformationController;
+use App\Http\Controllers\Traits\downloadUrtTrait;
 use App\Models\Advisor;
 use App\Models\Field;
+use App\Models\Payment;
+use App\Models\PaymentInformation;
 use App\Models\Program;
 use App\Models\Trainee;
 use App\Models\TrainingProgram;
@@ -14,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 
 class TrainingProgramController extends Controller
 {
+    use downloadUrtTrait;
     /**
      * Display a listing of the resource.
      */
@@ -31,25 +36,42 @@ class TrainingProgramController extends Controller
             $lname = Advisor::where('id', $program->program->advisor_id)->value('last_name');
             $program->advisor = $fname . " " . $lname;
             $program->program_type = Program::where('id', $program->program_id)->value('type');
+            $program->price = Program::where('id', $program->program_id)->value('price');
+            $program->payment_status = $program->payment_status === 'paid';
         }
 
-        return view('Trainee.ApplyProgramsManagement.index', compact('fields', 'programs'));
+
+        $paymentInformation = PaymentInformation::where('trainee_id', $traineeId)->exists();
+
+        return view('Trainee.ApplyProgramsManagement.index', compact('fields', 'programs','paymentInformation'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    //Training Program Request - display all trainees request to manager to accept or not
+    public function requests()
+    {
+        $programs = TrainingProgram::all();
+        foreach ($programs as $program) {
+            $program->program_name = Program::where('id', $program->program_id)->value('name');
+
+            $fname = Advisor::where('id', $program->program->advisor_id)->value('first_name');
+            $lname = Advisor::where('id', $program->program->advisor_id)->value('last_name');
+            $program->advisor = $fname . " " . $lname;
+
+            $trainee = Trainee::find($program->trainee_id);
+            $program->trainee_name = $trainee->first_name . " " . $trainee->last_name;
+
+            $program->program_type = Program::where('id', $program->program_id)->value('type');
+        }
+
+        return view('Admin.TrainingProgramManagement.index', compact('programs'));
+    }
+
     public function create()
     {
-
         $fields = Field::all();
         return view('Trainee.ApplyProgramsManagement.index', compact('fields'));
-
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $traineeId = Trainee::where('email', Auth::user()->email)->first();
@@ -84,6 +106,7 @@ class TrainingProgramController extends Controller
 
     }
 
+    //Training Program Request - display all trainee accepted request
     public function displayAcceptedProgram()
     {
         // Get the authenticated trainee
@@ -111,9 +134,81 @@ class TrainingProgramController extends Controller
         return $advisorName;
     }
 
-
-    public function destroy(TrainingProgram $trainingProgram)
+    public function update(Request $request, $id)
     {
-        //
+        $programId = $request->input('program_id');
+        $status = $request->input('status');
+
+        $program = TrainingProgram::findOrFail($id);
+
+
+        // Check if program number is greater than 0
+        if ($program->program->number <= 0) {
+            toastr()->error('Program is already full.');
+            return redirect()->back();
+        }
+
+        // Check if program is paid and trainee has paid for it
+        if ($program->program->type === 'paid') {
+            $trainee_id = Trainee::where('email', Auth()->user()->email)->value('id');
+
+            $trainingProgram = TrainingProgram::where('trainee_id', $trainee_id)
+                ->where('program_id', $programId)
+                ->where('payment_status', 'paid')
+                ->first();
+
+            toastr()->warning('Trainee not paid for this program.');
+        }
+
+        // Update the number/capacity of the program
+        $program->program->number = ($program->program->number - 1);
+        $program->program->save(); // Save the updated value
+        // Update the status of the program
+        $program->status = $status;
+        $program->save();
+
+        toastr()->success('Program status updated successfully.');
+
+        return redirect()->back();
+
+    }
+
+    public function alltrainee($id)
+    {
+        // Retrieve the program with its related trainees and their statuses
+        $trainees = TrainingProgram::with('trainee')->where('program_id', $id)->where('status' , 'accepted')->get();
+
+        foreach ($trainees as $trainee) {
+
+            // Get the file paths for CV, certification, and other files
+            $cvPath = $trainee->trainee->cv;
+            $certificationPath = $trainee->trainee->certification;
+            $otherFiles = json_decode($trainee->trainee->otherFile);
+
+
+            // Generate download links or display the files
+            $cvDownloadUrl = $this->generateDownloadUrl($cvPath);
+            $certificationDownloadUrl = $this->generateDownloadUrl($certificationPath);
+            $otherFileDownloadUrls = [];
+
+
+            // Handle the case when $otherFiles is empty or null
+            if (!empty($otherFiles)) {
+                foreach ($otherFiles as $otherFile) {
+                    $otherFileDownloadUrls[] = $this->generateDownloadUrl($otherFile);
+                }
+            }
+
+
+            // Assign the download URLs to the trainee object
+            $trainee->trainee->cv = $cvDownloadUrl;
+            $trainee->trainee->certification = $certificationDownloadUrl;
+            $trainee->trainee->otherFile = $otherFileDownloadUrls;
+
+        }
+
+        // Pass the $program variable to the view or perform any other operations
+        return view('Admin.ProgramsManagement.trainees', compact('trainees'));
+
     }
 }

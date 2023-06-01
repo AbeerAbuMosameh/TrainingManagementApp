@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="modal-body col-lg-12">
-                    <input type="number" min="0" name="mark" id="editMarkInput" placeholder="Enter Mark" class="col-lg-12">
+                    <input type="number" min="0" max="{{$task->mark}}" name="mark" id="editMarkInput" placeholder="Enter Mark" class="col-lg-12">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

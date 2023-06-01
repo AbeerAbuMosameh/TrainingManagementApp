@@ -27,7 +27,7 @@
                         advisors.forEach(function(advisor) {
                             var option = document.createElement('option');
                             option.value = advisor.id;
-                            option.textContent = advisor.first_name + advisor.last_name ;
+                            option.textContent = advisor.first_name + " " + advisor.last_name ;
                             advisorSelect.appendChild(option);
                         });
                     })

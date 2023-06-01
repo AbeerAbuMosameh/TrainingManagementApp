@@ -11,6 +11,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "kreait/firebase-php": "^7.2",
         "kreait/laravel-firebase": "^5.2",
+        "laravel-validation-rules/credit-card": "^1.8",
         "laravel/framework": "^10.8",
         "laravel/sanctum": "^3.2",
         "laravel/socialite": "^5.6",
@@ -18,7 +19,6 @@
         "laravel/ui": "^4.2",
         "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-permission": "^5.10",
-        "stripe/stripe-php": "^10.14",
         "yoeunes/toastr": "^2.3"
     },
     "require-dev": {

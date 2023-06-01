@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\downloadUrtTrait;
+use App\Mail\PendingProgramMail;
 use App\Mail\TraineeCredentialsMail;
 use App\Models\Advisor;
 use App\Models\AdvisorField;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class AdvisorController extends Controller
 {
@@ -78,7 +80,7 @@ class AdvisorController extends Controller
             'image' => 'nullable|mimes:jpeg,png|max:10240', //validate the file types and size
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:advisors|max:255',
+            'email' => 'required|email|unique:advisors|unique:users|max:255',
             'phone' => 'required|string|max:20',
             'education' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -91,9 +93,9 @@ class AdvisorController extends Controller
 
         ]);
 
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
-
         }
 
         try {
@@ -193,6 +195,9 @@ class AdvisorController extends Controller
                 'password' => Hash::make('123456'),
             ]);
 
+            $role = Role::where('name', 'advisor')->first(); // Assuming 'advisor' is the role name you want to assign
+            $user->assignRole($role);
+
             DB::commit();
 
 
@@ -276,7 +281,7 @@ class AdvisorController extends Controller
         $advisor->cv = $cvDownloadUrl;
         $advisor->certification = $certificationDownloadUrl;
         $advisor->otherFile = $otherFileDownloadUrls;
-//        Notification::where('id', $advisor->notification_id)->update(['status' => 'read']);
+       Notification::where('id', $advisor->notification_id)->update(['status' => 'read']);
         return view('Admin.AdvisorsManagement.show', compact('advisor'));
     }
 

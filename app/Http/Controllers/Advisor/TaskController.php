@@ -17,6 +17,15 @@ class TaskController extends Controller
 {
 
     use downloadUrtTrait;
+
+    function __construct(){
+//        $this->middleware('permission:a-task-list', ['only' => ['index', 'show']]);
+//        $this->middleware('permission:advisor-task-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:a-task-mark', ['only' => ['saveMark']]);
+        $this->middleware('permission:a-task-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:a-task-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:a-task-create', ['only' => ['create','store']]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -53,11 +62,7 @@ class TaskController extends Controller
     }
 
 
-
-
-
-    public function index1()
-    {
+    public function index1(){
         $advisorId = Advisor::where('email', Auth()->user()->email)->value('id');
 
         // Get the tasks with programs and solutions belonging to the advisor
@@ -103,9 +108,26 @@ class TaskController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+
+    //Admin - display task on specific program
+    public function alltasks($id)
     {
-        //
+        // Retrieve all tasks related to the program
+        $tasks = Task::where('program_id', $id)->get();
+        foreach ($tasks as $task) {
+            $related_files = json_decode($task->related_file);
+            $otherFileDownloadUrls = [];
+            if (!empty($related_files)) {
+                foreach ($related_files as $related_file) {
+                    $otherFileDownloadUrls[] = $this->generateDownloadUrl($related_file);
+                }
+            }
+
+            $task->related_file = $otherFileDownloadUrls;
+
+        }
+        return view('Admin.ProgramsManagement.tasks', compact('tasks'));
+
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class AdvisorPermissionsSeeder extends Seeder
 {
@@ -57,8 +58,16 @@ class AdvisorPermissionsSeeder extends Seeder
 
         ];
 
+
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission['name'], 'level' => 2]);
         }
+
+        $role = Role::create(['name' => 'advisor', 'level' => 2]);
+
+        $permissions = Permission::where(['level' => 2])->pluck('id', 'id')->all();
+
+        $role->syncPermissions($permissions);
+
     }
 }

@@ -189,7 +189,7 @@
             <div class="form-group row">
                 <label class="col-xl-3 col-lg-3 col-form-label">other file</label>
                 <div class="col-lg-9 col-xl-6">
-                    <div class="input-group input-group-lg input-group-solid">
+                    <div class="input-group input-group-lg">
                         @if(count($advisor->otherFile ?? []) > 0)
                             @foreach($advisor->otherFile as $otherFileUrl)
                                 <a href="{{ $otherFileUrl }}" class="btn btn-primary" target="_blank"
