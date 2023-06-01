@@ -24,8 +24,7 @@ class LogUserActivity
                 Log::info($logMessage);
             }
         }
-        $response = $next($request);
 
-        return $response;
+        return $next($request);
     }
 }
