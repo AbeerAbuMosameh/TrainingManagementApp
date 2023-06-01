@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Advisor;
+use App\Models\AdvisorField;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -49,6 +50,10 @@ class AdvisorSeeder extends Seeder
                 'password' => Hash::make('123456'),
                 'level'=> '2'
             ]);
+        AdvisorField::create([
+            'advisor_id' => 1,
+            'field_id' => 1,
+        ]);
 
         $notification = Notification::create([
             'message' =>'Abeer is a new Advisor registration',
