@@ -2,9 +2,7 @@
 
 use Illuminate\Support\Str;
 
-
 return [
-
 
     /*
     |--------------------------------------------------------------------------
@@ -17,7 +15,8 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'pgsql'),
+    'default' => env('DB_CONNECTION', 'mysql'),
+
     /*
     |--------------------------------------------------------------------------
     | Database Connections
