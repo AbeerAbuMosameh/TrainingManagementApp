@@ -17,14 +17,14 @@ class LogUserActivity
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check()) {
-            $user = Auth::user();
-            if ($user) {
-                $logMessage = 'User activity: ' . $user->id . ' ' . $user->name . ' ' . $request->method() . ' ' . $request->getRequestUri();
-                Log::info($logMessage);
-            }
-        }
-
-        return $next($request);
+//        if (Auth::check()) {
+//            $user = Auth::user();
+//            if ($user) {
+//                $logMessage = 'User activity: ' . $user->id . ' ' . $user->name . ' ' . $request->method() . ' ' . $request->getRequestUri();
+//                Log::info($logMessage);
+//            }
+//        }
+//
+//        return $next($request);
     }
 }
