@@ -48,9 +48,9 @@
                         <td>{{$loop->iteration}}</td>
                         <td>{{$field->name}}</td>
                         <td>
-                            <a href="{{ route('fields.edit', $field->id) }}"
-                               class="btn btn-sm btn-clean btn-icon" data-toggle="modal"
-                               data-target="#editModal" title="Edit details">
+                            <a href="#" class="btn btn-sm btn-clean btn-icon" data-toggle="modal"
+                               data-target="#editModal" title="Edit details"
+                               data-field-id="{{ $field->id }}" data-field-name="{{ $field->name }}">
                                 <i class="la la-edit"></i>
                             </a>
                             <a onclick="deleteRows('{{$field->id}}', this)"
@@ -68,7 +68,7 @@
             <!--end: Datatable-->
         </div>
     </div>
-    <form method="POST" action="{{ route("fields.store") }}" enctype="multipart/form-data">
+    <form  method="POST" action="{{ route("fields.store") }}" enctype="multipart/form-data">
         @csrf
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -108,7 +108,7 @@
         </div>
     </form>
     @if(!$fields->isEmpty())
-        <form method="POST" action="{{ route("fields.update", $field->id) }}" enctype="multipart/form-data">
+        <form  id="editForm" method="POST" action="{{ route("fields.update", $field->id) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
             <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
@@ -128,9 +128,10 @@
                                     <label for="name">Field Name<span class="text-danger">*</span></label>
                                     <input type="text"
                                            class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
-                                           name="name" id="name" value="{{ old('name', $field->name) }}"
+                                           name="name" id="name" value="{{ old('name') }}"
                                            placeholder="Enter Field Name" required/>
-                                    @if($errors->has('name'))
+
+                                @if($errors->has('name'))
                                         <div class="invalid-feedback">
                                             {{ $errors->first('name') }}
                                         </div>
@@ -163,7 +164,31 @@
     <script src="{{asset('admin/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
 
     <script>
-         function deleteRows(id, reference) {
+
+        $('#editModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var fieldId = button.data('field-id'); // Extracting the field ID from the button
+            var fieldName = button.data('field-name'); // Extracting the field name from the button
+
+            // Update the form action
+            var form = $('#editForm');
+            var action = form.attr('action');
+            action = action.replace(/\/\d+$/, '/' + fieldId); // Replace the last segment of the URL with the field ID
+            form.attr('action', action);
+
+            // Update the input field value
+            var inputName = form.find('#name');
+            inputName.val(fieldName);
+
+            // Add the 'is-invalid' class to the input field if there are errors
+            if (fieldName) {
+                inputName.removeClass('is-invalid');
+            } else {
+                inputName.addClass('is-invalid');
+            }
+        });
+
+        function deleteRows(id, reference) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
