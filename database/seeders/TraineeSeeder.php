@@ -33,7 +33,7 @@ class TraineeSeeder extends Seeder
             'city' => 'Gaza',
             'language' => 'Arabic',
             'payment' => 1 ,
-            'cv' => null,
+            'cv' => 'CVs/1692979316.cloud app requirements.pdf',
             'certification' => null,
             'otherFile' => null,
             'is_approved' => 0,
