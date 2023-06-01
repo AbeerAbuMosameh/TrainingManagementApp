@@ -20,7 +20,6 @@ class TaskController extends Controller
 
     function __construct(){
         $this->middleware('permission:admin-program-alltask', ['only' => ['alltasks']]);
-        $this->middleware('permission:a-task-mark', ['only' => ['saveMark']]);
         $this->middleware('permission:advisor-task-list', ['only' => ['index','show']]);
         $this->middleware('permission:advisor-task-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:advisor-task-delete', ['only' => ['destroy']]);
@@ -220,7 +219,7 @@ class TaskController extends Controller
         $storage = new StorageClient([
             'projectId' => 'it-training-app-386209',
             'keyFilePath' => $firebaseCredentialsPath,
-        ]);[]
+        ]);
 
         $bucket = $storage->bucket('it-training-app-386209.appspot.com');
 

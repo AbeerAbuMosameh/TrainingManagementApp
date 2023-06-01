@@ -67,12 +67,5 @@ class TraineePermissionsSeeder extends Seeder
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission['name'], 'level' => 3]);
         }
-
-
-        $role = Role::create(['name' => 'trainee', 'level' => 3]);
-
-        $permissions = Permission::where(['level' => 3])->pluck('id', 'id')->all();
-
-        $role->syncPermissions($permissions);
     }
 }

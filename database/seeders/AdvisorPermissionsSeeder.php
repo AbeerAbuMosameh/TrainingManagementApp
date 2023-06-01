@@ -66,11 +66,7 @@ class AdvisorPermissionsSeeder extends Seeder
             Permission::create(['name' => $permission['name'], 'level' => 2]);
         }
 
-        $role = Role::create(['name' => 'advisor', 'level' => 2]);
 
-        $permissions = Permission::where(['level' => 2])->pluck('id', 'id')->all();
-
-        $role->syncPermissions($permissions);
 
     }
 }

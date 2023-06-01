@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Advisor;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -29,13 +30,12 @@ class AdvisorSeeder extends Seeder
                 'education' => 'Bachelor Degree',
                 'address' => 'test',
                 'city' => 'Gaza',
-                'language' => 'test',
+                'language' => 'Arabic',
                 'cv' => 'CVs/1692979316.cloud app requirements.pdf',
                 'certification' => 'Certifications/1690600538.download.jpeg',
-                'otherFile' => 'otherfile.txt',
+                'otherFile' => null,
                 'is_approved' => 0,
                 'password' => bcrypt('123456'),
-                'notification_id' => 1,
                 'deleted_at' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -48,6 +48,13 @@ class AdvisorSeeder extends Seeder
                 'password' => Hash::make('123456'),
                 'level'=> '2'
             ]);
+
+        $notification = Notification::create([
+            'message' =>'Abeer is a new Advisor registration',
+            'status' => 'unread',
+            'level' => 1,
+
+        ]);
 
         $role = Role::create(['name' => 'advisor', 'level' => 2]);
 

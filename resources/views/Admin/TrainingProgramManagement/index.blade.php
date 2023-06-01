@@ -15,7 +15,7 @@
                 <span class="card-icon">
                     <i class="flaticon2-favourite text-primary"></i>
                 </span>
-                <h3 class="card-label">Trainee Data</h3>
+                <h3 class="card-label">Trainee Requests</h3>
             </div>
         </div>
         <div class="card-body">

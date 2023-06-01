@@ -215,7 +215,6 @@ class AdvisorController extends Controller
     public function accept($id){
         $advisor = Advisor::find($id); // Find the user by ID
         $user = User::where('email', $advisor->email)->first(); // Find the trainee by email
-        $advisor_id = uniqid();
         if ($user->unique_id == null) {
             $advisor->is_approved = true;
             $advisor->save();
@@ -228,13 +227,11 @@ class AdvisorController extends Controller
                 AdvisorField::where('advisor_id', $id)->where('field_id', $field->id)->update(['status' => 'accept']);
             }
 
-
+            $advisor_id = uniqid();
             $user->unique_id = $advisor_id;
             $pass = Str::random(10);
             $user->password = Hash::make($pass);
-
             $user->save();
-
 
             Mail::to($user->email)->send(new TraineeCredentialsMail($user->unique_id, $pass));
             return response()->json(['message' =>'Advisor Is Active  & Mail Send Successfully with login data!']);

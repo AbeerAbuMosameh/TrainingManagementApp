@@ -440,7 +440,7 @@ var KTLogin = function () {
                                 }
                             ).then(function(result) {
                                 if (result.isConfirmed) {
-                                    window.location.href = '/login';
+                                    window.location.href = '/';
                                 }
                             });
                         },
