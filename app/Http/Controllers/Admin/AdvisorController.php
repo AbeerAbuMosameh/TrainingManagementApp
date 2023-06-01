@@ -112,10 +112,11 @@ class AdvisorController extends Controller
             $advisor->language = $request->input('language');
             $advisor->password = Hash::make('123456');
 
+            $firebaseCredentialsPath = storage_path(env('FIREBASE_CREDENTIALS_PATH'));
             // Initialize Google Cloud Storage
             $storage = new StorageClient([
                 'projectId' => 'it-training-app-386209',
-                'keyFilePath' => 'C:\xampp\htdocs\TrainingManagementApp\app\Http\Controllers\it-training-app-386209-firebase-adminsdk-20xbx-c933a61e7b.json',
+                'keyFilePath' => $firebaseCredentialsPath,
             ]);
 
             $bucket = $storage->bucket('it-training-app-386209.appspot.com');

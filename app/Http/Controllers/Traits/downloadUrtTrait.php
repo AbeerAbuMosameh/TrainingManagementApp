@@ -11,11 +11,12 @@ trait downloadUrtTrait
     function generateDownloadUrl($filePath){
         if (!empty($filePath)) {
             // Initialize Firebase Storage
+            $firebaseCredentialsPath = storage_path(env('FIREBASE_CREDENTIALS_PATH'));
+            // Initialize Google Cloud Storage
             $storage = new StorageClient([
                 'projectId' => 'it-training-app-386209',
-                'keyFilePath' => 'C:\xampp\htdocs\TrainingManagementApp\app\Http\Controllers\it-training-app-386209-firebase-adminsdk-20xbx-c933a61e7b.json',
+                'keyFilePath' => $firebaseCredentialsPath,
             ]);
-
             // Get the bucket name from the Firebase configuration or replace it with your bucket name
             $bucket = $storage->bucket('it-training-app-386209.appspot.com');
 
