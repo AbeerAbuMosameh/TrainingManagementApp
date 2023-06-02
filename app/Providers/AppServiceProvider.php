@@ -30,11 +30,11 @@ class AppServiceProvider extends ServiceProvider
         foreach ($notifications as $notification) {
             $trainee = Trainee::where('notification_id', $notification->id)->first();
             if ($trainee) {
-                $notification->link = 'http://phplaravel-1011648-3574700.cloudwaysapps.com/trainees'.$trainee->id;
+                $notification->link = 'http://phplaravel-1011648-3574700.cloudwaysapps.com/trainees/'.$trainee->id;
             }else{
                 $advisor = Advisor::where('notification_id', $notification->id)->first();
                 if ($advisor) {
-                    $notification->link = 'http://phplaravel-1011648-3574700.cloudwaysapps.com/trainees'.$advisor->id;
+                    $notification->link = 'http://phplaravel-1011648-3574700.cloudwaysapps.com/trainees/'.$advisor->id;
                 }
             }
         }
