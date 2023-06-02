@@ -70,7 +70,7 @@
                         toastr.success(message); // Display success message
                         form.reset();
                         setTimeout(function() {
-                            window.location.href = 'http://phplaravel-1011648-3574516.cloudwaysapps.com/programs';
+                            window.location.href = 'http://phplaravel-1011648-3574700.cloudwaysapps.com/programs';
                         }, 3000);
                     } else {
                         toastr.error(message); // Display error message
