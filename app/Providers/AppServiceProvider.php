@@ -23,6 +23,24 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+ $notifications = Notification::where('status', 'unread')->orderByDesc('created_at')
+            ->get();
+        $count = Notification::where('status', 'unread')->count();
 
+        foreach ($notifications as $notification) {
+            $trainee = Trainee::where('notification_id', $notification->id)->first();
+            if ($trainee) {
+                $notification->link = 'http://127.0.0.1:8000/trainees/'.$trainee->id;
+            }else{
+                $advisor = Advisor::where('notification_id', $notification->id)->first();
+                if ($advisor) {
+                    $notification->link = 'http://127.0.0.1:8000/advisors/'.$advisor->id;
+                }
+            }
+        }
+
+        // Share the data with all views
+        View::share('notifications', $notifications);
+        View::share('count', $count);
     }
 }
