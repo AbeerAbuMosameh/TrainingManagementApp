@@ -88,8 +88,8 @@ class AdvisorController extends Controller
             'city' => 'required|string|max:255',
             'payment' => 'nullable|string|in:Card,PayPal,Bank',
             'language' => 'nullable|string|in:French,Arabic,English',
-            'cv' => 'required|mimes:pdf,docx|max:10240', //validate the file types and size
-            'certification' => 'required|mimes:pdf,docx,jpeg,png|max:10240',
+            'cv' => 'nullable|mimes:pdf,docx|max:10240', //validate the file types and size
+            'certification' => 'nullable|mimes:pdf,docx,jpeg,png|max:10240',
             'otherFile.*' => 'nullable|file|max:10240', // Adjust the maximum file size as needed
 
         ]);
@@ -112,62 +112,62 @@ class AdvisorController extends Controller
             $advisor->language = $request->input('language');
             $advisor->password = Hash::make('123456');
 
-            $firebaseCredentialsPath = storage_path(env('FIREBASE_CREDENTIALS_PATH'));
-            // Initialize Google Cloud Storage
-            $storage = new StorageClient([
-                'projectId' => 'it-training-app-386209',
-                'keyFilePath' => $firebaseCredentialsPath,
-            ]);
-
-            $bucket = $storage->bucket('it-training-app-386209.appspot.com');
-
-            // Store CV Files
-            if ($request->hasFile('cv')) {
-                $cvFile = $request->file('cv');
-                $cvPath = 'CVs/' . time() + rand(1, 10000000) . '.' . $cvFile->getClientOriginalName();
-                $bucket->upload(
-                    file_get_contents($cvFile),
-                    [
-                        'name' => $cvPath,
-                    ]
-                );
-                $advisor->cv = $cvPath;
-
-            }
-
-            // Store Certification Files
-            if ($request->hasFile('certification')) {
-                $certificationFile = $request->file('certification');
-
-                $certificationPath = 'Certifications/'. time() + rand(1, 10000000) . '.'  . $certificationFile->getClientOriginalName();
-                $bucket->upload(
-                    file_get_contents($certificationFile),
-                    [
-                        'name' => $certificationPath,
-                    ]
-                );
-                $advisor->certification = $certificationPath;
-
-            }
-
-            // Store Other Files
-            if ($request->hasFile('otherFile')) {
-                $otherFiles = $request->file('otherFile');
-
-                foreach ($otherFiles as $otherFile) {
-                    $otherPath = 'otherFiles/' .  time() + rand(1, 10000000) . '.' .$otherFile->getClientOriginalName();
-                    $bucket->upload(
-                        file_get_contents($otherFile),
-                        [
-                            'name' => $otherPath,
-                        ]
-                    );
-                    $otherFilePaths[] = $otherPath;
-                }
-
-                // Convert file paths to JSON array and save them in the trainee model
-                $advisor->otherFile = json_encode($otherFilePaths);
-            }
+//            $firebaseCredentialsPath = storage_path(env('FIREBASE_CREDENTIALS_PATH'));
+//            // Initialize Google Cloud Storage
+//            $storage = new StorageClient([
+//                'projectId' => 'it-training-app-386209',
+//                'keyFilePath' => $firebaseCredentialsPath,
+//            ]);
+//
+//            $bucket = $storage->bucket('it-training-app-386209.appspot.com');
+//
+//            // Store CV Files
+//            if ($request->hasFile('cv')) {
+//                $cvFile = $request->file('cv');
+//                $cvPath = 'CVs/' . time() + rand(1, 10000000) . '.' . $cvFile->getClientOriginalName();
+//                $bucket->upload(
+//                    file_get_contents($cvFile),
+//                    [
+//                        'name' => $cvPath,
+//                    ]
+//                );
+//                $advisor->cv = $cvPath;
+//
+//            }
+//
+//            // Store Certification Files
+//            if ($request->hasFile('certification')) {
+//                $certificationFile = $request->file('certification');
+//
+//                $certificationPath = 'Certifications/'. time() + rand(1, 10000000) . '.'  . $certificationFile->getClientOriginalName();
+//                $bucket->upload(
+//                    file_get_contents($certificationFile),
+//                    [
+//                        'name' => $certificationPath,
+//                    ]
+//                );
+//                $advisor->certification = $certificationPath;
+//
+//            }
+//
+//            // Store Other Files
+//            if ($request->hasFile('otherFile')) {
+//                $otherFiles = $request->file('otherFile');
+//
+//                foreach ($otherFiles as $otherFile) {
+//                    $otherPath = 'otherFiles/' .  time() + rand(1, 10000000) . '.' .$otherFile->getClientOriginalName();
+//                    $bucket->upload(
+//                        file_get_contents($otherFile),
+//                        [
+//                            'name' => $otherPath,
+//                        ]
+//                    );
+//                    $otherFilePaths[] = $otherPath;
+//                }
+//
+//                // Convert file paths to JSON array and save them in the trainee model
+//                $advisor->otherFile = json_encode($otherFilePaths);
+//            }
 
 
             $notification = Notification::create([
