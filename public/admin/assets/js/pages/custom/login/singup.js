@@ -116,27 +116,20 @@ var KTLogin = function () {
             form,
             {
                 fields: {
-                    cv: {
-                        validators: {
-                            notEmpty: {
-                                message: 'cv is required'
-                            }
-                        }
-                    },
-                    certification: {
-                        validators: {
-                            notEmpty: {
-                                message: 'certification is required'
-                            }
-                        }
-                    },
-                    preferreddelivery: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Preferred delivery window is required'
-                            }
-                        }
-                    }
+                    // cv: {
+                    //     validators: {
+                    //         notEmpty: {
+                    //             message: 'cv is required'
+                    //         }
+                    //     }
+                    // },
+                    // certification: {
+                    //     validators: {
+                    //         notEmpty: {
+                    //             message: 'certification is required'
+                    //         }
+                    //     }
+                    // }
                 },
                 plugins: {
                     trigger: new FormValidation.plugins.Trigger(),
