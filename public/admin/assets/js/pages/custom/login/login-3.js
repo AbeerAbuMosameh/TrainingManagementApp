@@ -439,7 +439,7 @@ var KTLogin = function () {
                                 }
                             ).then(function(result) {
                                 if (result.isConfirmed) {
-                                     window.location.href = '/login';
+                                     window.location.href = 'http://phplaravel-1011648-3574700.cloudwaysapps.com/';
                                 }
                             });
                         },
