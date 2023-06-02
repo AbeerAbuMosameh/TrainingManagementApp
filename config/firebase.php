@@ -5,14 +5,14 @@ declare(strict_types=1);
 return [
     /*
      * ------------------------------------------------------------------------
-     * Default Firebase project
+     * Default firebase project
      * ------------------------------------------------------------------------
      */
     'default' => env('FIREBASE_PROJECT', 'app'),
 
     /*
      * ------------------------------------------------------------------------
-     * Firebase project configurations
+     * firebase project configurations
      * ------------------------------------------------------------------------
      */
     'projects' => [
@@ -22,7 +22,7 @@ return [
              * Credentials / Service Account
              * ------------------------------------------------------------------------
              *
-             * In order to access a Firebase project and its related services using a
+             * In order to access a firebase project and its related services using a
              * server SDK, requests must be authenticated. For server-to-server
              * communication this is done with a Service Account.
              *
@@ -34,7 +34,7 @@ return [
              * Once you have downloaded the Service Account JSON file, you can use it
              * to configure the package.
              *
-             * If you don't provide credentials, the Firebase Admin SDK will try to
+             * If you don't provide credentials, the firebase Admin SDK will try to
              * auto-discover them
              *
              * - by checking the environment variable FIREBASE_CREDENTIALS
@@ -43,7 +43,7 @@ return [
              * - by checking if the application is running on GCE/GCP
              *
              * If no credentials file can be found, an exception will be thrown the
-             * first time you try to access a component of the Firebase Admin SDK.
+             * first time you try to access a component of the firebase Admin SDK.
              *
              */
             'credentials' => [
@@ -52,7 +52,7 @@ return [
 
             /*
              * ------------------------------------------------------------------------
-             * Firebase Auth Component
+             * firebase Auth Component
              * ------------------------------------------------------------------------
              */
 
@@ -62,7 +62,7 @@ return [
 
             /*
              * ------------------------------------------------------------------------
-             * Firebase Realtime Database
+             * firebase Realtime Database
              * ------------------------------------------------------------------------
              */
 
@@ -82,7 +82,7 @@ return [
 
                 /*
                  * As a best practice, a service should have access to only the resources it needs.
-                 * To get more fine-grained control over the resources a Firebase app instance can access,
+                 * To get more fine-grained control over the resources a firebase app instance can access,
                  * use a unique identifier in your Security Rules to represent your service.
                  *
                  * https://firebase.google.com/docs/database/admin/start#authenticate-with-limited-privileges
@@ -109,7 +109,7 @@ return [
 
             /*
              * ------------------------------------------------------------------------
-             * Firebase Cloud Storage
+             * firebase Cloud Storage
              * ------------------------------------------------------------------------
              */
 
@@ -129,7 +129,7 @@ return [
              * Caching
              * ------------------------------------------------------------------------
              *
-             * The Firebase Admin SDK can cache some data returned from the Firebase
+             * The firebase Admin SDK can cache some data returned from the firebase
              * API, for example Google's public keys used to verify ID tokens.
              *
              */
