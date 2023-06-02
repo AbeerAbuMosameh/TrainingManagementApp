@@ -33,7 +33,7 @@ class TraineeSeeder extends Seeder
             'city' => 'Gaza',
             'language' => 'Arabic',
             'payment' => 1 ,
-            'cv' => 'CVs/1692979316.cloud app requirements.pdf',
+            'cv' => null,
             'certification' => null,
             'otherFile' => null,
             'is_approved' => 0,
@@ -47,7 +47,7 @@ class TraineeSeeder extends Seeder
         $user = User::create([
             'name' => 'Abeer Abu Mosameh',
             'email' => 'abeermosameh@gmail.com',
-            'unique_id' => '123456788',
+            'unique_id' => 'Trainee123',
             'password' => Hash::make('123456'),
             'level'=> '3'
         ]);

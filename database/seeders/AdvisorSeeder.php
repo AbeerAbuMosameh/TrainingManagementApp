@@ -46,7 +46,7 @@ class AdvisorSeeder extends Seeder
             $advisor = User::create([
                 'name' => 'Abeer Abu Mosameh',
                 'email' => 'abeermosameh1@gmail.com',
-                'unique_id' => '123456789',
+                'unique_id' => 'Advisor123456',
                 'password' => Hash::make('123456'),
                 'level'=> '2'
             ]);
