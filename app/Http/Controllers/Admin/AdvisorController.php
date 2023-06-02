@@ -72,7 +72,6 @@ class AdvisorController extends Controller
     //Advisor Management - display View contain all field to register new advisor
     public function create(){
         $fields =Field::all();
-        dd($fields);
         return view('Admin.AdvisorsManagement.create',compact('fields'));
     }
 
