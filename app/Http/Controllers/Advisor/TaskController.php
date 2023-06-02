@@ -150,7 +150,7 @@ class TaskController extends Controller
 
 
             $firebaseCredentialsPath = storage_path(env('FIREBASE_CREDENTIALS_PATH'));
-            dd( $firebaseCredentialsPath);
+          
             // Initialize Google Cloud Storage
             $storage = new StorageClient([
                 'projectId' => 'it-training-app-386209',
