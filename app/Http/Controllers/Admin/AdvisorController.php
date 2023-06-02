@@ -200,7 +200,7 @@ class AdvisorController extends Controller
             $role = Role::where('name', 'advisor')->first(); // Assuming 'advisor' is the role name you want to assign
             $user->assignRole($role);
 
-            DB::commit();
+            dd($advisor,$user,$notification,$selectedFieldIds);
 
 
         } catch (\Exception $e) {
