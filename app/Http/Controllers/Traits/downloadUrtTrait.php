@@ -14,11 +14,11 @@ trait downloadUrtTrait
             $firebaseCredentialsPath = storage_path(env('FIREBASE_CREDENTIALS_PATH'));
 
             $storage = new StorageClient([
-                'projectId' => 'it-training-app-386209',
+                'projectId' => 'training-application-707f6',
                 'keyFilePath' => $firebaseCredentialsPath,
             ]);
             // Get the bucket name from the firebase configuration or replace it with your bucket name
-            $bucket = $storage->bucket('it-training-app-386209.appspot.com');
+            $bucket = $storage->bucket('training-application-707f6.appspot.com');
 
             // Generate the signed URL for the file
             $object = $bucket->object($filePath);

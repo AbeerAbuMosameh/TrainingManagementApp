@@ -23,20 +23,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
- $notifications = Notification::where('status', 'unread')->orderByDesc('created_at')
+        $notifications = Notification::where('status', 'unread')->orderByDesc('created_at')
             ->get();
         $count = Notification::where('status', 'unread')->count();
 
         foreach ($notifications as $notification) {
             $trainee = Trainee::where('notification_id', $notification->id)->first();
             if ($trainee) {
-                $notification->link = 'http://phplaravel-1011648-3574700.cloudwaysapps.com/trainees/'.$trainee->id;
-            }else{
+                $notification->link = 'http://trainingmanagementapp.test/trainees/' . $trainee->id;
+            } else {
                 $advisor = Advisor::where('notification_id', $notification->id)->first();
                 if ($advisor) {
-                    $notification->link = 'http://phplaravel-1011648-3574700.cloudwaysapps.com/trainees/'.$advisor->id;
+                    $notification->link = 'http://trainingmanagementapp.test/advisors/' . $advisor->id;
                 }
             }
+
         }
 
         // Share the data with all views

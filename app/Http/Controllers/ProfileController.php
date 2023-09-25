@@ -60,7 +60,6 @@ class ProfileController extends Controller
 
             // Perform actions based on the user's level
             if ($level === '1') {
-                dd(1);
             } elseif ($level === '2') {
                 $fields =Field::all();
 

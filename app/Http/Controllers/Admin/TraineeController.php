@@ -132,10 +132,10 @@ class TraineeController extends Controller
                 $firebaseCredentialsPath = storage_path(env('FIREBASE_CREDENTIALS_PATH'));
                 // Initialize Google Cloud Storage
                 $storage = new StorageClient([
-                    'projectId' => 'it-training-app-386209',
+                    'projectId' => 'training-application-707f6',
                     'keyFilePath' => $firebaseCredentialsPath,
                 ]);
-                $bucket = $storage->bucket('it-training-app-386209.appspot.com');
+                $bucket = $storage->bucket('training-application-707f6.appspot.com');
 
                 // Store CV Files
                 if ($request->hasFile('cv')) {

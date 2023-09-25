@@ -26,7 +26,7 @@
                     <div class="row justify-content-center pt-8 px-8 pt-md-50 px-md-0">
                         <div class="col-md-9">
                             <div class="rounded-xl overflow-hidden w-300 max-h-md-450px mb-30">
-                                <img src="{{asset('admin/assets/media/bg/welcome.png')}}" class="w-100" alt="">
+                                <img src="{{asset('admin/assets/media/bg/welcome2.png')}}" class="w-100" alt="">
                             </div>
 
                         </div>

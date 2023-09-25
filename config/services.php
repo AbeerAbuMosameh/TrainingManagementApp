@@ -37,9 +37,10 @@ return [
         'client_secret' => env('GOOGLE_ClIENT_SECRET'),
         'redirect' => 'http://127.0.0.1:8000/auth/google/callback',
     ],
+
     'firebase' => [
-        'credential' => storage_path('app/Http/Controllers/Admin/it-training-app.json'),
-        'database_url' => 'https://it-training-app-386209-default-rtdb.firebaseio.com/',
-        'storage_bucket' => 'gs://it-training-app-386209.appspot.com/',
+        'credential' => 'C:\laragon\www\TrainingManagementApp\storage\firebase\it-training-app.json',
+        'database_url' => 'https://training-application-707f6-default-rtdb.europe-west1.firebasedatabase.app/',
+        'storage_bucket' => 'gs://training-application-707f6.appspot.com/',
     ],
 ];
