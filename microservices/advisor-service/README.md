@@ -1,6 +1,16 @@
 # Advisor Service
 
-A microservice for managing advisors in the Training Management System.
+Manages advisor data.
+
+## Setup
+```bash
+composer install
+php artisan migrate --seed
+php artisan serve
+```
+
+## API
+Access endpoints via `/api/v1/advisors`
 
 ## Features
 
@@ -12,6 +22,13 @@ A microservice for managing advisors in the Training Management System.
 - ✅ Soft delete functionality
 - ✅ Notification system integration
 - ✅ Health check endpoint
+
+## Usage
+- Access API endpoints via `/api/advisors`.
+- Example: Add an advisor using a POST request to `/api/advisors`.
+
+## License
+© 2025 TrainingManagementApp Team
 
 ## API Endpoints
 
@@ -33,13 +50,13 @@ POST /api/v1/advisors
 Content-Type: application/json
 
 {
-    "first_name": "Dr. Smith",
-    "last_name": "Johnson",
-    "email": "smith@example.com",
-    "phone": "+1234567890",
-    "education": "PhD in Computer Science",
-    "address": "123 Main St",
-    "language": "English",
+    "first_name": "أسامة",
+    "last_name": "أحمد",
+    "email": "osama@example.com",
+    "phone": "+970591234567",
+    "education": "دكتوراه في علوم الحاسوب",
+    "address": "غزة، فلسطين",
+    "language": "Arabic",
     "password": "password123"
 }
 ```
@@ -51,7 +68,7 @@ GET /api/v1/advisors/approved/list
 
 #### Get Advisors by Language
 ```http
-GET /api/v1/advisors/language/{language}
+GET /api/v1/advisors/language/Arabic
 ```
 
 ### Inter-Service Endpoints
@@ -90,6 +107,27 @@ php artisan db:seed
 5. **Start the service**
 ```bash
 php artisan serve --port=8005
+```
+
+## Example Response
+
+```json
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "first_name": "أسامة",
+        "last_name": "أحمد",
+        "full_name": "أسامة أحمد",
+        "email": "osama@example.com",
+        "phone": "+970591234567",
+        "education": "دكتوراه في علوم الحاسوب",
+        "language": "Arabic",
+        "is_approved": true,
+        "created_at": "2025-01-15T10:30:00Z"
+    },
+    "message": "Advisor created successfully"
+}
 ```
 
 ## Models
@@ -133,7 +171,7 @@ Response:
 {
     "status": true,
     "message": "Advisor Service is running",
-    "timestamp": "2024-01-15T10:30:00Z",
+    "timestamp": "2025-01-15T10:30:00Z",
     "service": "advisor-service"
 }
 ```
@@ -165,4 +203,4 @@ Response:
 2. Create a feature branch
 3. Make your changes
 4. Add tests
-5. Submit a pull request
+5. Submit a pull request 

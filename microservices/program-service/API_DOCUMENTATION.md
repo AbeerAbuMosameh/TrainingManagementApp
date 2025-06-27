@@ -1,655 +1,405 @@
-# Training Management System - API Documentation
+# Program Service API Documentation
 
-## Overview
-
-The Training Management System is built using a microservices architecture with the following services:
-
-- **User Service** (Port 8003) - Authentication and user management
-- **Advisor Service** (Port 8005) - Advisor management and profiles
-- **Trainee Service** (Port 8004) - Trainee management and profiles
-- **Program Service** (Port 8001) - Training programs and courses
-- **Task Service** (Port 8002) - Task management and assignments
-- **Field Service** (Port 8006) - Field/category management
-
-## Service Communication
-
-All services communicate with each other using HTTP requests with service authentication via the `Service-Key` header.
-
-## Base URL Structure
-
+## Base URL
 ```
-http://localhost:{PORT}/api/v1/{RESOURCE}
+http://localhost:8001/api/v1
 ```
 
 ## Authentication
+All endpoints require a `Service-Key` header for inter-service communication.
 
-### User Service Authentication
-- Uses Laravel Sanctum for token-based authentication
-- All user-related endpoints require authentication except registration and login
+## Endpoints
 
-### Inter-Service Authentication
-- Uses `Service-Key` header for service-to-service communication
-- Each service has a unique secret key configured in environment variables
-
----
-
-## User Service (Port 8003)
-
-### Authentication Endpoints
-
-#### Register User
-```http
-POST /api/v1/auth/register
-Content-Type: application/json
-
-{
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123",
-    "password_confirmation": "password123",
-    "level": 3
-}
-```
-
-#### Login User
-```http
-POST /api/v1/auth/login
-Content-Type: application/json
-
-{
-    "email": "john@example.com",
-    "password": "password123"
-}
-```
-
-#### Logout User
-```http
-POST /api/v1/auth/logout
-Authorization: Bearer {token}
-```
-
-#### Get User Profile
-```http
-GET /api/v1/auth/profile
-Authorization: Bearer {token}
-```
-
-#### Update User Profile
-```http
-PUT /api/v1/auth/profile
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-    "name": "John Updated",
-    "email": "john.updated@example.com",
-    "level": 2
-}
-```
-
-#### Change Password
-```http
-POST /api/v1/auth/change-password
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-    "current_password": "password123",
-    "password": "newpassword123",
-    "password_confirmation": "newpassword123"
-}
-```
-
-### Inter-Service Endpoints
-
-#### Get User by Email
-```http
-GET /api/v1/users/email/{email}
-Service-Key: {service_secret}
-```
-
-#### Get User by ID
-```http
-GET /api/v1/users/{id}
-Service-Key: {service_secret}
-```
-
----
-
-## Advisor Service (Port 8005)
-
-### Advisor Management Endpoints
-
-#### Get All Advisors
-```http
-GET /api/v1/advisors
-```
-
-#### Create Advisor
-```http
-POST /api/v1/advisors
-Content-Type: application/json
-
-{
-    "first_name": "Dr. Smith",
-    "last_name": "Johnson",
-    "email": "smith@example.com",
-    "phone": "+1234567890",
-    "education": "PhD in Computer Science",
-    "address": "123 Main St",
-    "city": "New York",
-    "language": "English",
-    "password": "password123",
-    "is_approved": false
-}
-```
-
-#### Get Advisor by ID
-```http
-GET /api/v1/advisors/{id}
-```
-
-#### Update Advisor
-```http
-PUT /api/v1/advisors/{id}
-Content-Type: application/json
-
-{
-    "first_name": "Dr. Smith Updated",
-    "is_approved": true
-}
-```
-
-#### Delete Advisor
-```http
-DELETE /api/v1/advisors/{id}
-```
-
-#### Get Approved Advisors
-```http
-GET /api/v1/advisors/approved/list
-```
-
-#### Get Advisors by Language
-```http
-GET /api/v1/advisors/language/{language}
-```
-
-### Inter-Service Endpoints
-
-#### Verify Advisor
-```http
-GET /api/v1/advisors/{id}/verify
-Service-Key: {service_secret}
-```
-
----
-
-## Trainee Service (Port 8004)
-
-### Trainee Management Endpoints
-
-#### Get All Trainees
-```http
-GET /api/v1/trainees
-```
-
-#### Create Trainee
-```http
-POST /api/v1/trainees
-Content-Type: application/json
-
-{
-    "first_name": "Jane",
-    "last_name": "Doe",
-    "email": "jane@example.com",
-    "phone": "+1234567890",
-    "education": "Bachelor's Degree",
-    "address": "456 Oak St",
-    "password": "password123",
-    "gpa": "3.8",
-    "city": "Los Angeles",
-    "language": "English"
-}
-```
-
-#### Get Trainee by ID
-```http
-GET /api/v1/trainees/{id}
-```
-
-#### Update Trainee
-```http
-PUT /api/v1/trainees/{id}
-Content-Type: application/json
-
-{
-    "first_name": "Jane Updated",
-    "is_approved": true
-}
-```
-
-#### Delete Trainee
-```http
-DELETE /api/v1/trainees/{id}
-```
-
-#### Update Trainee Approval
-```http
-PUT /api/v1/trainees/{id}/approval
-Content-Type: application/json
-
-{
-    "is_approved": true
-}
-```
-
-### Inter-Service Endpoints
-
-#### Get Trainee by Email
-```http
-GET /api/v1/trainees/email/{email}
-Service-Key: {service_secret}
-```
-
----
-
-## Program Service (Port 8001)
-
-### Program Management Endpoints
-
-#### Get All Programs
+### 1. Get All Programs
 ```http
 GET /api/v1/programs
 ```
 
-#### Create Program
+**Response:**
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "name": "Ahmed's Development Program",
+            "type": "paid",
+            "hours": "120",
+            "start_date": "2024-02-01",
+            "end_date": "2024-05-01",
+            "field_id": 1,
+            "advisor_id": 1,
+            "duration": "months",
+            "level": "intermediate",
+            "language": "English",
+            "description": "Comprehensive software development training program",
+            "price": 500,
+            "number": 25,
+            "image": "program_image.jpg",
+            "created_at": "2024-01-15T10:30:00Z"
+        },
+        {
+            "id": 2,
+            "name": "Shatha's Web Development Bootcamp",
+            "type": "free",
+            "hours": "80",
+            "start_date": "2024-02-15",
+            "end_date": "2024-04-10",
+            "field_id": 2,
+            "advisor_id": 2,
+            "duration": "weeks",
+            "level": "beginner",
+            "language": "English",
+            "description": "Intensive web development training for beginners",
+            "price": 0,
+            "number": 15,
+            "image": "web_bootcamp.jpg",
+            "created_at": "2024-01-16T14:20:00Z"
+        }
+    ]
+}
+```
+
+### 2. Create Program
 ```http
 POST /api/v1/programs
 Content-Type: application/json
 
 {
-    "name": "Advanced Web Development",
+    "name": "Abeer's Data Science Program",
     "type": "paid",
-    "hours": "120",
-    "start_date": "2024-01-15",
-    "end_date": "2024-04-15",
-    "field_id": 1,
-    "advisor_id": 1,
+    "hours": "160",
+    "start_date": "2024-03-01",
+    "end_date": "2024-06-20",
+    "field_id": 3,
+    "advisor_id": 3,
     "duration": "months",
-    "level": "intermediate",
+    "level": "advanced",
     "language": "English",
-    "description": "Comprehensive web development course",
-    "price": 999,
-    "number": 25,
-    "image": "program-image.jpg"
+    "description": "Advanced data science and machine learning training",
+    "price": 800,
+    "number": 20,
+    "image": "data_science.jpg"
 }
 ```
 
-#### Get Program by ID
-```http
-GET /api/v1/programs/{id}
-```
-
-#### Update Program
-```http
-PUT /api/v1/programs/{id}
-Content-Type: application/json
-
-{
-    "name": "Updated Program Name",
-    "price": 1299
-}
-```
-
-#### Delete Program
-```http
-DELETE /api/v1/programs/{id}
-```
-
-### Field Management Endpoints
-
-#### Get All Fields
-```http
-GET /api/v1/fields
-```
-
-#### Create Field
-```http
-POST /api/v1/fields
-Content-Type: application/json
-
-{
-    "name": "Web Development",
-    "description": "Programming and web technologies",
-    "is_active": true
-}
-```
-
-#### Get Field by ID
-```http
-GET /api/v1/fields/{id}
-```
-
-#### Update Field
-```http
-PUT /api/v1/fields/{id}
-Content-Type: application/json
-
-{
-    "name": "Updated Field Name",
-    "is_active": false
-}
-```
-
-#### Delete Field
-```http
-DELETE /api/v1/fields/{id}
-```
-
-#### Get Active Fields
-```http
-GET /api/v1/fields/active/list
-```
-
-### Inter-Service Endpoints
-
-#### Verify Field
-```http
-GET /api/v1/fields/{id}/verify
-Service-Key: {service_secret}
-```
-
----
-
-## Task Service (Port 8002)
-
-### Task Management Endpoints
-
-#### Get All Tasks
-```http
-GET /api/v1/tasks
-```
-
-#### Create Task
-```http
-POST /api/v1/tasks
-Content-Type: application/json
-
-{
-    "program_id": 1,
-    "advisor_id": 1,
-    "start_date": "2024-01-20",
-    "end_date": "2024-01-27",
-    "mark": 10,
-    "description": "Complete the final project",
-    "related_file": ["file1.pdf", "file2.jpg"]
-}
-```
-
-#### Get Task by ID
-```http
-GET /api/v1/tasks/{id}
-```
-
-#### Update Task
-```http
-PUT /api/v1/tasks/{id}
-Content-Type: application/json
-
-{
-    "description": "Updated task description",
-    "mark": 15
-}
-```
-
-#### Delete Task
-```http
-DELETE /api/v1/tasks/{id}
-```
-
----
-
-## Field Service (Port 8006)
-
-### Field Management Endpoints
-
-#### Get All Fields
-```http
-GET /api/v1/fields
-```
-
-#### Create Field
-```http
-POST /api/v1/fields
-Content-Type: application/json
-
-{
-    "name": "Data Science",
-    "description": "Data analysis and machine learning",
-    "is_active": true
-}
-```
-
-#### Get Field by ID
-```http
-GET /api/v1/fields/{id}
-```
-
-#### Update Field
-```http
-PUT /api/v1/fields/{id}
-Content-Type: application/json
-
-{
-    "name": "Updated Field Name",
-    "is_active": false
-}
-```
-
-#### Delete Field
-```http
-DELETE /api/v1/fields/{id}
-```
-
-#### Get Active Fields
-```http
-GET /api/v1/fields/active/list
-```
-
-### Inter-Service Endpoints
-
-#### Verify Field
-```http
-GET /api/v1/fields/{id}/verify
-Service-Key: {service_secret}
-```
-
----
-
-## Health Check Endpoints
-
-All services provide health check endpoints:
-
-```http
-GET /api/health
-```
-
-Response:
+**Response:**
 ```json
 {
-    "status": true,
-    "message": "{Service Name} is running",
-    "timestamp": "2024-01-15T10:30:00Z",
-    "service": "{service-name}"
+    "success": true,
+    "message": "Program created successfully",
+    "data": {
+        "id": 3,
+        "name": "Abeer's Data Science Program",
+        "type": "paid",
+        "hours": "160",
+        "start_date": "2024-03-01",
+        "end_date": "2024-06-20",
+        "field_id": 3,
+        "advisor_id": 3,
+        "duration": "months",
+        "level": "advanced",
+        "language": "English",
+        "description": "Advanced data science and machine learning training",
+        "price": 800,
+        "number": 20,
+        "image": "data_science.jpg",
+        "created_at": "2024-01-17T09:15:00Z"
+    }
 }
 ```
 
----
+### 3. Get Program by ID
+```http
+GET /api/v1/programs/1
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "name": "Ahmed's Development Program",
+        "type": "paid",
+        "hours": "120",
+        "start_date": "2024-02-01",
+        "end_date": "2024-05-01",
+        "field_id": 1,
+        "advisor_id": 1,
+        "duration": "months",
+        "level": "intermediate",
+        "language": "English",
+        "description": "Comprehensive software development training program",
+        "price": 500,
+        "number": 25,
+        "image": "program_image.jpg",
+        "field": {
+            "id": 1,
+            "name": "Software Development",
+            "description": "Programming and software engineering"
+        },
+        "advisor": {
+            "id": 1,
+            "first_name": "Osama",
+            "last_name": "Ahmed",
+            "full_name": "Osama Ahmed"
+        },
+        "created_at": "2024-01-15T10:30:00Z"
+    }
+}
+```
+
+### 4. Update Program
+```http
+PUT /api/v1/programs/1
+Content-Type: application/json
+
+{
+    "name": "Ahmed's Advanced Development Program",
+    "description": "Updated comprehensive software development training program",
+    "price": 750,
+    "hours": "140"
+}
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Program updated successfully",
+    "data": {
+        "id": 1,
+        "name": "Ahmed's Advanced Development Program",
+        "type": "paid",
+        "hours": "140",
+        "start_date": "2024-02-01",
+        "end_date": "2024-05-01",
+        "field_id": 1,
+        "advisor_id": 1,
+        "duration": "months",
+        "level": "intermediate",
+        "language": "English",
+        "description": "Updated comprehensive software development training program",
+        "price": 750,
+        "number": 25,
+        "image": "program_image.jpg",
+        "created_at": "2024-01-15T10:30:00Z",
+        "updated_at": "2024-01-17T11:45:00Z"
+    }
+}
+```
+
+### 5. Delete Program
+```http
+DELETE /api/v1/programs/3
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Program deleted successfully"
+}
+```
+
+### 6. Get Programs by Advisor
+```http
+GET /api/v1/programs/advisor/1
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "name": "Ahmed's Advanced Development Program",
+            "type": "paid",
+            "level": "intermediate",
+            "language": "English",
+            "price": 750,
+            "advisor": {
+                "id": 1,
+                "full_name": "Osama Ahmed"
+            }
+        }
+    ]
+}
+```
+
+### 7. Get Programs by Field
+```http
+GET /api/v1/programs/field/1
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "name": "Ahmed's Advanced Development Program",
+            "type": "paid",
+            "level": "intermediate",
+            "language": "English",
+            "price": 750,
+            "field": {
+                "id": 1,
+                "name": "Software Development"
+            }
+        }
+    ]
+}
+```
+
+### 8. Get Programs by Language
+```http
+GET /api/v1/programs/language/English
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "name": "Ahmed's Advanced Development Program",
+            "language": "English",
+            "level": "intermediate"
+        },
+        {
+            "id": 2,
+            "name": "Shatha's Web Development Bootcamp",
+            "language": "English",
+            "level": "beginner"
+        },
+        {
+            "id": 3,
+            "name": "Abeer's Data Science Program",
+            "language": "English",
+            "level": "advanced"
+        }
+    ]
+}
+```
+
+### 9. Get Programs by Level
+```http
+GET /api/v1/programs/level/intermediate
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "name": "Ahmed's Advanced Development Program",
+            "level": "intermediate",
+            "language": "English",
+            "price": 750
+        }
+    ]
+}
+```
+
+### 10. Get Programs by Type
+```http
+GET /api/v1/programs/type/paid
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "name": "Ahmed's Advanced Development Program",
+            "type": "paid",
+            "price": 750
+        },
+        {
+            "id": 3,
+            "name": "Abeer's Data Science Program",
+            "type": "paid",
+            "price": 800
+        }
+    ]
+}
+```
+
+### 11. Verify Program (Inter-Service)
+```http
+GET /api/v1/programs/1/verify
+Service-Key: {service_secret}
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "name": "Ahmed's Advanced Development Program",
+        "advisor_id": 1,
+        "field_id": 1,
+        "status": "active"
+    }
+}
+```
 
 ## Error Responses
 
-All services follow a consistent error response format:
-
+### 404 - Program Not Found
 ```json
 {
-    "status": false,
-    "message": "Error description",
+    "success": false,
+    "message": "Program not found"
+}
+```
+
+### 422 - Validation Error
+```json
+{
+    "success": false,
+    "message": "Validation failed",
     "errors": {
-        "field_name": ["Validation error message"]
+        "name": ["The name field is required."],
+        "advisor_id": ["The advisor id field is required."],
+        "field_id": ["The field id field is required."],
+        "end_date": ["The end date must be a date after start date."]
     }
 }
 ```
 
-## Success Responses
-
-All services follow a consistent success response format:
-
+### 500 - Server Error
 ```json
 {
-    "status": true,
-    "message": "Success message",
-    "data": {
-        // Response data
-    }
+    "success": false,
+    "message": "Internal server error"
 }
 ```
 
----
+## Program Types
+- `paid` - Programs with a price
+- `free` - Free programs
 
-## Environment Variables
+## Program Levels
+- `beginner` - For beginners
+- `intermediate` - For intermediate learners
+- `advanced` - For advanced learners
 
-Each service requires the following environment variables:
+## Program Languages
+- `English` - English language programs
+- `Arabic` - Arabic language programs
+- `French` - French language programs
 
-### User Service
-```
-USER_SERVICE_SECRET=SERVICE_SECRET
-```
-
-### Advisor Service
-```
-ADVISOR_SERVICE_SECRET=SERVICE_SECRET
-```
-
-### Trainee Service
-```
-TRAINEE_SERVICE_SECRET=SERVICE_SECRET
-```
-
-### Program Service
-```
-PROGRAM_SERVICE_SECRET=SERVICE_SECRET
-ADVISOR_SERVICE_URL=http://advisor-service
-ADVISOR_SERVICE_SECRET=SERVICE_SECRET
-FIELD_SERVICE_URL=http://field-service
-FIELD_SERVICE_SECRET=SERVICE_SECRET
-```
-
-### Task Service
-```
-TASK_SERVICE_SECRET=SERVICE_SECRET
-PROGRAM_SERVICE_URL=http://program-service
-PROGRAM_SERVICE_SECRET=SERVICE_SECRET
-ADVISOR_SERVICE_URL=http://advisor-service
-ADVISOR_SERVICE_SECRET=SERVICE_SECRET
-```
-
-### Field Service
-```
-FIELD_SERVICE_SECRET=SERVICE_SECRET
-```
-
----
-
-## Database Migrations
-
-Each service includes its own database migrations and seeders. Run the following commands in each service directory:
-
-```bash
-php artisan migrate
-php artisan db:seed
-```
-
----
-
-## Testing
-
-Each service includes PHPUnit tests. Run tests with:
-
-```bash
-php artisan test
-```
-
----
-
-## Docker Support
-
-The program service includes Docker configuration for containerized deployment. Use:
-
-```bash
-docker-compose up -d
-```
-
----
-
-## Service Dependencies
-
-- **Program Service** depends on Advisor Service and Field Service
-- **Task Service** depends on Program Service and Advisor Service
-- **Advisor Service** has optional dependency on Notification Service
-- All services can communicate with User Service for authentication
-
----
-
-## Security Considerations
-
-1. All inter-service communication uses service keys
-2. User authentication uses Laravel Sanctum tokens
-3. Input validation is implemented on all endpoints
-4. Soft deletes are used where appropriate
-5. Foreign key constraints ensure data integrity
-
----
-
-## Rate Limiting
-
-Consider implementing rate limiting for production environments:
-
-```php
-// In routes/api.php
-Route::middleware(['throttle:60,1'])->group(function () {
-    // API routes
-});
-```
-
----
-
-## Monitoring and Logging
-
-Each service includes:
-- Laravel's built-in logging system
-- Health check endpoints
-- Error handling and reporting
-- Database query logging (in debug mode)
-
----
-
-## Deployment
-
-1. Set up environment variables for each service
-2. Run database migrations
-3. Configure service URLs for inter-service communication
-4. Set up reverse proxy (nginx) for load balancing
-5. Configure SSL certificates for production
-6. Set up monitoring and alerting
-
----
-
-## Support
-
-For issues and questions:
-1. Check service logs
-2. Verify environment variables
-3. Test inter-service communication
-4. Review database connections
-5. Check service health endpoints
+## Duration Types
+- `weeks` - Duration in weeks
+- `months` - Duration in months 
