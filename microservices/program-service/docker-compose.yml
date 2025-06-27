@@ -1,0 +1,215 @@
+version: '3.8'
+
+services:
+  # API Gateway
+  api-gateway:
+    build:
+      context: ../api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    environment:
+      - PROGRAM_SERVICE_URL=http://program-service:9000
+      - TASK_SERVICE_URL=http://task-service:9000
+      - TRAINEE_SERVICE_URL=http://trainee-service:9000
+      - ADVISOR_SERVICE_URL=http://advisor-service:9000
+      - USER_SERVICE_URL=http://user-service:9000
+    depends_on:
+      - program-service
+      - task-service
+      - trainee-service
+      - advisor-service
+      - user-service
+    networks:
+      - training-network
+
+  # Program Service
+  program-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9001:9000"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=program-db
+      - DB_PORT=3306
+      - DB_DATABASE=program_service
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - ADVISOR_SERVICE_URL=http://advisor-service:9000
+      - ADVISOR_SERVICE_SECRET=SERVICE_SECRET
+    depends_on:
+      - program-db
+    networks:
+      - training-network
+    volumes:
+      - ./storage:/var/www/storage
+
+  # Task Service
+  task-service:
+    build:
+      context: ../task-service
+      dockerfile: Dockerfile
+    ports:
+      - "9002:9000"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=task-db
+      - DB_PORT=3306
+      - DB_DATABASE=task_service
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - PROGRAM_SERVICE_URL=http://program-service:9000
+      - PROGRAM_SERVICE_SECRET=SERVICE_SECRET
+      - ADVISOR_SERVICE_URL=http://advisor-service:9000
+      - ADVISOR_SERVICE_SECRET=SERVICE_SECRET
+    depends_on:
+      - task-db
+    networks:
+      - training-network
+
+  # Trainee Service
+  trainee-service:
+    build:
+      context: ../trainee-service
+      dockerfile: Dockerfile
+    ports:
+      - "9003:9000"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=trainee-db
+      - DB_PORT=3306
+      - DB_DATABASE=trainee_service
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - USER_SERVICE_URL=http://user-service:9000
+      - USER_SERVICE_SECRET=SERVICE_SECRET
+    depends_on:
+      - trainee-db
+    networks:
+      - training-network
+
+  # Advisor Service
+  advisor-service:
+    build:
+      context: ../advisor-service
+      dockerfile: Dockerfile
+    ports:
+      - "9004:9000"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=advisor-db
+      - DB_PORT=3306
+      - DB_DATABASE=advisor_service
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - USER_SERVICE_URL=http://user-service:9000
+      - USER_SERVICE_SECRET=SERVICE_SECRET
+    depends_on:
+      - advisor-db
+    networks:
+      - training-network
+
+  # User Service
+  user-service:
+    build:
+      context: ../user-service
+      dockerfile: Dockerfile
+    ports:
+      - "9005:9000"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=user-db
+      - DB_PORT=3306
+      - DB_DATABASE=user_service
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+    depends_on:
+      - user-db
+    networks:
+      - training-network
+
+  # Databases
+  program-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=program_service
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - "3307:3306"
+    volumes:
+      - program_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  task-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=task_service
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - "3308:3306"
+    volumes:
+      - task_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  trainee-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=trainee_service
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - "3309:3306"
+    volumes:
+      - trainee_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  advisor-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=advisor_service
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - "3310:3306"
+    volumes:
+      - advisor_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  user-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=user_service
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - "3311:3306"
+    volumes:
+      - user_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  # Nginx for API Gateway
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - api-gateway
+    networks:
+      - training-network
+
+volumes:
+  program_data:
+  task_data:
+  trainee_data:
+  advisor_data:
+  user_data:
+
+networks:
+  training-network:
+    driver: bridge 
