@@ -1,0 +1,1146 @@
+{
+	"info": {
+		"_postman_id": "513d89b4-0e0b-48d2-9de3-3f8bade8f53b",
+		"name": "Training Management System - Gateway Collection",
+		"description": "Complete Postman collection for testing all microservices through the API Gateway",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18979068"
+	},
+	"item": [
+		{
+			"name": "Gateway Health & Info",
+			"item": [
+				{
+					"name": "Gateway Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/health",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gateway Routes Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/gateway/routes",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"gateway",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Service (via Gateway)",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Abeer Trainee\",\n    \"email\": \"abeermosameh12333@gmail.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"level\": 3\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/users/api/v1/auth/register",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"users",
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"abeer@gmail.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/users/api/v1/auth/login",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"users",
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by Email (Inter-Service)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Service-Key",
+								"value": "{{service_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/users/api/v1/users/email/john@example.com",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"users",
+								"api",
+								"v1",
+								"users",
+								"email",
+								"john@example.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID (Inter-Service)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Service-Key",
+								"value": "{{service_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/users/api/v1/users/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"users",
+								"api",
+								"v1",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Advisor Service (via Gateway)",
+			"item": [
+				{
+					"name": "Get All Advisors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Advisor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"Dr. Osame\",\n    \"last_name\": \"test\",\n    \"email\": \"osam2@gmail.com\",\n    \"phone\": \"+1234567890\",\n    \"education\": \"PhD in Computer Science\",\n    \"address\": \"123 Main St\",\n    \"city\": \"Gaza\",\n    \"language\": \"English\",\n    \"password\": \"password123\",\n    \"is_approved\": false\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Advisor by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Advisor",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"Dr. Abeer Mosameh\",\n    \"email\":\"abeertest@gmail.com\",\n    \"is_approved\": true\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Approved Advisors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors/approved/list",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors",
+								"approved",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Advisors by Language",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors/language/Arabic",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors",
+								"language",
+								"Arabic"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Advisor (Inter-Service)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Service-Key",
+								"value": "{{service_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors/1/verify",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors",
+								"1",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trainee Service (via Gateway)",
+			"item": [
+				{
+					"name": "Get All Trainees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/trainees/api/v1/trainees",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"trainees",
+								"api",
+								"v1",
+								"trainees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Trainee",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Doe\",\n    \"email\": \"jane@test.com\",\n    \"phone\": \"+1234567890\",\n    \"education\": \"Bachelor's Degree\",\n    \"address\": \"456 Oak St\",\n    \"password\": \"password123\",\n    \"gpa\": \"3.8\",\n    \"city\": \"Los Angeles\",\n    \"language\": \"English\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/trainees/api/v1/trainees",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"trainees",
+								"api",
+								"v1",
+								"trainees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trainee by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/trainees/api/v1/trainees/4",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"trainees",
+								"api",
+								"v1",
+								"trainees",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Trainee",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"Jane Updated\",\n    \"is_approved\": true\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/trainees/api/v1/trainees/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"trainees",
+								"api",
+								"v1",
+								"trainees",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Trainee Approval",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_approved\": false\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/trainees/api/v1/trainees/1/approval",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"trainees",
+								"api",
+								"v1",
+								"trainees",
+								"1",
+								"approval"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trainee by Email (Inter-Service)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Service-Key",
+								"value": "{{service_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/trainees/api/v1/trainees/email/jane@example.com",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"trainees",
+								"api",
+								"v1",
+								"trainees",
+								"email",
+								"jane@example.com"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Field Service (via Gateway)",
+			"item": [
+				{
+					"name": "Get All Fields",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/fields/api/v1/fields",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"fields",
+								"api",
+								"v1",
+								"fields"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Field",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Web Development 2\",\n    \"description\": \"Programming and web technologies\",\n    \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/fields/api/v1/fields",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"fields",
+								"api",
+								"v1",
+								"fields"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Field by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/fields/api/v1/fields/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"fields",
+								"api",
+								"v1",
+								"fields",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Field",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Field Name\",\n    \"is_active\": false\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/fields/api/v1/fields/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"fields",
+								"api",
+								"v1",
+								"fields",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Active Fields",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/fields/api/v1/fields/active/list",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"fields",
+								"api",
+								"v1",
+								"fields",
+								"active",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Field (Inter-Service)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Service-Key",
+								"value": "{{service_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/fields/api/v1/fields/1/verify",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"fields",
+								"api",
+								"v1",
+								"fields",
+								"1",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Program Service (via Gateway)",
+			"item": [
+				{
+					"name": "Get All Programs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/programs/api/v1/programs",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"programs",
+								"api",
+								"v1",
+								"programs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Program",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Advanced Web Development 2\",\n    \"type\": \"paid\",\n    \"hours\": \"120\",\n    \"start_date\": \"2024-01-15\",\n    \"end_date\": \"2024-04-15\",\n    \"field_id\": 1,\n    \"advisor_id\": 1,\n    \"duration\": \"months\",\n    \"level\": \"intermediate\",\n    \"language\": \"English\",\n    \"description\": \"Comprehensive web development course\",\n    \"price\": 999,\n    \"number\": 25,\n    \"image\": \"program-image.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/programs/api/v1/programs",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"programs",
+								"api",
+								"v1",
+								"programs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Program by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/programs/api/v1/programs/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"programs",
+								"api",
+								"v1",
+								"programs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Program",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Program Name\",\n    \"price\": 1299\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/programs/api/v1/programs/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"programs",
+								"api",
+								"v1",
+								"programs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Program",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/programs/api/v1/programs/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"programs",
+								"api",
+								"v1",
+								"programs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task Service (via Gateway)",
+			"item": [
+				{
+					"name": "Get All Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/tasks/api/v1/tasks",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"tasks",
+								"api",
+								"v1",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"program_id\": 1,\n    \"advisor_id\": 1,\n    \"start_date\": \"2024-01-20\",\n    \"end_date\": \"2024-01-27\",\n    \"mark\": 10,\n    \"description\": \"Complete the final project\",\n    \"related_file\": [\"file1.pdf\", \"file2.jpg\"]\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/tasks/api/v1/tasks",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"tasks",
+								"api",
+								"v1",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Task by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/tasks/api/v1/tasks/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"tasks",
+								"api",
+								"v1",
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Updated task description\",\n    \"mark\": 15\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/tasks/api/v1/tasks/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"tasks",
+								"api",
+								"v1",
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/tasks/api/v1/tasks/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"tasks",
+								"api",
+								"v1",
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inter-Service Communication Tests (via Gateway)",
+			"item": [
+				{
+					"name": "Task Service → Program Service",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Service-Key",
+								"value": "{{service_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/programs/api/v1/programs/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"programs",
+								"api",
+								"v1",
+								"programs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task Service → Advisor Service",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Service-Key",
+								"value": "{{service_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Program Service → Advisor Service",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Service-Key",
+								"value": "{{service_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors/1/verify",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors",
+								"1",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Program Service → Field Service",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Service-Key",
+								"value": "{{service_secret}}"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/fields/api/v1/fields/1/verify",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"fields",
+								"api",
+								"v1",
+								"fields",
+								"1",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Error Testing (via Gateway)",
+			"item": [
+				{
+					"name": "Invalid Service Key",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Service-Key",
+								"value": "INVALID_SECRET"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors/1/verify",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors",
+								"1",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Missing Service Key",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors/1/verify",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors",
+								"1",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Resource ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors/999",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Email Format",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"Test\",\n    \"last_name\": \"User\",\n    \"email\": \"invalid-email\",\n    \"phone\": \"1234567890\",\n    \"education\": \"Test Education\",\n    \"address\": \"Test Address\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/advisors/api/v1/advisors",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"advisors",
+								"api",
+								"v1",
+								"advisors"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "gateway_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "service_secret",
+			"value": "SERVICE_SECRET_KEY_2024",
+			"type": "string"
+		},
+		{
+			"key": "user_token",
+			"value": "your_jwt_token_here",
+			"type": "string"
+		}
+	]
+} 

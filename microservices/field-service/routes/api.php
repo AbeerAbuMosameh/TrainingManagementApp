@@ -22,10 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Health check endpoint
 Route::get('/health', function () {
     return response()->json([
-        'status' => true,
-        'message' => 'Field Service is running',
-        'timestamp' => now(),
-        'service' => 'field-service'
+        'success' => true,
+        'message' => 'Field Service is healthy',
+        'timestamp' => now()
     ]);
 });
 

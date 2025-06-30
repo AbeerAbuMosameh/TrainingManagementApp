@@ -1,9 +1,8 @@
 # Program Service API Documentation
 
-## Base URL
-```
-http://localhost:8001/api/v1
-```
+## Accessing the API
+All endpoints should be accessed via the API Gateway:
+- Base URL: `http://localhost:8080/programs`
 
 ## Authentication
 All endpoints require a `Service-Key` header for inter-service communication.
@@ -11,9 +10,7 @@ All endpoints require a `Service-Key` header for inter-service communication.
 ## Endpoints
 
 ### 1. Get All Programs
-```http
-GET /api/v1/programs
-```
+- **GET** `/api/v1/programs`
 
 **Response:**
 ```json
@@ -61,27 +58,26 @@ GET /api/v1/programs
 ```
 
 ### 2. Create Program
-```http
-POST /api/v1/programs
-Content-Type: application/json
-
-{
-    "name": "Abeer's Data Science Program",
+- **POST** `/api/v1/programs`
+- **Body:**
+  ```json
+  {
+    "name": "Advanced Web Development 2",
     "type": "paid",
-    "hours": "160",
-    "start_date": "2024-03-01",
-    "end_date": "2024-06-20",
-    "field_id": 3,
-    "advisor_id": 3,
+    "hours": "120",
+    "start_date": "2024-01-15",
+    "end_date": "2024-04-15",
+    "field_id": 1,
+    "advisor_id": 1,
     "duration": "months",
-    "level": "advanced",
+    "level": "intermediate",
     "language": "English",
-    "description": "Advanced data science and machine learning training",
-    "price": 800,
-    "number": 20,
-    "image": "data_science.jpg"
-}
-```
+    "description": "Comprehensive web development course",
+    "price": 999,
+    "number": 25,
+    "image": "program-image.jpg"
+  }
+  ```
 
 **Response:**
 ```json
@@ -110,9 +106,7 @@ Content-Type: application/json
 ```
 
 ### 3. Get Program by ID
-```http
-GET /api/v1/programs/1
-```
+- **GET** `/api/v1/programs/{id}`
 
 **Response:**
 ```json
@@ -151,17 +145,7 @@ GET /api/v1/programs/1
 ```
 
 ### 4. Update Program
-```http
-PUT /api/v1/programs/1
-Content-Type: application/json
-
-{
-    "name": "Ahmed's Advanced Development Program",
-    "description": "Updated comprehensive software development training program",
-    "price": 750,
-    "hours": "140"
-}
-```
+- **PUT** `/api/v1/programs/{id}`
 
 **Response:**
 ```json
@@ -191,9 +175,7 @@ Content-Type: application/json
 ```
 
 ### 5. Delete Program
-```http
-DELETE /api/v1/programs/3
-```
+- **DELETE** `/api/v1/programs/{id}`
 
 **Response:**
 ```json
@@ -402,4 +384,9 @@ Service-Key: {service_secret}
 
 ## Duration Types
 - `weeks` - Duration in weeks
-- `months` - Duration in months 
+- `months` - Duration in months
+
+## Testing with Docker & Postman
+- Make sure Docker Desktop is running and all services are up (`docker-compose up -d`).
+- Use the provided Postman collection and set `gateway_url` to `http://localhost:8080`.
+- All requests should go through the gateway, not direct service ports. 

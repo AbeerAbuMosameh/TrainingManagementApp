@@ -53,27 +53,27 @@ return [
 
     'advisor' => [
         'url' => env('ADVISOR_SERVICE_URL', 'http://advisor-service'),
-        'secret' => env('ADVISOR_SERVICE_SECRET', 'SERVICE_SECRET'),
+        'secret' => env('ADVISOR_SERVICE_SECRET', 'SERVICE_SECRET_KEY_2024'),
     ],
 
     'trainee' => [
         'url' => env('TRAINEE_SERVICE_URL', 'http://trainee-service'),
-        'secret' => env('TRAINEE_SERVICE_SECRET', 'SERVICE_SECRET'),
+        'secret' => env('TRAINEE_SERVICE_SECRET', 'SERVICE_SECRET_KEY_2024'),
     ],
 
     'task' => [
         'url' => env('TASK_SERVICE_URL', 'http://task-service'),
-        'secret' => env('TASK_SERVICE_SECRET', 'SERVICE_SECRET'),
+        'secret' => env('TASK_SERVICE_SECRET', 'SERVICE_SECRET_KEY_2024'),
     ],
 
     'user' => [
         'url' => env('USER_SERVICE_URL', 'http://user-service'),
-        'secret' => env('USER_SERVICE_SECRET', 'SERVICE_SECRET'),
+        'secret' => env('USER_SERVICE_SECRET', 'SERVICE_SECRET_KEY_2024'),
     ],
 
     'field' => [
         'url' => env('FIELD_SERVICE_URL', 'http://field-service'),
-        'secret' => env('FIELD_SERVICE_SECRET', 'SERVICE_SECRET'),
+        'secret' => env('FIELD_SERVICE_SECRET', 'SERVICE_SECRET_KEY_2024'),
     ],
 
 ];

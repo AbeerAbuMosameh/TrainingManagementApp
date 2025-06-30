@@ -1,75 +1,38 @@
 # User Service API Documentation
 
-## Base URL
-```
-http://localhost:8003/api/v1
-```
+## Accessing the API
+All endpoints should be accessed via the API Gateway:
+- Base URL: `http://localhost:8080/users`
 
 ## Authentication
 Uses Laravel Sanctum for token-based authentication.
 
 ## Endpoints
 
-### 1. Register User
-```http
-POST /api/v1/auth/register
-Content-Type: application/json
-
-{
-    "name": "Ahmed Ali",
-    "email": "ahmed.ali@example.com",
+### Register User
+- **POST** `/api/v1/auth/register`
+- **Body:**
+  ```json
+  {
+    "name": "Abeer Trainee",
+    "email": "abeermosameh12333@gmail.com",
     "password": "password123",
     "password_confirmation": "password123",
     "level": 3
-}
-```
+  }
+  ```
 
-**Response:**
-```json
-{
-    "success": true,
-    "message": "User registered successfully",
-    "data": {
-        "user": {
-            "id": 1,
-            "name": "Ahmed Ali",
-            "email": "ahmed.ali@example.com",
-            "level": 3
-        },
-        "token": "1|abc123def456..."
-    }
-}
-```
-
-### 2. Login User
-```http
-POST /api/v1/auth/login
-Content-Type: application/json
-
-{
-    "email": "ahmed.ali@example.com",
+### Login User
+- **POST** `/api/v1/auth/login`
+- **Body:**
+  ```json
+  {
+    "email": "abeer@gmail.com",
     "password": "password123"
-}
-```
+  }
+  ```
 
-**Response:**
-```json
-{
-    "success": true,
-    "message": "Login successful",
-    "data": {
-        "user": {
-            "id": 1,
-            "name": "Ahmed Ali",
-            "email": "ahmed.ali@example.com",
-            "level": 3
-        },
-        "token": "2|xyz789uvw012..."
-    }
-}
-```
-
-### 3. Logout User
+### Logout User
 ```http
 POST /api/v1/auth/logout
 Authorization: Bearer {token}
@@ -83,7 +46,7 @@ Authorization: Bearer {token}
 }
 ```
 
-### 4. Get User Profile
+### Get User Profile
 ```http
 GET /api/v1/auth/profile
 Authorization: Bearer {token}
@@ -104,7 +67,7 @@ Authorization: Bearer {token}
 }
 ```
 
-### 5. Update User Profile
+### Update User Profile
 ```http
 PUT /api/v1/auth/profile
 Authorization: Bearer {token}
@@ -131,7 +94,7 @@ Content-Type: application/json
 }
 ```
 
-### 6. Change Password
+### Change Password
 ```http
 POST /api/v1/auth/change-password
 Authorization: Bearer {token}
@@ -152,43 +115,20 @@ Content-Type: application/json
 }
 ```
 
-### 7. Get User by Email (Inter-Service)
-```http
-GET /api/v1/users/email/ahmed.ali@example.com
-Service-Key: {service_secret}
-```
+### Get User by ID (Inter-Service)
+- **GET** `/api/v1/users/{id}`
+- **Headers:**
+  - `Service-Key: SERVICE_SECRET_KEY_2024`
 
-**Response:**
-```json
-{
-    "success": true,
-    "data": {
-        "id": 1,
-        "name": "Ahmed Ali",
-        "email": "ahmed.ali@example.com",
-        "level": 3
-    }
-}
-```
+### Get User by Email (Inter-Service)
+- **GET** `/api/v1/users/email/{email}`
+- **Headers:**
+  - `Service-Key: SERVICE_SECRET_KEY_2024`
 
-### 8. Get User by ID (Inter-Service)
-```http
-GET /api/v1/users/1
-Service-Key: {service_secret}
-```
-
-**Response:**
-```json
-{
-    "success": true,
-    "data": {
-        "id": 1,
-        "name": "Ahmed Ali",
-        "email": "ahmed.ali@example.com",
-        "level": 3
-    }
-}
-```
+## Testing with Docker & Postman
+- Make sure Docker Desktop is running and all services are up (`docker-compose up -d`).
+- Use the provided Postman collection and set `gateway_url` to `http://localhost:8080`.
+- All requests should go through the gateway, not direct service ports.
 
 ## Error Responses
 

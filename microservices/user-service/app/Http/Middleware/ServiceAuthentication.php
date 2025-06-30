@@ -16,12 +16,12 @@ class ServiceAuthentication
     public function handle(Request $request, Closure $next): Response
     {
         $serviceKey = $request->header('Service-Key');
-        $expectedKey = config('services.user.secret', 'SERVICE_SECRET');
+        $expectedKey = config('services.user.secret', 'SERVICE_SECRET_KEY_2024');
 
         if (!$serviceKey || $serviceKey !== $expectedKey) {
             return response()->json([
-                'status' => false,
-                'message' => 'Unauthorized service access'
+                'error' => 'Unauthorized service access',
+                'message' => 'Invalid or missing service key'
             ], 401);
         }
 

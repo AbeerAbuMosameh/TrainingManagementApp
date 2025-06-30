@@ -46,27 +46,27 @@ return [
 
     'advisor' => [
         'url' => env('ADVISOR_SERVICE_URL', 'http://localhost:8005'),
-        'secret' => env('ADVISOR_SERVICE_SECRET', 'SERVICE_SECRET'),
+        'secret' => env('ADVISOR_SERVICE_SECRET', 'SERVICE_SECRET_KEY_2024'),
     ],
 
     'trainee' => [
         'url' => env('TRAINEE_SERVICE_URL', 'http://localhost:8004'),
-        'secret' => env('TRAINEE_SERVICE_SECRET', 'SERVICE_SECRET'),
+        'secret' => env('TRAINEE_SERVICE_SECRET', 'SERVICE_SECRET_KEY_2024'),
     ],
 
     'task' => [
         'url' => env('TASK_SERVICE_URL', 'http://localhost:8002'),
-        'secret' => env('TASK_SERVICE_SECRET', 'SERVICE_SECRET'),
+        'secret' => env('TASK_SERVICE_SECRET', 'SERVICE_SECRET_KEY_2024'),
     ],
 
     'user' => [
         'url' => env('USER_SERVICE_URL', 'http://localhost:8003'),
-        'secret' => env('USER_SERVICE_SECRET', 'SERVICE_SECRET'),
+        'secret' => env('USER_SERVICE_SECRET', 'SERVICE_SECRET_KEY_2024'),
     ],
 
     'program' => [
         'url' => env('PROGRAM_SERVICE_URL', 'http://localhost:8001'),
-        'secret' => env('PROGRAM_SERVICE_SECRET', 'SERVICE_SECRET'),
+        'secret' => env('PROGRAM_SERVICE_SECRET', 'SERVICE_SECRET_KEY_2024'),
     ],
 
 ];

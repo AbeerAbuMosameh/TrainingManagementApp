@@ -1,0 +1,221 @@
+services:
+  # API Gateway Service
+  gateway-service:
+    build: ./microservices/gateway-service
+    ports:
+      - "8080:80"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - SERVICE_SECRET=GATEWAY_SECRET_KEY_2024
+      - DB_CONNECTION=mysql
+      - DB_HOST=gateway-db
+      - DB_DATABASE=gateway_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+    depends_on:
+      - gateway-db
+      - user-service
+      - trainee-service
+      - advisor-service
+      - field-service
+      - program-service
+      - task-service
+    networks:
+      - training-network
+
+  gateway-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=gateway_db
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - gateway_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  # User Service
+  user-service:
+    build: ./microservices/user-service
+    ports:
+      - "8003:80"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=user-db
+      - DB_DATABASE=users_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - SERVICE_SECRET=SERVICE_SECRET_KEY_2024
+    depends_on:
+      - user-db
+    networks:
+      - training-network
+
+  user-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=users_db
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - user_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  # Trainee Service
+  trainee-service:
+    build: ./microservices/trainee-service
+    ports:
+      - "8004:80"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=trainee-db
+      - DB_DATABASE=trainees_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - SERVICE_SECRET=SERVICE_SECRET_KEY_2024
+    depends_on:
+      - trainee-db
+    networks:
+      - training-network
+
+  trainee-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=trainees_db
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - trainee_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  # Advisor Service
+  advisor-service:
+    build: ./microservices/advisor-service
+    ports:
+      - "8005:80"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=advisor-db
+      - DB_DATABASE=advisors_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - SERVICE_SECRET=SERVICE_SECRET_KEY_2024
+    depends_on:
+      - advisor-db
+    networks:
+      - training-network
+
+  advisor-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=advisors_db
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - advisor_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  # Field Service
+  field-service:
+    build: ./microservices/field-service
+    container_name: field-service
+    ports:
+      - "8086:80"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=field-db
+      - DB_DATABASE=fields_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - SERVICE_SECRET=SERVICE_SECRET_KEY_2024
+    volumes:
+      - ./microservices/field-service:/var/www/html
+      - field_storage:/var/www/html/storage
+    depends_on:
+      - field-db
+    networks:
+      - training-network
+
+  field-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=fields_db
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - field_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  # Program Service
+  program-service:
+    build: ./microservices/program-service
+    ports:
+      - "8001:80"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=program-db
+      - DB_DATABASE=programs_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - SERVICE_SECRET=SERVICE_SECRET_KEY_2024
+    depends_on:
+      - program-db
+    networks:
+      - training-network
+
+  program-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=programs_db
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - program_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  # Task Service
+  task-service:
+    build: ./microservices/task-service
+    ports:
+      - "8002:80"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=task-db
+      - DB_DATABASE=tasks_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - SERVICE_SECRET=SERVICE_SECRET_KEY_2024
+    depends_on:
+      - task-db
+    networks:
+      - training-network
+
+  task-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=tasks_db
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - task_data:/var/lib/mysql
+    networks:
+      - training-network
+
+volumes:
+  user_data:
+  trainee_data:
+  advisor_data:
+  field_data:
+  field_storage:
+  program_data:
+  task_data:
+  gateway_data:
+
+networks:
+  training-network:
+    driver: bridge 

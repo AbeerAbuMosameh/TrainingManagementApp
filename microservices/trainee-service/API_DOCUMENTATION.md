@@ -1,9 +1,8 @@
 # Trainee Service API Documentation
 
-## Base URL
-```
-http://localhost:8004/api/v1
-```
+## Accessing the API
+All endpoints should be accessed via the API Gateway:
+- Base URL: `http://localhost:8080/trainees`
 
 ## Authentication
 All endpoints require a `Service-Key` header for inter-service communication.
@@ -11,9 +10,7 @@ All endpoints require a `Service-Key` header for inter-service communication.
 ## Endpoints
 
 ### 1. Get All Trainees
-```http
-GET /api/v1/trainees
-```
+- **GET** `/api/v1/trainees`
 
 **Response:**
 ```json
@@ -53,24 +50,22 @@ GET /api/v1/trainees
 ```
 
 ### 2. Create Trainee
-```http
-POST /api/v1/trainees
-Content-Type: application/json
-
-{
-    "first_name": "Abeer",
-    "last_name": "Saleh",
-    "email": "abeer.saleh@example.com",
-    "phone": "+970596789012",
-    "date_of_birth": "1996-11-08",
-    "address": "987 Cedar Lane",
-    "city": "Nablus",
-    "education_level": "Bachelor's Degree",
-    "field_of_study": "Information Technology",
-    "university": "An-Najah National University",
-    "graduation_year": 2019
-}
-```
+- **POST** `/api/v1/trainees`
+- **Body:**
+  ```json
+  {
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "jane@test.com",
+    "phone": "+1234567890",
+    "education": "Bachelor's Degree",
+    "address": "456 Oak St",
+    "password": "password123",
+    "gpa": "3.8",
+    "city": "Los Angeles",
+    "language": "English"
+  }
+  ```
 
 **Response:**
 ```json
@@ -79,17 +74,17 @@ Content-Type: application/json
     "message": "Trainee created successfully",
     "data": {
         "id": 3,
-        "first_name": "Abeer",
-        "last_name": "Saleh",
-        "email": "abeer.saleh@example.com",
-        "phone": "+970596789012",
-        "date_of_birth": "1996-11-08",
-        "address": "987 Cedar Lane",
-        "city": "Nablus",
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "email": "jane@test.com",
+        "phone": "+1234567890",
+        "date_of_birth": "1995-03-15",
+        "address": "456 Oak St",
+        "city": "Los Angeles",
         "education_level": "Bachelor's Degree",
-        "field_of_study": "Information Technology",
-        "university": "An-Najah National University",
-        "graduation_year": 2019,
+        "field_of_study": "Computer Science",
+        "university": "Islamic University of Gaza",
+        "graduation_year": 2018,
         "created_at": "2024-01-17T10:20:00Z",
         "updated_at": "2024-01-17T10:20:00Z"
     }
@@ -97,9 +92,7 @@ Content-Type: application/json
 ```
 
 ### 3. Get Trainee by ID
-```http
-GET /api/v1/trainees/1
-```
+- **GET** `/api/v1/trainees/{id}`
 
 **Response:**
 ```json
@@ -125,18 +118,7 @@ GET /api/v1/trainees/1
 ```
 
 ### 4. Update Trainee
-```http
-PUT /api/v1/trainees/1
-Content-Type: application/json
-
-{
-    "first_name": "Ahmed",
-    "last_name": "Ali",
-    "phone": "+970594567891",
-    "address": "321 Elm Street, Apt 5",
-    "education_level": "Master's Degree"
-}
-```
+- **PUT** `/api/v1/trainees/{id}`
 
 **Response:**
 ```json
@@ -239,6 +221,11 @@ Service-Key: {service_secret}
 }
 ```
 
+### 9. Get Trainee by Email (Inter-Service)
+- **GET** `/api/v1/trainees/email/{email}`
+- **Headers:**
+  - `Service-Key: SERVICE_SECRET_KEY_2024`
+
 ## Error Responses
 
 ### 404 - Trainee Not Found
@@ -268,4 +255,9 @@ Service-Key: {service_secret}
     "success": false,
     "message": "Internal server error"
 }
-``` 
+```
+
+## Testing with Docker & Postman
+- Make sure Docker Desktop is running and all services are up (`docker-compose up -d`).
+- Use the provided Postman collection and set `gateway_url` to `http://localhost:8080`.
+- All requests should go through the gateway, not direct service ports. 

@@ -1,9 +1,8 @@
 # Advisor Service API Documentation
 
-## Base URL
-```
-http://localhost:8005/api/v1
-```
+## Accessing the API
+All endpoints should be accessed via the API Gateway:
+- Base URL: `http://localhost:8080/advisors`
 
 ## Authentication
 All endpoints require a `Service-Key` header for inter-service communication.
@@ -11,9 +10,7 @@ All endpoints require a `Service-Key` header for inter-service communication.
 ## Endpoints
 
 ### 1. Get All Advisors
-```http
-GET /api/v1/advisors
-```
+- **GET** `/api/v1/advisors`
 
 **Response:**
 ```json
@@ -53,23 +50,22 @@ GET /api/v1/advisors
 ```
 
 ### 2. Create Advisor
-```http
-POST /api/v1/advisors
-Content-Type: application/json
-
-{
-    "first_name": "Abeer",
-    "last_name": "Hassan",
-    "email": "abeer.hassan@example.com",
-    "phone": "+970593456789",
-    "education": "PhD in Information Technology",
-    "address": "789 Pine Street",
-    "city": "Nablus",
+- **POST** `/api/v1/advisors`
+- **Body:**
+  ```json
+  {
+    "first_name": "Dr. Osame",
+    "last_name": "test",
+    "email": "osam2@gmail.com",
+    "phone": "+1234567890",
+    "education": "PhD in Computer Science",
+    "address": "123 Main St",
+    "city": "Gaza",
     "language": "English",
-    "password": "securepassword123",
+    "password": "password123",
     "is_approved": false
-}
-```
+  }
+  ```
 
 **Response:**
 ```json
@@ -94,9 +90,7 @@ Content-Type: application/json
 ```
 
 ### 3. Get Advisor by ID
-```http
-GET /api/v1/advisors/1
-```
+- **GET** `/api/v1/advisors/{id}`
 
 **Response:**
 ```json
@@ -120,18 +114,7 @@ GET /api/v1/advisors/1
 ```
 
 ### 4. Update Advisor
-```http
-PUT /api/v1/advisors/1
-Content-Type: application/json
-
-{
-    "first_name": "Osama",
-    "last_name": "Ahmed",
-    "phone": "+970591234568",
-    "education": "PhD in Computer Science and Engineering",
-    "is_approved": true
-}
-```
+- **PUT** `/api/v1/advisors/{id}`
 
 **Response:**
 ```json
@@ -169,9 +152,7 @@ DELETE /api/v1/advisors/3
 ```
 
 ### 6. Get Approved Advisors
-```http
-GET /api/v1/advisors/approved/list
-```
+- **GET** `/api/v1/advisors/approved/list`
 
 **Response:**
 ```json
@@ -207,9 +188,7 @@ GET /api/v1/advisors/approved/list
 ```
 
 ### 7. Get Advisors by Language
-```http
-GET /api/v1/advisors/language/English
-```
+- **GET** `/api/v1/advisors/language/{language}`
 
 **Response:**
 ```json
@@ -237,10 +216,9 @@ GET /api/v1/advisors/language/English
 ```
 
 ### 8. Verify Advisor (Inter-Service)
-```http
-GET /api/v1/advisors/1/verify
-Service-Key: {service_secret}
-```
+- **GET** `/api/v1/advisors/{id}/verify`
+- **Headers:**
+  - `Service-Key: SERVICE_SECRET_KEY_2024`
 
 **Response:**
 ```json
@@ -284,4 +262,9 @@ Service-Key: {service_secret}
     "success": false,
     "message": "Internal server error"
 }
-``` 
+```
+
+## Testing with Docker & Postman
+- Make sure Docker Desktop is running and all services are up (`docker-compose up -d`).
+- Use the provided Postman collection and set `gateway_url` to `http://localhost:8080`.
+- All requests should go through the gateway, not direct service ports. 
